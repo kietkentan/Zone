@@ -66,14 +66,14 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener {
         val str = intent.getStringExtra("state_app") ?: ""
         val pos = intent.getIntExtra("position_app", 0)
 
-        currentPage = if (pos > 0) pos - 1 else if (str == "NORMAL") END_PAGE else START_PAGE
+        currentPage = if (pos > START_PAGE) END_PAGE else if (str == "NORMAL") END_PAGE else START_PAGE
         setPageSelect(currentPage)
         checkLanguage()
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun actionView() {
-        for (i in 0..END_PAGE) {
+        for (i in START_PAGE..END_PAGE) {
             binding.circleIndicator[i].setOnClickListener {
                 setPageSelect(i)
             }
@@ -99,9 +99,9 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener {
                     && previousState == ViewPager2.SCROLL_STATE_DRAGGING // from    DRAGGING
                     && state == ViewPager2.SCROLL_STATE_IDLE) {          // to      IDLE
                     //overscroll performed. work here
-                    setPageSelect(0)
+                    setPageSelect(START_PAGE)
                 }
-                if ((currentPage <= 0)// end of list. these checks can be
+                if ((currentPage <= START_PAGE)// end of list. these checks can be
                     // used individually to detect end or start of pages
                     && previousState == ViewPager2.SCROLL_STATE_DRAGGING // from    DRAGGING
                     && state == ViewPager2.SCROLL_STATE_IDLE) {          // to      IDLE
