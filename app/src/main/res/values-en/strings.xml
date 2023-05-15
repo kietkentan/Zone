@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="about_info">From HCMC-VNU</string>
+    <string name="bypass">Bypass</string>
+    <string name="next">Next</string>
+    <string name="login">Login</string>
+    <string name="intro_title_1">Access Anywhere</string>
+    <string name="intro_title_2">Don’t Feel Alone</string>
+    <string name="intro_title_3">Happiness</string>
+    <string name="intro_title_4">Let\'s Get Started</string>
+    <string name="intro_desc_1">The video call feature can be accessed from anywhere in your house to help you.</string>
+    <string name="intro_desc_2">Nobody likes to be alone and the built-in group video call feature helps you connect.</string>
+    <string name="intro_desc_3">With nearby friend connections, you\'ll find people you can chat with.</string>
+    <string name="intro_desc_4">To interact together, chat with friends everywhere.</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="sign_up">Sign up</string>
+    <string name="vietnamese">Vietnamese</string>
+    <string name="english">English</string>
+    <string name="take_photo">Take photo</string>
+    <string name="select_from_your_device">Select from your device</string>
+    <string name="cancel">Cancel</string>
+    <string name="camera_not_available">Camera not available</string>
+    <string name="file_p_error">Permission Denied. Please enable permission!</string>
+    <string name="typing">Typing…</string>
+    <string name="online">Online</string>
+    <string name="last_seen">Last seen</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="today">Today</string>
+    <string name="notifications">Notifications</string>
+    <string name="not_description">Enable Notification</string>
+    <string name="err_no_net">No Internet Connection</string>
+    <string name="logged_in_another_device">This phone number is logged in another device!</string>
+    <string name="login_again">Please, log in again to verify your number</string>
+    <string name="logout">Logout</string>
+    <string name="create_by">Created by</string>
+</resources>

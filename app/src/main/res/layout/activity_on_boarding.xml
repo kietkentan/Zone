@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activity.OnBoardingActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="10">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager_onboard"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:scrollbars="none"
+                tools:ignore="NestedWeights,UselessParent,SpeakableTextPresentCheck">
+
+                <me.relex.circleindicator.CircleIndicator3
+                    android:id="@+id/circle_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp30"
+                    android:layout_gravity="center"
+                    app:ci_drawable="@drawable/bg_circle_green_selected"
+                    app:ci_width="@dimen/dp10" />
+            </HorizontalScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_onboarding_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_button_green_ripple_20dp"
+                    android:minWidth="@dimen/dp150"
+                    android:text="@string/login"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp10"
+                    tools:ignore="TextContrastCheck" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_onboarding_signup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_button_default_ripple_20dp"
+                    android:minWidth="@dimen/dp150"
+                    android:layout_marginTop="@dimen/dp5"
+                    android:text="@string/sign_up"
+                    android:textSize="@dimen/sp10"
+                    android:textColor="@color/black"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_onboarding_setting_vietnamese"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_text_green_ripple_5dp"
+                        android:paddingHorizontal="@dimen/dp10"
+                        android:paddingVertical="@dimen/dp5"
+                        android:text="@string/vietnamese"
+                        android:textColor="@color/green_220"
+                        android:textSize="@dimen/sp10"
+                        tools:ignore="TextContrastCheck" />
+
+                    <View
+                        android:id="@+id/view_onboarding_vietnamese"
+                        android:layout_width="@dimen/dp40"
+                        android:layout_height="1dp"
+                        android:background="@color/green_220"
+                        android:layout_gravity="bottom|center_horizontal"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_onboarding_setting_english"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_text_green_ripple_5dp"
+                        android:paddingHorizontal="@dimen/dp10"
+                        android:paddingVertical="@dimen/dp5"
+                        android:text="@string/english"
+                        android:textColor="@color/grey_160"
+                        android:textSize="@dimen/sp10"
+                        tools:ignore="TextContrastCheck" />
+
+                    <View
+                        android:id="@+id/view_onboarding_english"
+                        android:layout_width="@dimen/dp40"
+                        android:layout_height="1dp"
+                        android:visibility="gone"
+                        android:background="@color/green_220"
+                        android:layout_gravity="bottom|center_horizontal"/>
+                </FrameLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

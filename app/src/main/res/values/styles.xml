@@ -1,0 +1,16 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.Zone" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorAccent">@color/color_accent</item>
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/white</item>
+    </style>
+
+    <style name="TextBoldImageResourceSheet">
+        <item name="android:textSize">@dimen/sp12</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textAlignment">center</item>
+        <item name="textAllCaps">true</item>
+        <item name="fontFamily">@font/raleway_bold</item>
+        <item name="fontWeight">700</item>
+    </style>
+</resources>

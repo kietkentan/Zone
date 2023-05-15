@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name" translatable="false">Zone</string>
+    <string name="about_info">Từ HCMC-VNU</string>
+    <string name="bypass">Bỏ qua</string>
+    <string name="login">Đăng nhập</string>
+    <string name="next">Tiếp tục</string>
+    <string name="intro_title_1">Truy Cập Mọi Nơi</string>
+    <string name="intro_title_2">Bạn Không Một Mình</string>
+    <string name="intro_title_3">Hạnh Phúc</string>
+    <string name="intro_title_4">Đăng Nhập Ngay</string>
+    <string name="intro_desc_1">Tính năng cuộc gọi video có thể được truy cập từ bất cứ đâu để giúp bạn.</string>
+    <string name="intro_desc_2">Không ai thích ở một mình và tính năng gọi điện, gọi qua video được tích hợp sẵn giúp bạn kết nối.</string>
+    <string name="intro_desc_3">Với tính năng kết nối bạn bè gần đây, bạn sẽ tìm được người có thể trò chuyện cùng mình.</string>
+    <string name="intro_desc_4">Để cùng tương tác, trò chuyện với bạn bè khắp nơi.</string>
+    <string name="phone_number">Số điện thoại</string>
+    <string name="sign_up">Đăng ký</string>
+    <string name="vietnamese">Tiếng Việt</string>
+    <string name="english">Tiếng Anh</string>
+    <string name="take_photo">Chụp ảnh</string>
+    <string name="select_from_your_device">Chọn ảnh từ thiết bị</string>
+    <string name="cancel">Hủy</string>
+    <string name="camera_not_available">Camera không khả dụng</string>
+    <string name="file_p_error">Quyền bị từ chối. Vui lòng kích hoạt quyền!</string>
+    <string name="typing">Đang nhập…</string>
+    <string name="online">Đang hoạt động</string>
+    <string name="last_seen">Xem lần cuối</string>
+    <string name="yesterday">Hôm qua</string>
+    <string name="today">Hôm nay</string>
+    <string name="notifications">Thông báo</string>
+    <string name="not_description">Bật thông báo</string>
+    <string name="err_no_net">Không có kết nối Internet</string>
+    <string name="logged_in_another_device">Số điện thoại này được đăng nhập vào một thiết bị khác!</string>
+    <string name="login_again">Vui lòng đăng nhập lại để xác minh số của bạn</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="create_by">Được tạo lúc</string>
+</resources>
