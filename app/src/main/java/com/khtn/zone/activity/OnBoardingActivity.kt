@@ -29,7 +29,7 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener {
     private val list: List<OnBoardingItems> = OnBoardingItems.getData()
     private var eventGA: EventGAImp
     /*             ↧
-    @Inject private lateinit var eventGA: EventGA
+    @Inject lateinit var eventGA: EventGA
     Custom interface EventGA
      */
 
