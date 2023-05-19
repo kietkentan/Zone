@@ -1,8 +1,13 @@
 package com.khtn.zone.di
 
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.installations.FirebaseInstallations
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.khtn.zone.utils.FirebaseStorageConstants
@@ -14,11 +19,17 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-class FirebaseModule {
+object FirebaseModule {
     @Provides
     @Singleton
     fun provideFirebaseDatabaseInstance(): FirebaseDatabase {
         return FirebaseDatabase.getInstance()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseFirestoreInstance(): FirebaseFirestore {
+        return FirebaseFirestore.getInstance()
     }
 
     @Singleton
@@ -27,7 +38,7 @@ class FirebaseModule {
         return firestore.collection("users")
     }
 
-    /*@GroupCollection
+    @GroupCollection
     @Singleton
     @Provides
     fun provideGroupCollectionReference(firestore: FirebaseFirestore): CollectionReference {
@@ -39,7 +50,25 @@ class FirebaseModule {
     @Provides
     fun provideMessagesCollectionReference(firestore: FirebaseFirestore): CollectionReference {
         return firestore.collection("messages")
-    }*/
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseAuthInstance(): FirebaseAuth {
+        return FirebaseAuth.getInstance()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseInstallations(): FirebaseInstallations {
+        return FirebaseInstallations.getInstance()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseAnalytics(): FirebaseAnalytics {
+        return Firebase.analytics
+    }
 
     @Singleton
     @Provides

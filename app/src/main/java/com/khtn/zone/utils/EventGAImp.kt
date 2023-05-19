@@ -4,8 +4,11 @@ import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.installations.FirebaseInstallations
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class EventGAImp constructor(
+@Singleton
+class EventGAImp @Inject constructor(
     private val mAnalytics: FirebaseAnalytics,
     mAuth: FirebaseAuth,
     private val mInstallations: FirebaseInstallations
@@ -16,7 +19,6 @@ class EventGAImp constructor(
         id = mAuth.currentUser?.uid
         id?.run {
             mAnalytics.setUserId("user_$id")
-            mAnalytics.setUserProperty("user_name", "Guest Name")
         }.let {
             mInstallations.id.addOnCompleteListener {
                 if (it.isSuccessful) { mAnalytics.setUserId("guest_${it.result}") }

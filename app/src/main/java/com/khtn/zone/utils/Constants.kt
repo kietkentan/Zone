@@ -1,6 +1,17 @@
 package com.khtn.zone.utils
 
 object FireStoreCollection {
+    const val GROUP_MESSAGE = "group_messages"
+    const val GROUP = "groups"
+    const val TO = "to"
+    const val TYPING_STATUS = "typing_status"
+    const val CHAT_USER = "chatUsers"
+    const val LAST_SEEN = "last_seen"
+    const val M_CHAT_USER = "chatuser"
+    const val MESSAGE = "messages"
+    const val USER = "Users"
+    const val MOBILE_NUMBER = "mobile.number"
+    const val STATUS = "status"
 }
 
 object SharedPrefConstants {
@@ -33,6 +44,7 @@ object UserStatusConstants {
     const val OFFLINE = "offline"
     const val TYPING = "typing"
     const val NON_TYPING = "non_typing"
+    const val NOT_TYPING = "not_typing"
 }
 
 object ActionConstants {
@@ -61,6 +73,5 @@ object WorkerConstants {
 }
 
 object Event {
-    const val LOGIN_USER = "login_uer"
-    const val VIEW_ON_BOARDING = "view_on_boarding"
+    const val LOGIN_USER = "login_suer"
 }

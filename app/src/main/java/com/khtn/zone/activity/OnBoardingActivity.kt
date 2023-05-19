@@ -10,33 +10,28 @@ import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.installations.FirebaseInstallations
-import com.google.firebase.ktx.Firebase
 import com.khtn.zone.R
 import com.khtn.zone.adapter.OnBoardingAdapter
 import com.khtn.zone.databinding.ActivityOnBoardingBinding
 import com.khtn.zone.model.OnBoardingItems
 import com.khtn.zone.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 private const val TAG = "OnBoardingActivity"
 
 @AndroidEntryPoint
 class OnBoardingActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityOnBoardingBinding
-    private val list: List<OnBoardingItems> = OnBoardingItems.getData()
-    private var eventGA: EventGAImp
-    /*             ↧
-    @Inject lateinit var eventGA: EventGA
-    Custom interface EventGA
-     */
+    private val list: List<OnBoardingItems>
+
+    @Inject
+    lateinit var eventGA: EventGAImp
 
     private val START_PAGE = 0
-    private val END_PAGE = list.size - 1
+    private val END_PAGE: Int
     private var previousState =  ViewPager2.SCROLL_STATE_IDLE
-    private var currentPage : Int = 0
+    private var currentPage: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,11 +50,8 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener {
 
     init {
         this.title = TAG
-        eventGA = EventGAImp(
-            Firebase.analytics,
-            FirebaseAuth.getInstance(),
-            FirebaseInstallations.getInstance()
-        )
+        list = OnBoardingItems.getData()
+        END_PAGE = list.size - 1
     }
 
     private fun initView() {

@@ -64,3 +64,9 @@ val Int.dpToPx: Int
 
 val Int.pxToDp: Int
     get() = (this / Resources.getSystem().displayMetrics.density).toInt()
+
+val Float.dpToPx: Float
+    get() = (this * Resources.getSystem().displayMetrics.density)
+
+val Float.pxToDp: Float
+    get() = (this / Resources.getSystem().displayMetrics.density)

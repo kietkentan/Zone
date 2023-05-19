@@ -1,28 +1,25 @@
 package com.khtn.zone.di
 
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.installations.FirebaseInstallations
-import com.khtn.zone.utils.EventGA
-import com.khtn.zone.utils.EventGAImp
+import com.khtn.zone.activity.MainActivity
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import javax.inject.Qualifier
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class MessageCollection
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class GroupCollection
 
 @InstallIn(SingletonComponent::class)
 @Module
-class AppModule {
-    /*
+object AppModule {
     @Provides
-    @Singleton
-    fun provideEventGA(
-        mAnalytics: FirebaseAnalytics,
-        mAuth: FirebaseAuth,
-        mInstallations: FirebaseInstallations
-    ): EventGA {
-        return EventGAImp(mAnalytics, mAuth, mInstallations)
+    fun provideMainActivity(): MainActivity {
+        return MainActivity()
     }
-    */
 }

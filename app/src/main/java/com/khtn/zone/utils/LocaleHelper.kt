@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import java.util.*
+import javax.inject.Inject
 
 object LocaleHelper {
     fun onAttach(context: Context): Context {
@@ -32,11 +33,11 @@ object LocaleHelper {
         context: Context,
         language: String
     ) {
-        SharedPreferencesManager(context).saveStringByKey(SharedPrefConstants.LANGUAGE, language)
+        SharedPreferencesManager(context = context).saveStringByKey(SharedPrefConstants.LANGUAGE, language)
     }
 
     private fun getPersistedData(context: Context): String {
-        return SharedPreferencesManager(context).retrieveStringByKey(SharedPrefConstants.LANGUAGE)
+        return SharedPreferencesManager(context = context).retrieveStringByKey(SharedPrefConstants.LANGUAGE)
             ?: return SupportLanguage.VIETNAM.name
     }
 
