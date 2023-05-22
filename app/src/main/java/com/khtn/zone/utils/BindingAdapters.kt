@@ -9,6 +9,7 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.TextUtils
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -494,5 +495,4 @@ object BindingAdapters {
         else
             txtView.show()
     }
-
 }

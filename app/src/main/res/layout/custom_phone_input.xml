@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_phone_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextBlackRg10"
+        android:text="@string/enter_mobile_no" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/txt_country_code"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_nocode_ripple_8dp"
+            style="@style/TextWhiteSemi12"
+            app:drawableEndCompat="@drawable/ic_arrow_down"
+            android:minWidth="@dimen/dp55"
+            android:gravity="center"
+            android:padding="@dimen/dp6"
+            app:drawableTint="@color/white" />
+
+        <EditText
+            android:id="@+id/edt_mobile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/ex_mobile_no"
+            android:maxLength="15"
+            android:background="@drawable/shape_edit_bg"
+            style="@style/TextBlackSemi12"
+            android:inputType="phone"
+            android:padding="@dimen/dp10"
+            android:importantForAutofill="no" />
+    </LinearLayout>
+</LinearLayout>

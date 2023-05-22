@@ -54,7 +54,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     // Library PhoneNumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.11'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.13.12'
+
 
     // Multidex Application
     implementation 'com.android.support:multidex:1.0.3'

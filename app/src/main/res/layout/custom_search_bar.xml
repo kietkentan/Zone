@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/edt_text_input"
+        style="@style/TextBlackSemi12"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp40"
+        android:layout_weight="1"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:maxLines="1"
+        tools:ignore="LabelFor" />
+
+    <ImageButton
+        android:id="@+id/btn_right"
+        android:layout_width="@dimen/dp40"
+        android:layout_height="@dimen/dp40"
+        android:background="@drawable/bg_text_green_ripple_5dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_search"
+        tools:ignore="ContentDescription" />
+</LinearLayout>

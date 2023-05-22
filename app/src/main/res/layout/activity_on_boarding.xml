@@ -58,22 +58,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_button_green_ripple_20dp"
-                    android:minWidth="@dimen/dp150"
-                    android:text="@string/login"
+                    android:minWidth="@dimen/dp170"
+                    android:text="@string/login_signup"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp10"
                     tools:ignore="TextContrastCheck" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_onboarding_signup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_button_default_ripple_20dp"
-                    android:minWidth="@dimen/dp150"
-                    android:layout_marginTop="@dimen/dp5"
-                    android:text="@string/sign_up"
-                    android:textSize="@dimen/sp10"
-                    android:textColor="@color/black"/>
             </LinearLayout>
 
             <LinearLayout

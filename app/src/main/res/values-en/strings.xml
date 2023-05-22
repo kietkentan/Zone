@@ -3,7 +3,7 @@
     <string name="about_info">From HCMC-VNU</string>
     <string name="bypass">Bypass</string>
     <string name="next">Next</string>
-    <string name="login">Login</string>
+    <string name="login_signup">Login/Signup</string>
     <string name="intro_title_1">Access Anywhere</string>
     <string name="intro_title_2">Don’t Feel Alone</string>
     <string name="intro_title_3">Happiness</string>
@@ -13,7 +13,6 @@
     <string name="intro_desc_3">With nearby friend connections, you\'ll find people you can chat with.</string>
     <string name="intro_desc_4">To interact together, chat with friends everywhere.</string>
     <string name="phone_number">Phone Number</string>
-    <string name="sign_up">Sign up</string>
     <string name="vietnamese">Vietnamese</string>
     <string name="english">English</string>
     <string name="take_photo">Take photo</string>
@@ -33,4 +32,19 @@
     <string name="login_again">Please, log in again to verify your number</string>
     <string name="logout">Logout</string>
     <string name="create_by">Created by</string>
+    <string name="txt_in">in</string>
+    <string name="txt_resend">Resend</string>
+    <string name="otp_sent_succesfully">Verification code sent successfully</string>
+    <string name="invalid_verification_code">Invalid verification code!</string>
+    <string name="invalid_request">Invalid request</string>
+    <string name="welcome">Wellcome!</string>
+    <string name="we_will_send_otp">We will send you an <b> One Time Password </b>to this mobile number</string>
+    <string name="enter_mobile_no">Enter Mobile Number</string>
+    <string name="get_otp">Get OTP</string>
+    <string name="ex_mobile_no">Ex: 123456789</string>
+    <string name="invalid_phone_number">Invalid phone number!</string>
+    <string name="press_back_exit">Press Back again to exit</string>
+    <string name="enter_otp">Enter the verification code that was sent to your phone number.</string>
+    <string name="otp_verification">OTP Verification</string>
+    <string name="dont_receive">Don\\\'t receive the OTP?</string>
 </resources>

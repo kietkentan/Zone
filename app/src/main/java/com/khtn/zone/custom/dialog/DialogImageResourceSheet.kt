@@ -1,5 +1,6 @@
 package com.khtn.zone.custom.dialog
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.khtn.zone.databinding.DialogImageResourceSheetBinding
 import com.khtn.zone.utils.ImageResourceSheetOptions
+import com.khtn.zone.utils.setTransparentBackground
 
 interface SheetListener {
     fun selectedItem(index: Int)
@@ -42,6 +44,7 @@ class DialogImageResourceSheet: BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
+        setTransparentBackground()
 
         binding.tvCamera.setOnClickListener {
             listener.selectedItem(index = ImageResourceSheetOptions.CAMERA)

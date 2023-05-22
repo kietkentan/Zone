@@ -25,11 +25,16 @@ import com.google.gson.GsonBuilder
 import com.khtn.zone.R
 import com.khtn.zone.database.ChatUserDatabase
 import com.khtn.zone.database.data.GroupMessage
+import com.khtn.zone.model.Country
 import com.khtn.zone.model.UserStatus
 import java.text.SimpleDateFormat
 
 object Utils {
     private const val PERMISSION_REQ_CODE = 114
+
+    fun getDefaultCountry() = Country("VN", "Vietnam", "+84", "VND")
+
+    fun clearNull(str: String?) = str?.trim() ?: ""
 
     @Suppress("DEPRECATION")
     fun isNetConnected(context: Context): Boolean {

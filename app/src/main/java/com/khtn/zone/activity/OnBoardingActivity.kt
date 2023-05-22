@@ -1,6 +1,7 @@
 package com.khtn.zone.activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -72,7 +73,6 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         binding.btnOnboardingLogin.setOnClickListener(this)
-        binding.btnOnboardingSignup.setOnClickListener(this)
         binding.tvOnboardingSettingVietnamese.setOnClickListener(this)
         binding.tvOnboardingSettingEnglish.setOnClickListener(this)
 
@@ -111,12 +111,8 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun onLogin() {
         eventGA.eventAuth("login_user" /* custom event GA */, "item")
-        Log.i("TAG_U", "onLogIn: ")
-    }
-
-    private fun onSignUp() {
-        eventGA.eventAuth(FirebaseAnalytics.Event.SIGN_UP, "item")
-        Log.i("TAG_U", "onSigUp: ")
+        startActivity(Intent(this@OnBoardingActivity, MainActivity::class.java))
+        finish()
     }
 
     private fun checkLanguage() {
@@ -148,7 +144,6 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_onboarding_login -> onLogin()
-            R.id.btn_onboarding_signup -> onSignUp()
             R.id.tv_onboarding_setting_vietnamese -> changeLanguage(SupportLanguage.VIETNAM.name)
             R.id.tv_onboarding_setting_english -> changeLanguage(SupportLanguage.ENGLISH.name)
         }

@@ -2,7 +2,7 @@
     <string name="app_name" translatable="false">Zone</string>
     <string name="about_info">Từ HCMC-VNU</string>
     <string name="bypass">Bỏ qua</string>
-    <string name="login">Đăng nhập</string>
+    <string name="login_signup">Đăng nhập/Đăng kí</string>
     <string name="next">Tiếp tục</string>
     <string name="intro_title_1">Truy Cập Mọi Nơi</string>
     <string name="intro_title_2">Bạn Không Một Mình</string>
@@ -13,7 +13,6 @@
     <string name="intro_desc_3">Với tính năng kết nối bạn bè gần đây, bạn sẽ tìm được người có thể trò chuyện cùng mình.</string>
     <string name="intro_desc_4">Để cùng tương tác, trò chuyện với bạn bè khắp nơi.</string>
     <string name="phone_number">Số điện thoại</string>
-    <string name="sign_up">Đăng ký</string>
     <string name="vietnamese">Tiếng Việt</string>
     <string name="english">Tiếng Anh</string>
     <string name="take_photo">Chụp ảnh</string>
@@ -33,4 +32,19 @@
     <string name="login_again">Vui lòng đăng nhập lại để xác minh số của bạn</string>
     <string name="logout">Đăng xuất</string>
     <string name="create_by">Được tạo lúc</string>
+    <string name="txt_resend">Gửi lại</string>
+    <string name="txt_in">trong</string>
+    <string name="otp_sent_succesfully">Mã xác nhận đã được gửi thành công.</string>
+    <string name="invalid_verification_code">Mã xác nhận không đúng!</string>
+    <string name="invalid_request">Yêu cầu không hợp lệ</string>
+    <string name="welcome">Chào bạn!</string>
+    <string name="we_will_send_otp">Chúng tôi sẽ gửi cho bạn <b> Mật Khẩu Dùng Một Lần </b> đến số điện thoại này</string>
+    <string name="enter_mobile_no">Nhập Số Điện Thoại</string>
+    <string name="get_otp">Nhận mã OTP</string>
+    <string name="ex_mobile_no">Ví dụ: 123456789</string>
+    <string name="invalid_phone_number">Số điện thoại không hợp lệ!</string>
+    <string name="press_back_exit">Nhấn Back một lần nữa để thoát</string>
+    <string name="enter_otp">Nhập mã xác thực đã được gửi đến số điện thoại của bạn.</string>
+    <string name="otp_verification">Xác thực OTP</string>
+    <string name="dont_receive">Không nhận được mã?</string>
 </resources>

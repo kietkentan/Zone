@@ -3,6 +3,7 @@ package com.khtn.zone.utils
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.res.Resources
 import android.graphics.Color
 import android.view.View
@@ -10,6 +11,9 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import java.security.AccessController.getContext
+
 
 fun View.hide() {
     visibility = View.GONE
@@ -45,6 +49,17 @@ fun Activity.showSoftKeyboard(view: View) {
     }
 }
 
+fun getActivity(view: View): Activity? {
+    var context = view.context
+    while (context is ContextWrapper) {
+        if (context is Activity) {
+            return context
+        }
+        context = context.baseContext
+    }
+    return null
+}
+
 @SuppressLint("InlinedApi")
 @Suppress("DEPRECATION")
 fun Activity.transparentStatusBar(isLightBackground: Boolean) {
@@ -55,6 +70,15 @@ fun Activity.transparentStatusBar(isLightBackground: Boolean) {
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
 
     window.statusBarColor = Color.TRANSPARENT
+}
+
+fun BottomSheetDialogFragment.setTransparentBackground() {
+    dialog?.apply {
+        setOnShowListener {
+            val bottomSheet = findViewById<View?>(com.google.android.material.R.id.design_bottom_sheet)
+            bottomSheet?.setBackgroundResource(android.R.color.transparent)
+        }
+    }
 }
 
 fun Context.getAppName(): String = applicationInfo.loadLabel(packageManager).toString()
@@ -70,3 +94,6 @@ val Float.dpToPx: Float
 
 val Float.pxToDp: Float
     get() = (this / Resources.getSystem().displayMetrics.density)
+
+val String.toEmail: String
+    get() = "$this@domain.com"

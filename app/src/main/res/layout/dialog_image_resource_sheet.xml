@@ -13,7 +13,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp220"
-        android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,7 +24,7 @@
 
             <TextView
                 android:id="@+id/tvCamera"
-                style="@style/TextBoldImageResourceSheet"
+                style="@style/TextBlackBoldImageResourceSheet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingVertical="@dimen/dp15"
@@ -43,7 +42,7 @@
 
             <TextView
                 android:id="@+id/tvGallery"
-                style="@style/TextBoldImageResourceSheet"
+                style="@style/TextBlackBoldImageResourceSheet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingVertical="@dimen/dp15"
@@ -55,7 +54,7 @@
 
         <TextView
             android:id="@+id/tvCancel"
-            style="@style/TextBoldImageResourceSheet"
+            style="@style/TextBlackBoldImageResourceSheet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp12"

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/green_00"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp150">
+
+                <ImageView
+                    android:layout_width="@dimen/dp70"
+                    android:layout_height="@dimen/dp70"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_chat_bg"
+                    tools:ignore="ContentDescription" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_corner_top_dp28"
+                    android:elevation="@dimen/dp5"
+                    android:orientation="vertical"
+                    android:padding="@dimen/dp20"
+                    tools:ignore="UselessParent">
+
+                    <TextView
+                        style="@style/TextBlackSemi15"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp15"
+                        android:text="@string/welcome" />
+
+                    <TextView
+                        style="@style/TextBlackRg10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp5"
+                        android:gravity="start"
+                        android:text="@string/we_will_send_otp" />
+
+                    <com.khtn.zone.custom.textField.PhoneInput
+                        android:id="@+id/text_input_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp30"/>
+
+                    <TextView
+                        android:id="@+id/tv_error_phone_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/TextError"
+                        android:visibility="gone"
+                        android:text="@string/invalid_phone_number"/>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp80">
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btn_get_otp"
+                            style="@style/TextWhiteSemi12"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_button_green_ripple_5dp"
+                            android:padding="@dimen/dp8"
+                            android:text="@string/get_otp"
+                            android:gravity="center"
+                            tools:ignore="TextContrastCheck" />
+
+                        <ProgressBar
+                            android:id="@+id/progress_get_otp"
+                            android:layout_width="@dimen/dp35"
+                            android:layout_height="@dimen/dp35"
+                            android:layout_gravity="center"
+                            android:visibility="gone"/>
+                    </FrameLayout>
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>

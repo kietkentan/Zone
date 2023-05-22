@@ -1,4 +1,4 @@
-package com.khtn.zone.custom
+package com.khtn.zone.custom.progressbar
 
 import com.khtn.zone.R
 import android.content.Context
@@ -76,7 +76,7 @@ class ArcProgress @JvmOverloads constructor(
         initPainters()
     }
 
-    protected fun initByAttributes(attributes: TypedArray) {
+    private fun initByAttributes(attributes: TypedArray) {
         finishedStrokeColor =
             attributes.getColor(R.styleable.ArcProgress_arc_finished_color, default_finished_color)
         unfinishedStrokeColor = attributes.getColor(

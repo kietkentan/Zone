@@ -73,5 +73,5 @@ object WorkerConstants {
 }
 
 object Event {
-    const val LOGIN_USER = "login_suer"
+    const val LOGIN_USER = "login_user"
 }

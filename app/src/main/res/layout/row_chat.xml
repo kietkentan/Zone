@@ -39,11 +39,8 @@
                 <TextView
                     android:layout_width="@dimen/dp48"
                     android:layout_height="@dimen/dp48"
-                    android:textSize="@dimen/sp20"
                     android:gravity="center"
-                    android:textAllCaps="true"
-                    android:maxLength="1"
-                    android:textColor="@color/white"
+                    style="@style/TextDefaultName"
                     android:background="@drawable/shape_circle_non_user_image"
                     android:visibility="@{(chatUser.user.user.image == null || chatUser.user.user.image.isEmpty) ? View.VISIBLE : View.GONE}"
                     android:text="@{chatUser.user.localName}" />
@@ -61,10 +58,8 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:gravity="top"
-                    android:maxLines="1"
+                    style="@style/TextNameInMessage"
                     android:text="@{chatUser.user.user.userName}"
-                    android:textColor="@color/blue_90"
-                    android:textSize="@dimen/sp14"
                     app:layout_constraintEnd_toStartOf="@+id/textView3"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -75,10 +70,8 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:gravity="bottom"
-                    android:maxLines="1"
-                    android:textColor="@color/blue_120"
+                    style="@style/TextMessageReview"
                     android:layout_marginEnd="@dimen/dp20"
-                    android:textSize="@dimen/sp10"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -90,9 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="start"
-                    android:maxLines="1"
-                    android:textColor="@color/color_time"
-                    android:textSize="@dimen/sp8"
+                    style="@style/TextTimeRowChat"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -102,8 +93,7 @@
                     android:layout_height="@dimen/dp15"
                     android:background="@drawable/shape_circle_blue"
                     android:gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/sp6"
+                    style="@style/TextUnreadCount"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textView3" />

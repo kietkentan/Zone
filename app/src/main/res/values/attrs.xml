@@ -20,4 +20,21 @@
         <attr name="arc_bottom_text" format="string"/>
         <attr name="arc_bottom_text_size" format="dimension"/>
     </declare-styleable>
+
+    <declare-styleable name="PhoneInput">
+        <attr name="text" format="string"/>
+        <attr name="text_title" format="string"/>
+        <attr name="text_hint" format="string"/>
+        <attr name="text_nocode" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="OTPInput">
+        <attr name="otp_one" format="string"/>
+        <attr name="otp_two" format="string"/>
+        <attr name="otp_three" format="string"/>
+        <attr name="otp_four" format="string"/>
+        <attr name="otp_five" format="string"/>
+        <attr name="otp_six" format="string"/>
+        <attr name="otp_error" format="string"/>
+    </declare-styleable>
 </resources>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <EditText
+        android:id="@+id/edt_OTP1"
+        android:layout_width="@dimen/dp35"
+        android:layout_height="@dimen/dp35"
+        style="@style/TextOTP"
+        android:importantForAutofill="no"
+        tools:ignore="LabelFor"
+        android:cursorVisible="false"/>
+
+    <EditText
+        android:id="@+id/edt_OTP2"
+        android:layout_width="@dimen/dp35"
+        android:layout_height="@dimen/dp35"
+        style="@style/TextOTP"
+        tools:ignore="LabelFor,MissingConstraints"
+        android:importantForAutofill="no"
+        android:cursorVisible="false"/>
+
+    <EditText
+        android:id="@+id/edt_OTP3"
+        android:layout_width="@dimen/dp35"
+        android:layout_height="@dimen/dp35"
+        style="@style/TextOTP"
+        tools:ignore="LabelFor,MissingConstraints"
+        android:importantForAutofill="no"
+        android:cursorVisible="false"/>
+
+    <EditText
+        android:id="@+id/edt_OTP4"
+        android:layout_width="@dimen/dp35"
+        android:layout_height="@dimen/dp35"
+        style="@style/TextOTP"
+        tools:ignore="LabelFor,MissingConstraints"
+        android:importantForAutofill="no"
+        android:cursorVisible="false"/>
+
+    <EditText
+        android:id="@+id/edt_OTP5"
+        android:layout_width="@dimen/dp35"
+        android:layout_height="@dimen/dp35"
+        style="@style/TextOTP"
+        tools:ignore="LabelFor,MissingConstraints"
+        android:importantForAutofill="no"
+        android:cursorVisible="false"/>
+
+    <EditText
+        android:id="@+id/edt_OTP6"
+        android:layout_width="@dimen/dp35"
+        android:layout_height="@dimen/dp35"
+        style="@style/TextOTP"
+        tools:ignore="LabelFor,MissingConstraints"
+        android:importantForAutofill="no"
+        android:cursorVisible="false"/>
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="@dimen/dp10"
+        app:constraint_referenced_ids="edt_OTP1, edt_OTP2, edt_OTP3, edt_OTP4, edt_OTP5, edt_OTP6"
+        app:flow_horizontalGap="@dimen/dp5"
+        app:flow_maxElementsWrap="6"
+        app:flow_wrapMode="aligned"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_error_otp_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/enter_otp"
+        style="@style/TextError"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/dp10"
+        app:layout_constraintTop_toBottomOf="@+id/flow" />
+</androidx.constraintlayout.widget.ConstraintLayout>
