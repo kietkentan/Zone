@@ -9,10 +9,7 @@ import androidx.fragment.app.activityViewModels
 import com.google.firebase.auth.PhoneAuthProvider
 import com.khtn.zone.custom.view.OTPInputListener
 import com.khtn.zone.databinding.FragmentVerifyBinding
-import com.khtn.zone.utils.Utils
-import com.khtn.zone.utils.printMeD
-import com.khtn.zone.utils.showSoftKeyboard
-import com.khtn.zone.utils.snackNet
+import com.khtn.zone.utils.*
 import com.khtn.zone.viewmodel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,6 +17,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class VerifyFragment : Fragment() {
     private lateinit var binding: FragmentVerifyBinding
     private val authViewModel: AuthViewModel by activityViewModels()
+
+    private val OTP_LENGHT = 6
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,6 +57,7 @@ class VerifyFragment : Fragment() {
                 credential?.let {
                     val otp = credential.smsCode
                     otp?.let { binding.otpInput.setOTPCode(it) }
+                    authViewModel.setVerifyProgress(show = true)
                 }
             }
 
@@ -65,11 +65,26 @@ class VerifyFragment : Fragment() {
                 binding.tvResendOtp.text = it
             }
 
-            authViewModel.getVerificationId().observe(viewLifecycleOwner) { veriCode ->
-                veriCode?.let {
-                    authViewModel.setVCodeNull()
+            authViewModel.getVerificationId().observe(viewLifecycleOwner) { verifyCode ->
+                verifyCode?.let {
+                    authViewModel.setVerifyProgress(show = false)
+                    authViewModel.setVerifyCodeNull()
                     authViewModel.startTimer()
                 }
+            }
+
+            authViewModel.getVerifyProgress().observe(viewLifecycleOwner) {
+                if (it) {
+                    binding.progressVerify.show()
+                    binding.layoutResendOtp.hide()
+                } else {
+                    binding.progressVerify.hide()
+                    binding.layoutResendOtp.show()
+                }
+            }
+
+            authViewModel.getFailed().observe(viewLifecycleOwner) {
+                authViewModel.setVerifyProgress(show = false)
             }
 
             authViewModel.getTaskResult().observe(viewLifecycleOwner) { taskId ->
@@ -89,7 +104,7 @@ class VerifyFragment : Fragment() {
         try {
             val otp = binding.otpInput.getOTPCode()
             when {
-                otp.length < 6 -> binding.otpInput.showError()
+                otp.length < OTP_LENGHT -> binding.otpInput.showError()
                 Utils.isNoInternet(requireContext()) -> {
                     snackNet(requireActivity())
                 }
@@ -106,9 +121,6 @@ class VerifyFragment : Fragment() {
     }
 
     override fun onDestroy() {
-/*
-        progressView?.dismissIfShowing()
-*/
         authViewModel.clearAll()
         super.onDestroy()
     }

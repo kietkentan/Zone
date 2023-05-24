@@ -29,31 +29,31 @@ class OTPInput @JvmOverloads constructor(
 
     var error: String?
         get() = binding.tvErrorOtpInput.text.toString()
-        set(value) {binding.tvErrorOtpInput.text = value}
+        set(value) { if (!value.isNullOrEmpty()) binding.tvErrorOtpInput.text = value}
 
     var otpOne: String?
         get() = binding.edtOTP1.text.toString()
-        set(value) {binding.edtOTP1.setText(value)}
+        set(value) { binding.edtOTP1.setText(value) }
 
     var otpTwo: String?
         get() = binding.edtOTP2.text.toString()
-        set(value) {binding.edtOTP2.setText(value)}
+        set(value) { binding.edtOTP2.setText(value) }
 
     var otpThree: String?
         get() = binding.edtOTP3.text.toString()
-        set(value) {binding.edtOTP3.setText(value)}
+        set(value) { binding.edtOTP3.setText(value) }
 
     var otpFour: String?
         get() = binding.edtOTP4.text.toString()
-        set(value) {binding.edtOTP4.setText(value)}
+        set(value) { binding.edtOTP4.setText(value) }
 
     var otpFive: String?
         get() = binding.edtOTP5.text.toString()
-        set(value) {binding.edtOTP5.setText(value)}
+        set(value) { binding.edtOTP5.setText(value) }
 
     var otpSix: String?
         get() = binding.edtOTP6.text.toString()
-        set(value) {binding.edtOTP6.setText(value)}
+        set(value) { binding.edtOTP6.setText(value) }
 
     var currentFocus: Int = 0
 
@@ -71,10 +71,10 @@ class OTPInput @JvmOverloads constructor(
             context.theme.obtainStyledAttributes(attrs, R.styleable.OTPInput, defStyleAttr, 0)
         initByAttributes(attributes)
         attributes.recycle()
-        initView()
+        initListener()
     }
 
-    private fun hideError() {
+    fun hideError() {
         binding.tvErrorOtpInput.hide()
     }
 
@@ -84,13 +84,6 @@ class OTPInput @JvmOverloads constructor(
 
     fun addListener(listener: OTPInputListener) {
         otpInputListener = listener
-    }
-
-    fun onFocusChange(isFocus: Boolean) {
-        if (isFocus)
-            setFocus()
-        else
-            clearFocus()
     }
 
     private fun setFocus() {
@@ -120,14 +113,7 @@ class OTPInput @JvmOverloads constructor(
         listEdtOtp[currentFocus].isCursorVisible = true
     }
 
-    private fun initView() {
-        if (!error.isNullOrEmpty()) binding.tvErrorOtpInput.text = error
-        if (!otpOne.isNullOrEmpty()) binding.edtOTP1.setText(otpOne)
-        if (!otpTwo.isNullOrEmpty()) binding.edtOTP2.setText(otpTwo)
-        if (!otpThree.isNullOrEmpty()) binding.edtOTP3.setText(otpThree)
-        if (!otpFour.isNullOrEmpty()) binding.edtOTP4.setText(otpFour)
-        if (!otpFive.isNullOrEmpty()) binding.edtOTP5.setText(otpFive)
-        if (!otpSix.isNullOrEmpty()) binding.edtOTP6.setText(otpSix)
+    private fun initListener() {
         listEdtOtp[0].isCursorVisible = true
         addTextChangedListener()
         onKeyListener()
@@ -193,8 +179,7 @@ class OTPInput @JvmOverloads constructor(
                     } else if ((event?.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                         getActivity(this@OTPInput)?.closeKeyBoard()
                         (v as EditText).clearFocus()
-                        if (i == listEdtOtp.size - 1)
-                            otpInputListener?.onSuccess()
+                        otpInputListener?.onSuccess()
                     }
                     return false
                 }

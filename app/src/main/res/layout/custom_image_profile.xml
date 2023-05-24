@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/igv_profile"
+        android:layout_width="@dimen/dp120"
+        android:layout_height="@dimen/dp120"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_other_user"
+        tools:ignore="ContentDescription" />
+
+    <ProgressBar
+        android:id="@+id/progress_profile"
+        android:layout_width="@dimen/dp30"
+        android:layout_height="@dimen/dp30"
+        android:visibility="gone"
+        android:layout_centerInParent="true"/>
+</RelativeLayout>

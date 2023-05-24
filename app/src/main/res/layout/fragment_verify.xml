@@ -50,6 +50,7 @@
                     android:layout_marginVertical="@dimen/dp20"/>
 
                 <LinearLayout
+                    android:id="@+id/layout_resend_otp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center">
@@ -64,9 +65,16 @@
                         android:id="@+id/tv_resend_otp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/TextGreenSemi12"
-                        android:layout_marginStart="@dimen/dp10" />
+                        style="@style/TextGreenSemiItalic12"
+                        android:paddingHorizontal="@dimen/dp10" />
                 </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/progress_verify"
+                    android:layout_width="@dimen/dp45"
+                    android:layout_height="@dimen/dp45"
+                    android:visibility="gone"
+                    android:layout_gravity="center_horizontal"/>
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

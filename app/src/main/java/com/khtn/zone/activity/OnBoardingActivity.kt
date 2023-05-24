@@ -11,6 +11,7 @@ import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.auth.FirebaseAuth
 import com.khtn.zone.R
 import com.khtn.zone.adapter.OnBoardingAdapter
 import com.khtn.zone.databinding.ActivityOnBoardingBinding

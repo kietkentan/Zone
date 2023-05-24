@@ -63,10 +63,11 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="TextGreenSemi12">
+    <style name="TextGreenSemiItalic12">
         <item name="android:textSize">@dimen/sp12</item>
         <item name="android:fontFamily">@font/font_semi</item>
         <item name="android:textColor">@color/green_220</item>
+        <item name="android:textStyle">italic</item>
     </style>
 
     <style name="TextWhiteSemi12">

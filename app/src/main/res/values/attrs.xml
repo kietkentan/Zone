@@ -37,4 +37,9 @@
         <attr name="otp_six" format="string"/>
         <attr name="otp_error" format="string"/>
     </declare-styleable>
+
+    <declare-styleable name="ImageProfile">
+        <attr name="url_profile" format="string"/>
+        <attr name="progress_profile" format="boolean"/>
+    </declare-styleable>
 </resources>

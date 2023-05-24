@@ -1,5 +1,6 @@
 package com.khtn.zone.viewmodel
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
@@ -85,7 +86,8 @@ class AuthViewModel @Inject constructor(
     fun resendClicked() {
         "Resend Clicked".printMeD()
         if (canResend) {
-            setVProgress(true)
+            setVerifyProgress(true)
+            setEmptyText()
             setMobile()
         }
     }
@@ -109,6 +111,7 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    @SuppressLint("SuspiciousIndentation")
     fun resetTimer() {
         canResend = false
         resendTxt.value = ""
@@ -144,11 +147,11 @@ class AuthViewModel @Inject constructor(
         otpSix.value = ""
     }
 
-    fun setVProgress(show: Boolean) {
+    fun setVerifyProgress(show: Boolean) {
         verifyProgress.value = show
     }
 
-    fun getVProgress(): LiveData<Boolean> {
+    fun getVerifyProgress(): LiveData<Boolean> {
         return verifyProgress
     }
 
@@ -157,11 +160,11 @@ class AuthViewModel @Inject constructor(
     }
 
     fun setCredential(credential: PhoneAuthCredential) {
-        setVProgress(true)
+        setVerifyProgress(true)
         authRepo.setCredential(credential)
     }
 
-    fun setVCodeNull(){
+    fun setVerifyCodeNull(){
         verifyCode = authRepo.getVCode().value!!
         authRepo.setVCodeNull()
     }
@@ -192,7 +195,7 @@ class AuthViewModel @Inject constructor(
                 Timber.v("Uss11:: ${preference.getUid()}")
                 preference.setLogin()
                 preference.setLogInTime()
-                setVProgress(false)
+                setVerifyProgress(false)
                 progress.value = false
                 if (data.exists()) {
                     val appUser = data.toObject(UserProfile::class.java)
@@ -203,7 +206,7 @@ class AuthViewModel @Inject constructor(
                 }
                 userProfileGot.value = true
             }.addOnFailureListener { e ->
-                setVProgress(false)
+                setVerifyProgress(false)
                 progress.value = false
                 context.toast(e.message.toString())
             }

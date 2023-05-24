@@ -53,8 +53,9 @@ class LoginFragment: Fragment() {
                 vCode?.let {
                     authViewModel.setProgress(false)
                     authViewModel.resetTimer()
-                    authViewModel.setVCodeNull()
+                    authViewModel.setVerifyCodeNull()
                     authViewModel.setEmptyText()
+
                     if (findNavController().isValidDestination(R.id.loginFragment))
                         findNavController().navigate(R.id.action_loginFragment_to_verifyFragment)
                 }
@@ -70,21 +71,21 @@ class LoginFragment: Fragment() {
                     authViewModel.fetchUser(taskId)
             }
 
+            authViewModel.getFailed().observe(viewLifecycleOwner) {
+                authViewModel.setProgress(show = false)
+            }
+
             authViewModel.userProfileGot.observe(viewLifecycleOwner) { success ->
-                /*if (success && authViewModel.getCredential().value?.smsCode.isNullOrEmpty()
-                    && findNavController().isValidDestination(R.id.FLogIn)
+                if (success && authViewModel.getCredential().value?.smsCode.isNullOrEmpty()
+                    && findNavController().isValidDestination(R.id.loginFragment)
                 ) {
                     requireActivity().toastLong("Authenticated successfully using Instant verification")
-                    findNavController().navigate(R.id.action_FLogIn_to_FProfile)
-                }*/
+                    /*findNavController().navigate(R.id.action_FLogIn_to_FProfile)*/
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
-    }
-
-    private fun requestOTP() {
-        findNavController().navigate(R.id.action_loginFragment_to_verifyFragment)
     }
 
     private fun openDialogSelectNoCode() {

@@ -1,5 +1,6 @@
 package com.khtn.zone.repo
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
@@ -34,12 +35,13 @@ class AuthRepo @Inject constructor(
     private val failedState: MutableLiveData<LogInFailedState> = MutableLiveData()
 
     init {
-        "LoginRepo init".printMeD()
+        "AuthRepo init".printMeD()
     }
 
     fun setMobile(country: Country, mobile: String) {
         Timber.v("Mobile $mobile")
         val number = country.noCode + " " + mobile
+        auth.setLanguageCode(country.code)
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(number)
             .setTimeout(60L, TimeUnit.SECONDS)
@@ -62,7 +64,7 @@ class AuthRepo @Inject constructor(
         failedState.value = LogInFailedState.Verification
         when (exp) {
             is FirebaseAuthInvalidCredentialsException ->
-                context.toast(context.getString(com.khtn.zone.R.string.invalid_request))
+                context.toast(context.getString(R.string.invalid_request))
             else -> context.toast(exp.message.toString())
         }
     }
@@ -70,7 +72,7 @@ class AuthRepo @Inject constructor(
     override fun onCodeSent(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
         Timber.v("onCodeSent:$verificationId")
         this.verificationId.value = verificationId
-        context.toast(context.getString(com.khtn.zone.R.string.otp_sent_succesfully))
+        context.toast(context.getString(R.string.otp_sent_succesfully))
     }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
@@ -96,10 +98,12 @@ class AuthRepo @Inject constructor(
         return verificationId
     }
 
+    @SuppressLint("NullSafeMutableLiveData")
     fun setVCodeNull() {
         verificationId.value = null
     }
 
+    @SuppressLint("NullSafeMutableLiveData")
     fun clearOldAuth() {
         credential.value = null
         taskResult.value = null
