@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.PhoneAuthProvider
+import com.khtn.zone.R
 import com.khtn.zone.custom.view.OTPInputListener
 import com.khtn.zone.databinding.FragmentVerifyBinding
 import com.khtn.zone.utils.*
@@ -46,6 +48,7 @@ class VerifyFragment : Fragment() {
     }
 
     private fun initView() {
+        binding.viewModel = authViewModel
         activity?.showSoftKeyboard(binding.otpInput.listEdtOtp[0])
         if (authViewModel.resendTxt.value.isNullOrEmpty())
             authViewModel.startTimer()
@@ -73,7 +76,7 @@ class VerifyFragment : Fragment() {
                 }
             }
 
-            authViewModel.getVerifyProgress().observe(viewLifecycleOwner) {
+            authViewModel.verifyProgress.observe(viewLifecycleOwner) {
                 if (it) {
                     binding.progressVerify.show()
                     binding.layoutResendOtp.hide()
@@ -92,8 +95,8 @@ class VerifyFragment : Fragment() {
             }
 
             authViewModel.userProfileGot.observe(viewLifecycleOwner) { success ->
-                /*if (success && findNavController().isValidDestination(R.id.FVerify))
-                    findNavController().navigate(R.id.action_FVerify_to_FProfile)*/
+                if (success && findNavController().isValidDestination(R.id.verifyFragment))
+                    findNavController().navigate(R.id.action_verifyFragment_to_setupProfileFragment)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -104,14 +107,12 @@ class VerifyFragment : Fragment() {
         try {
             val otp = binding.otpInput.getOTPCode()
             when {
-                otp.length < OTP_LENGHT -> binding.otpInput.showError()
-                Utils.isNoInternet(requireContext()) -> {
-                    snackNet(requireActivity())
-                }
+                otp.length < OTP_LENGHT -> authViewModel.setErrorOTP(getString(R.string.invalid_verification_code))
+                Utils.isNoInternet(requireContext()) -> { snackNet(requireActivity()) }
                 else -> {
-                    "VCode:: ${authViewModel.verifyCode}".printMeD()
+                    "VCode:: ${authViewModel.verifyCode.value}".printMeD()
                     "OTP:: $otp".printMeD()
-                    val credential = PhoneAuthProvider.getCredential(authViewModel.verifyCode, otp)
+                    val credential = PhoneAuthProvider.getCredential(authViewModel.verifyCode.value.toString(), otp)
                     authViewModel.setCredential(credential)
                 }
             }

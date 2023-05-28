@@ -74,7 +74,6 @@
         android:id="@+id/tv_error_otp_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/enter_otp"
         style="@style/TextError"
         android:visibility="gone"
         android:layout_marginTop="@dimen/dp10"

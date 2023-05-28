@@ -5,53 +5,43 @@ import android.content.res.TypedArray
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.EditText
 import android.widget.LinearLayout
 import com.khtn.zone.R
 import com.khtn.zone.databinding.CustomPhoneInputBinding
 
-class PhoneInput @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-): LinearLayout(context, attrs, defStyleAttr) {
-    private val binding: CustomPhoneInputBinding
+class PhoneInput: LinearLayout {
+    val binding = CustomPhoneInputBinding.inflate(LayoutInflater.from(context), this, true)
 
-    val editText: EditText
-        get() = binding.edtMobile
+    var textPhone: String? = null
+    var textPhoneHint: String? = null
+    var textNoCode: String? = null
+    var textPhoneTitle: String? = null
 
-    var text: String?
-        get() = binding.edtMobile.text.toString()
-        set(value) { if (!value.isNullOrEmpty()) binding.edtMobile.setText(value) }
-
-    var textHint: String? = ""
-        set(value) { if (!value.isNullOrEmpty()) binding.edtMobile.hint = value }
-
-    var noCode: String?
-        get() = binding.txtCountryCode.text.toString()
-        set(value) { if (!value.isNullOrEmpty()) binding.txtCountryCode.text = value }
-
-    var title: String?
-        get() = binding.tvPhoneTitle.text.toString()
-        set(value) { if (!value.isNullOrEmpty()) binding.tvPhoneTitle.text = value }
-
-    init {
-        binding = CustomPhoneInputBinding.inflate(LayoutInflater.from(context), this, true)
-        val attributes =
-            context.theme.obtainStyledAttributes(attrs, R.styleable.PhoneInput, defStyleAttr, 0)
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+        val attributes = context.obtainStyledAttributes(attrs, R.styleable.PhoneInput)
         initByAttributes(attributes)
         attributes.recycle()
+        initView()
     }
 
+
     private fun initByAttributes(attributes: TypedArray) {
-        text = attributes.getString(R.styleable.PhoneInput_text)
-        textHint = attributes.getString(R.styleable.PhoneInput_text_hint)
-        title = attributes.getString(R.styleable.PhoneInput_text_title)
-        noCode = attributes.getString(R.styleable.PhoneInput_text_nocode)
+        textPhone = attributes.getString(R.styleable.PhoneInput_textPhone)
+        textPhoneHint = attributes.getString(R.styleable.PhoneInput_textPhoneHint)
+        textPhoneTitle = attributes.getString(R.styleable.PhoneInput_textPhoneTitle)
+        textNoCode = attributes.getString(R.styleable.PhoneInput_textNoCode)
+    }
+
+    private fun initView() {
+        textPhone?.let { binding.edtMobile.setText(it) }
+        textPhoneHint?.let { binding.edtMobile.hint = it }
+        textNoCode?.let { binding.tvCountryCode.text = it }
+        textPhoneTitle?.let { binding.tvPhoneTitle.text = it }
     }
 
     fun onLeftClickListener(listener: OnClickListener) {
-        binding.txtCountryCode.setOnClickListener(listener)
+        binding.tvCountryCode.setOnClickListener(listener)
     }
 
     fun onKeyListener(listener: OnKeyListener) {

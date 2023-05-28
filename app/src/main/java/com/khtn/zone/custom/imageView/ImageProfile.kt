@@ -9,45 +9,31 @@ import android.widget.RelativeLayout
 import androidx.core.net.toUri
 import com.khtn.zone.R
 import com.khtn.zone.databinding.CustomImageProfileBinding
+import com.khtn.zone.utils.ImageUtils
+import com.khtn.zone.utils.hide
+import com.khtn.zone.utils.show
 
-interface ChoseSuccess {
-    fun onSuccess()
-}
+class ImageProfile: RelativeLayout{
+    val binding = CustomImageProfileBinding.inflate(LayoutInflater.from(context), this, true)
 
-class ImageProfile @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-): RelativeLayout(context, attrs, defStyleAttr){
-    private val binding: CustomImageProfileBinding
-    private var choseSuccess: ChoseSuccess? = null
+    var profileUrl: String? = null
+    var profileProgress: Boolean = false
 
-    var url: String? = null
-        set(value) { if (!value.isNullOrEmpty()) binding.igvProfile.setImageURI(value.toUri()) }
-
-    var progress: Boolean
-        get() = binding.progressProfile.visibility == View.VISIBLE
-        set(value) { binding.progressProfile.visibility = if (value) View.VISIBLE else View.GONE }
-
-    init {
-        binding = CustomImageProfileBinding.inflate(LayoutInflater.from(context), this, true)
-        val attributes =
-            context.theme.obtainStyledAttributes(attrs, R.styleable.ImageProfile, defStyleAttr, 0)
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+        val attributes = context.obtainStyledAttributes(attrs, R.styleable.ImageProfile)
         initByAttributes(attributes)
         attributes.recycle()
         onClickListener()
     }
 
     private fun initByAttributes(attributes: TypedArray) {
-        url = attributes.getString(R.styleable.ImageProfile_url_profile)
-        progress = attributes.getBoolean(R.styleable.ImageProfile_progress_profile, false)
+        profileUrl = attributes.getString(R.styleable.ImageProfile_profileUrl)
+        profileProgress = attributes.getBoolean(R.styleable.ImageProfile_profileProgress, false)
     }
-
     private fun onClickListener() {
-
-    }
-
-    fun onChoseImageSuccess(listener: ChoseSuccess) {
-        choseSuccess = listener
+        profileUrl?.let { ImageUtils.loadUserImage(binding.igvProfile, it) }
+        if (!profileProgress) binding.progressProfile.hide()
+        else binding.progressProfile.show()
     }
 }

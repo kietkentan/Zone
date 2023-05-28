@@ -28,6 +28,7 @@ import com.khtn.zone.custom.dialog.SheetListener
 import java.io.*
 import kotlin.random.Random
 
+
 object ImageUtils {
     private const val FROM_GALLERY = 116
     private const val TAKE_PHOTO = 111
@@ -72,7 +73,7 @@ object ImageUtils {
         builder.show(context.childFragmentManager, "")
     }
 
-    public fun chooseGallery(context: Activity) {
+    fun chooseGallery(context: Activity) {
         try {
             val intent = Intent(Intent.ACTION_PICK)
             intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
@@ -127,6 +128,7 @@ object ImageUtils {
             val cropImage = CropImage.activity(imgUri)
                 .setOutputCompressFormat(Bitmap.CompressFormat.JPEG)
                 .setGuidelines(CropImageView.Guidelines.ON)
+                .setNoOutputImage(false)
             if (squareCrop)
                 cropImage.setAspectRatio(1, 1)
             cropImage.start(context)

@@ -9,19 +9,14 @@ import android.widget.LinearLayout
 import com.khtn.zone.R
 import com.khtn.zone.databinding.CustomSearchBarBinding
 
-class SearchInput @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-): LinearLayout(context, attrs, defStyleAttr) {
-    private val binding: CustomSearchBarBinding
-    private var text: String? = ""
-    private var textHint: String? = ""
+class SearchInput: LinearLayout {
+    val binding = CustomSearchBarBinding.inflate(LayoutInflater.from(context), this, true)
+    var textSearch: String? = null
+    var textSearchHint: String? = null
 
-    init {
-        binding = CustomSearchBarBinding.inflate(LayoutInflater.from(context), this, true)
-        val attributes =
-            context.theme.obtainStyledAttributes(attrs, R.styleable.PhoneInput, defStyleAttr, 0)
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+        val attributes = context.obtainStyledAttributes(attrs, R.styleable.SearchInput)
         initByAttributes(attributes)
         attributes.recycle()
         initView()
@@ -35,25 +30,13 @@ class SearchInput @JvmOverloads constructor(
         binding.btnRight.setOnClickListener(listener)
     }
 
-    fun getText(): String {
-        return binding.edtTextInput.text.toString()
-    }
-
-    fun setText(str: String) {
-        binding.edtTextInput.setText(str)
-    }
-
-    fun setTextHint(str: String) {
-        binding.edtTextInput.hint = str
-    }
-
     private fun initView() {
-        if (!textHint.isNullOrEmpty()) binding.edtTextInput.hint = textHint
-        if (!text.isNullOrEmpty()) binding.edtTextInput.setText(text)
+        if (!textSearchHint.isNullOrEmpty()) binding.edtTextInput.hint = textSearchHint
+        if (!textSearch.isNullOrEmpty()) binding.edtTextInput.setText(textSearch)
     }
 
     private fun initByAttributes(attributes: TypedArray) {
-        text = attributes.getString(R.styleable.PhoneInput_text)
-        textHint = attributes.getString(R.styleable.PhoneInput_text_hint)
+        textSearch = attributes.getString(R.styleable.SearchInput_textSearch)
+        textSearchHint = attributes.getString(R.styleable.SearchInput_textSearchHint)
     }
 }

@@ -22,24 +22,30 @@
     </declare-styleable>
 
     <declare-styleable name="PhoneInput">
-        <attr name="text" format="string"/>
-        <attr name="text_title" format="string"/>
-        <attr name="text_hint" format="string"/>
-        <attr name="text_nocode" format="string"/>
+        <attr name="textPhone" format="string"/>
+        <attr name="textPhoneTitle" format="string"/>
+        <attr name="textPhoneHint" format="string"/>
+        <attr name="textNoCode" format="string"/>
+        <attr name="textPhoneError" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="SearchInput">
+        <attr name="textSearch" format="string"/>
+        <attr name="textSearchHint" format="string"/>
     </declare-styleable>
 
     <declare-styleable name="OTPInput">
-        <attr name="otp_one" format="string"/>
-        <attr name="otp_two" format="string"/>
-        <attr name="otp_three" format="string"/>
-        <attr name="otp_four" format="string"/>
-        <attr name="otp_five" format="string"/>
-        <attr name="otp_six" format="string"/>
-        <attr name="otp_error" format="string"/>
+        <attr name="otpOne" format="string"/>
+        <attr name="otpTwo" format="string"/>
+        <attr name="otpThree" format="string"/>
+        <attr name="otpFour" format="string"/>
+        <attr name="otpFive" format="string"/>
+        <attr name="otpSix" format="string"/>
+        <attr name="otpError" format="string"/>
     </declare-styleable>
 
     <declare-styleable name="ImageProfile">
-        <attr name="url_profile" format="string"/>
-        <attr name="progress_profile" format="boolean"/>
+        <attr name="profileUrl" format="string"/>
+        <attr name="profileProgress" format="boolean"/>
     </declare-styleable>
 </resources>

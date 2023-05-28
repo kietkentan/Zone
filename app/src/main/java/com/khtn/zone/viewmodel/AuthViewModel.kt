@@ -24,6 +24,10 @@ import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
+interface ErrorChange {
+    fun onErrorChange(error: String)
+}
+
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -31,61 +35,78 @@ class AuthViewModel @Inject constructor(
     private val preference: SharedPreferencesManager,
     private val firestore: FirebaseFirestore
 ): BaseViewModel() {
-    val country = MutableLiveData<Country>()
+    init {
+        "LogInViewModel init".printMeD()
+        authRepo.setListener(object : ErrorChange {
+            override fun onErrorChange(error: String) {
+                _errorOTP.value = error
+            }
+        })
+    }
 
-    val mobile = MutableLiveData<String>()
+    private val _country = MutableLiveData<Country>()
+    val country: LiveData<Country>
+        get() = _country
 
-    val userProfileGot = MutableLiveData<Boolean>()
+    private val _mobile = MutableLiveData<String>()
+    val mobile: LiveData<String>
+        get() = _mobile
 
-    private val progress = MutableLiveData(false)
+    private val _userProfileGot = MutableLiveData<Boolean>()
+    val userProfileGot: LiveData<Boolean>
+        get() = _userProfileGot
 
-    private val verifyProgress = MutableLiveData(false)
+    private val _progress = MutableLiveData(false)
+    val progress: LiveData<Boolean>
+        get() = _progress
 
-    var canResend: Boolean = false
+    private val _verifyProgress = MutableLiveData(false)
+    val verifyProgress: LiveData<Boolean>
+        get() = _verifyProgress
 
-    val resendTxt = MutableLiveData<String>()
+    private val _canResend = MutableLiveData(false)
+    val canResend: LiveData<Boolean>
+        get() = _canResend
 
-    val otpOne = MutableLiveData<String>()
+    private val _resendTxt = MutableLiveData<String>()
+    val resendTxt: LiveData<String>
+        get() = _resendTxt
 
-    val otpTwo = MutableLiveData<String>()
+    private val _otpCode = MutableLiveData<String>()
+    val otpCode: LiveData<String>
+        get() = _otpCode
 
-    val otpThree = MutableLiveData<String>()
+    private val _verifyCode = MutableLiveData<String>()
+    val verifyCode: LiveData<String>
+        get() = _verifyCode
 
-    val otpFour = MutableLiveData<String>()
+    private val _errorPhone = MutableLiveData<String>()
+    val errorPhone: LiveData<String>
+        get() = _errorPhone
 
-    val otpFive = MutableLiveData<String>()
-
-    val otpSix = MutableLiveData<String>()
-
-    var verifyCode: String = ""
+    private val _errorOTP = MutableLiveData<String>()
+    val errorOTP: LiveData<String>
+        get() = _errorOTP
 
     private lateinit var timer: CountDownTimer
 
-    init {
-        "LogInViewModel init".printMeD()
-    }
-
     fun setCountry(country: Country) {
-        this.country.value = country
+        this._country.value = country
     }
 
     fun setMobile() {
         authRepo.clearOldAuth()
         saveMobile()
-        authRepo.setMobile(country.value!!, mobile.value!!)
+        authRepo.setMobile(_country.value!!, _mobile.value!!)
     }
 
     fun setProgress(show: Boolean) {
-        progress.value = show
-    }
-
-    fun getProgress(): LiveData<Boolean> {
-        return progress
+        _progress.value = show
     }
 
     fun resendClicked() {
         "Resend Clicked".printMeD()
-        if (canResend) {
+        if (_canResend.value == true) {
             setVerifyProgress(true)
             setEmptyText()
             setMobile()
@@ -94,15 +115,15 @@ class AuthViewModel @Inject constructor(
 
     fun startTimer() {
         try {
-            canResend = false
+            _canResend.value = false
             timer = object : CountDownTimer(60000L, 1000L) {
                 override fun onTick(millisUntilFinished: Long) {
                     setTimerTxt(millisUntilFinished/1000L)
                 }
 
                 override fun onFinish() {
-                    canResend = true
-                    resendTxt.value = context.getString(R.string.txt_resend)
+                    _canResend.value = true
+                    _resendTxt.value = context.getString(R.string.txt_resend)
                 }
             }
             timer.start()
@@ -113,8 +134,8 @@ class AuthViewModel @Inject constructor(
 
     @SuppressLint("SuspiciousIndentation")
     fun resetTimer() {
-        canResend = false
-        resendTxt.value = ""
+        _canResend.value = false
+        _resendTxt.value = ""
         if (this::timer.isInitialized)
         timer.cancel()
     }
@@ -132,27 +153,34 @@ class AuthViewModel @Inject constructor(
                             m,
                             s
                         )
-            resendTxt.value = resend
+            _resendTxt.value = resend
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    fun setEmptyText(){
-        otpOne.value = ""
-        otpTwo.value = ""
-        otpThree.value = ""
-        otpFour.value = ""
-        otpFive.value = ""
-        otpSix.value = ""
+    fun setEmptyErrorPhone() {
+        _errorPhone.value = ""
+    }
+
+    fun setEmptyErrorOTP() {
+        _errorOTP.value = ""
+    }
+
+    fun setEmptyText() {
+        _otpCode.value = ""
+    }
+
+    fun setErrorPhone(error: String) {
+        _errorPhone.value = error
+    }
+
+    fun setErrorOTP(error: String) {
+        _errorOTP.value = error
     }
 
     fun setVerifyProgress(show: Boolean) {
-        verifyProgress.value = show
-    }
-
-    fun getVerifyProgress(): LiveData<Boolean> {
-        return verifyProgress
+        _verifyProgress.value = show
     }
 
     fun getCredential(): LiveData<PhoneAuthCredential> {
@@ -165,7 +193,7 @@ class AuthViewModel @Inject constructor(
     }
 
     fun setVerifyCodeNull(){
-        verifyCode = authRepo.getVCode().value!!
+        _verifyCode.value = authRepo.getVCode().value
         authRepo.setVCodeNull()
     }
 
@@ -184,6 +212,10 @@ class AuthViewModel @Inject constructor(
     private fun saveMobile() =
        preference.saveMobile(ModelMobile(country.value!!.noCode, mobile.value!!))
 
+    fun saveMobile(mobile: String) {
+        _mobile.value = mobile
+    }
+
     fun fetchUser(taskId: Task<AuthResult>) {
         val user = taskId.result?.user
         Timber.v("FetchUser:: ${user?.uid}")
@@ -196,7 +228,7 @@ class AuthViewModel @Inject constructor(
                 preference.setLogin()
                 preference.setLogInTime()
                 setVerifyProgress(false)
-                progress.value = false
+                _progress.value = false
                 if (data.exists()) {
                     val appUser = data.toObject(UserProfile::class.java)
                     Timber.v("UserId ${appUser?.uId}")
@@ -204,10 +236,10 @@ class AuthViewModel @Inject constructor(
                     // if device id is not same, send new_user_logged type notification to the token
                     checkLastDevice(appUser)
                 }
-                userProfileGot.value = true
+                _userProfileGot.value = true
             }.addOnFailureListener { e ->
                 setVerifyProgress(false)
-                progress.value = false
+                _progress.value = false
                 context.toast(e.message.toString())
             }
     }
@@ -232,7 +264,7 @@ class AuthViewModel @Inject constructor(
     }
 
     fun clearAll(){
-        userProfileGot.value = false
+        _userProfileGot.value = false
         authRepo.clearOldAuth()
     }
 }

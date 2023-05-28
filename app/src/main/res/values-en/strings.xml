@@ -47,4 +47,7 @@
     <string name="enter_otp">Enter the verification code that was sent to your phone number.</string>
     <string name="otp_verification">OTP Verification</string>
     <string name="dont_receive">Don\\\'t receive the OTP?</string>
+    <string name="user_name">User name</string>
+    <string name="pics_name_des">This user name and picture will be visible to your Letschat users. Other users can find you by searching.</string>
+    <string name="please_select_country">Please select a country code!</string>
 </resources>

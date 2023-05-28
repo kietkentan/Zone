@@ -45,10 +45,6 @@ class LoginFragment: Fragment() {
 
     private fun observer() {
         try {
-            authViewModel.country.observe(viewLifecycleOwner) {
-                binding.textInputPhone.noCode = it.noCode
-            }
-
             authViewModel.getVerificationId().observe(viewLifecycleOwner) { vCode ->
                 vCode?.let {
                     authViewModel.setProgress(false)
@@ -61,7 +57,7 @@ class LoginFragment: Fragment() {
                 }
             }
 
-            authViewModel.getProgress().observe(viewLifecycleOwner) {
+            authViewModel.progress.observe(viewLifecycleOwner) {
                 binding.progressGetOtp.visibility = if (it) View.VISIBLE else View.GONE
                 binding.btnGetOtp.visibility = if (it) View.GONE else View.VISIBLE
             }
@@ -80,7 +76,7 @@ class LoginFragment: Fragment() {
                     && findNavController().isValidDestination(R.id.loginFragment)
                 ) {
                     requireActivity().toastLong("Authenticated successfully using Instant verification")
-                    /*findNavController().navigate(R.id.action_FLogIn_to_FProfile)*/
+                    findNavController().navigate(R.id.action_loginFragment_to_setupProfileFragment)
                 }
             }
         } catch (e: Exception) {
@@ -114,16 +110,14 @@ class LoginFragment: Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
-                authViewModel.mobile.value = s.toString()
+                authViewModel.saveMobile(s.toString())
+                authViewModel.setEmptyErrorPhone()
             }
         })
 
         binding.textInputPhone.onKeyListener { _, keyCode, event ->
             if ((event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                activity?.closeKeyBoard()
-                binding.textInputPhone.editText.clearFocus()
-                binding.tvErrorPhoneInput.visibility =
-                    if (authViewModel.isValidPhoneNumber()) View.GONE else View.VISIBLE
+                validate()
                 return@onKeyListener true
             }
             return@onKeyListener false
@@ -136,12 +130,9 @@ class LoginFragment: Fragment() {
             val mobileNo = authViewModel.mobile.value?.trim()
             val country = authViewModel.country.value
             when {
-                Validator.isMobileNumberEmpty(mobileNo) -> snack(requireActivity(), "Enter valid mobile number")
-                country == null -> snack(requireActivity(), "Select a country")
-                !Validator.isValidNo(country.code, mobileNo!!) -> snack(
-                    requireActivity(),
-                    "Enter valid mobile number"
-                )
+                Validator.isMobileNumberEmpty(mobileNo) -> authViewModel.setErrorPhone(getString(R.string.invalid_phone_number))
+                country == null -> authViewModel.setErrorPhone(getString(R.string.please_select_country))
+                !Validator.isValidNo(country.code, mobileNo!!) -> authViewModel.setErrorPhone(getString(R.string.invalid_phone_number))
                 Utils.isNoInternet(requireContext()) -> snackNet(requireActivity())
                 else -> {
                     authViewModel.setMobile()
@@ -175,6 +166,7 @@ class LoginFragment: Fragment() {
     }
 
     private fun initView() {
+        binding.viewModel = authViewModel
         setDefaultCountry()
     }
 }

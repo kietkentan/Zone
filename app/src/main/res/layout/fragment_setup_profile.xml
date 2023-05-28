@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragment.SetupProfileFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.khtn.zone.viewmodel.SetupProfileViewModel" />
+    </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -14,13 +18,55 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingTop="@dimen/dp20"
             android:orientation="vertical">
 
             <com.khtn.zone.custom.imageView.ImageProfile
                 android:id="@+id/iv_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:profileUrl="@{viewModel.profilePicUrl}"
+                app:profileProgress="@{viewModel.progressProPic}"
                 android:layout_gravity="center_horizontal"/>
+
+            <EditText
+                android:id="@+id/edt_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp35"
+                android:background="@android:color/transparent"
+                style="@style/TextBlackSemi15"
+                android:hint="@string/user_name"
+                android:text="@{viewModel.name}"
+                android:inputType="textPersonName|textCapWords"
+                android:padding="@dimen/dp8"
+                tools:ignore="Autofill" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/color_background"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp15"
+                style="@style/TextBlackSemi12"
+                android:gravity="center_horizontal"
+                android:text="@string/pics_name_des" />
         </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floating_button_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:backgroundTint="@color/green_220"
+            android:src="@drawable/ic_arrow_r8"
+            app:useCompatPadding="true"
+            android:elevation="@dimen/dp5"
+            android:layout_margin="@dimen/dp15"
+            app:tint="@color/white"
+            tools:ignore="ContentDescription,RtlHardcoded" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

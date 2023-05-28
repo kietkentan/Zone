@@ -47,4 +47,7 @@
     <string name="enter_otp">Nhập mã xác thực đã được gửi đến số điện thoại của bạn.</string>
     <string name="otp_verification">Xác thực OTP</string>
     <string name="dont_receive">Không nhận được mã?</string>
+    <string name="user_name">Tên người dùng</string>
+    <string name="pics_name_des">Tên người dùng và hình ảnh này sẽ hiển thị cho người dùng Zone. Những người dùng khác có thể tìm thấy bạn bằng cách tìm kiếm.</string>
+    <string name="please_select_country">Vui lòng chọn mã quốc gia!</string>
 </resources>

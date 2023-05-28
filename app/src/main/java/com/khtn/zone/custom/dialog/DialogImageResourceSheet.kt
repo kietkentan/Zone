@@ -1,6 +1,5 @@
 package com.khtn.zone.custom.dialog
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -56,7 +55,7 @@ class DialogImageResourceSheet: BottomSheetDialogFragment() {
             dismiss()
         }
 
-        binding.tvCamera.setOnClickListener {
+        binding.tvCancel.setOnClickListener {
             listener.selectedItem(index = ImageResourceSheetOptions.CANCEL)
             dismiss()
         }

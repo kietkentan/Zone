@@ -18,18 +18,19 @@ interface OTPInputListener {
     fun onSuccess()
 }
 
-class OTPInput @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-): ConstraintLayout(context, attrs, defStyleAttr) {
-    private val binding: CustomInputOtpBinding
-    val listEdtOtp: MutableList<EditText>
+class OTPInput: ConstraintLayout {
+    val binding = CustomInputOtpBinding.inflate(LayoutInflater.from(context), this, true)
+    val listEdtOtp = arrayListOf(
+        binding.edtOTP1,
+        binding.edtOTP2,
+        binding.edtOTP3,
+        binding.edtOTP4,
+        binding.edtOTP5,
+        binding.edtOTP6
+    )
     private var otpInputListener: OTPInputListener? = null
 
-    var error: String?
-        get() = binding.tvErrorOtpInput.text.toString()
-        set(value) { if (!value.isNullOrEmpty()) binding.tvErrorOtpInput.text = value}
+    var error: String? = null
 
     var otpOne: String?
         get() = binding.edtOTP1.text.toString()
@@ -57,29 +58,17 @@ class OTPInput @JvmOverloads constructor(
 
     var currentFocus: Int = 0
 
-    init {
-        binding = CustomInputOtpBinding.inflate(LayoutInflater.from(context), this, true)
-        listEdtOtp = arrayListOf(
-            binding.edtOTP1,
-            binding.edtOTP2,
-            binding.edtOTP3,
-            binding.edtOTP4,
-            binding.edtOTP5,
-            binding.edtOTP6
-        )
-        val attributes =
-            context.theme.obtainStyledAttributes(attrs, R.styleable.OTPInput, defStyleAttr, 0)
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+        val attributes = context.obtainStyledAttributes(attrs, R.styleable.OTPInput)
         initByAttributes(attributes)
         attributes.recycle()
+        initView()
         initListener()
     }
 
-    fun hideError() {
-        binding.tvErrorOtpInput.hide()
-    }
+    private fun initView() {
 
-    fun showError() {
-        binding.tvErrorOtpInput.show()
     }
 
     fun addListener(listener: OTPInputListener) {
@@ -87,8 +76,8 @@ class OTPInput @JvmOverloads constructor(
     }
 
     private fun setFocus() {
-        hideError()
         val otpCode = getOTPCode()
+        binding.tvErrorOtpInput.hide()
 
         if (otpCode.isEmpty()) {
             currentFocus = 0
@@ -121,13 +110,13 @@ class OTPInput @JvmOverloads constructor(
     }
 
     private fun initByAttributes(attributes: TypedArray) {
-        error = attributes.getString(R.styleable.OTPInput_otp_error)
-        otpOne = attributes.getString(R.styleable.OTPInput_otp_one)
-        otpTwo = attributes.getString(R.styleable.OTPInput_otp_two)
-        otpThree = attributes.getString(R.styleable.OTPInput_otp_three)
-        otpFour = attributes.getString(R.styleable.OTPInput_otp_four)
-        otpFive = attributes.getString(R.styleable.OTPInput_otp_five)
-        otpSix = attributes.getString(R.styleable.OTPInput_otp_six)
+        error = attributes.getString(R.styleable.OTPInput_otpError)
+        otpOne = attributes.getString(R.styleable.OTPInput_otpOne)
+        otpTwo = attributes.getString(R.styleable.OTPInput_otpTwo)
+        otpThree = attributes.getString(R.styleable.OTPInput_otpThree)
+        otpFour = attributes.getString(R.styleable.OTPInput_otpFour)
+        otpFive = attributes.getString(R.styleable.OTPInput_otpFive)
+        otpSix = attributes.getString(R.styleable.OTPInput_otpSix)
     }
 
     fun setOTPCode(code: String) {
@@ -139,7 +128,6 @@ class OTPInput @JvmOverloads constructor(
                 otpFour = code[3].toString()
                 otpFive = code[4].toString()
                 otpSix = code[5].toString()
-                hideError()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -189,7 +177,7 @@ class OTPInput @JvmOverloads constructor(
 
     private fun onFocusChangeListener() {
         for (i in 0 until listEdtOtp.size) {
-            listEdtOtp[i].onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
+            listEdtOtp[i].onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
                 if (hasFocus && i == listEdtOtp.size - 1 && !otpSix.isNullOrEmpty()) {
                     listEdtOtp[i].requestFocus()
                     listEdtOtp[i].isCursorVisible = true
@@ -202,6 +190,6 @@ class OTPInput @JvmOverloads constructor(
     }
 
     fun getOTPCode(): String {
-        return otpOne + otpTwo + otpThree + otpFour + otpFive + otpSix
+        return otpOne + otpTwo + otpThree + otpFour + otpFive + otpSix + ""
     }
 }

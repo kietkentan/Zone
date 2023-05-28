@@ -18,6 +18,7 @@ import com.khtn.zone.R
 import com.khtn.zone.model.Country
 import com.khtn.zone.utils.printMeD
 import com.khtn.zone.utils.toast
+import com.khtn.zone.viewmodel.ErrorChange
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -34,6 +35,8 @@ class AuthRepo @Inject constructor(
 
     private val failedState: MutableLiveData<LogInFailedState> = MutableLiveData()
 
+    private var errorChange: ErrorChange? = null
+
     init {
         "AuthRepo init".printMeD()
     }
@@ -49,6 +52,10 @@ class AuthRepo @Inject constructor(
             .setCallbacks(this)
             .build()
         PhoneAuthProvider.verifyPhoneNumber(options)
+    }
+
+    fun setListener(listener: ErrorChange) {
+        errorChange = listener
     }
 
     override fun onVerificationCompleted(credential: PhoneAuthCredential) {
@@ -84,7 +91,7 @@ class AuthRepo @Inject constructor(
                 } else {
                     Timber.v("signInWithCredential:failure ${task.exception}")
                     if (task.exception is FirebaseAuthInvalidCredentialsException)
-                        context.toast(context.getString(R.string.invalid_verification_code))
+                        errorChange?.onErrorChange(context.getString(R.string.invalid_verification_code))
                     failedState.value = LogInFailedState.SignIn
                 }
             }
