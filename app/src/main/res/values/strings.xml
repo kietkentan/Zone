@@ -50,4 +50,11 @@
     <string name="user_name">Tên người dùng</string>
     <string name="pics_name_des">Tên người dùng và hình ảnh này sẽ hiển thị cho người dùng Zone. Những người dùng khác có thể tìm thấy bạn bằng cách tìm kiếm.</string>
     <string name="please_select_country">Vui lòng chọn mã quốc gia!</string>
+    <string name="error_name_setup">Tên không hợp lệ!</string>
+    <string name="error_profile_photo">Vui lòng chọn ảnh đại diện!</string>
+    <string name="chat_with_friends">Bạn bè</string>
+    <string name="chat_with_groups">Nhóm</string>
+    <string name="contacts">Danh bạ</string>
+    <string name="profile">Cá nhân</string>
+    <string name="write_message">Tin nhắn...</string>
 </resources>

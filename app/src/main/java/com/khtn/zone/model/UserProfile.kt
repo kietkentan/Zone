@@ -16,7 +16,7 @@ data class UserProfile(
     var image: String = "",
     var userName: String = "",
     var about: String = "",
-    var token :String = "",
+    var token: String = "",
     var mobile: ModelMobile? = null,
     @get:PropertyName("device_details")
     @set:PropertyName("device_details")

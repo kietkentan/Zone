@@ -48,4 +48,6 @@
         <attr name="profileUrl" format="string"/>
         <attr name="profileProgress" format="boolean"/>
     </declare-styleable>
+
+    <attr name="errorString" format="string"/>
 </resources>

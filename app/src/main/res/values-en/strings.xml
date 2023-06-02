@@ -50,4 +50,11 @@
     <string name="user_name">User name</string>
     <string name="pics_name_des">This user name and picture will be visible to your Letschat users. Other users can find you by searching.</string>
     <string name="please_select_country">Please select a country code!</string>
+    <string name="error_profile_photo">Please select a profile picture!</string>
+    <string name="error_name_setup">Invalid name!</string>
+    <string name="chat_with_friends">Friends</string>
+    <string name="chat_with_groups">Groups</string>
+    <string name="contacts">Contacts</string>
+    <string name="profile">Profile</string>
+    <string name="write_message">Write a message...</string>
 </resources>

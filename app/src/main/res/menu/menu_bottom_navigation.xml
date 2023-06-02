@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_chats"
+        android:title="@string/chat_with_friends"
+        android:enabled="true"
+        android:icon="@drawable/ic_single_chat"/>
+
+    <item android:id="@+id/nav_groups"
+        android:title="@string/chat_with_groups"
+        android:enabled="true"
+        android:icon="@drawable/ic_group_chat"/>
+
+    <item android:id="@+id/nav_contacts"
+        android:title="@string/contacts"
+        android:enabled="true"
+        android:icon="@drawable/ic_contacts"/>
+
+    <item android:id="@+id/nav_profile"
+        android:title="@string/profile"
+        android:enabled="true"
+        android:icon="@drawable/ic_profile"/>
+</menu>

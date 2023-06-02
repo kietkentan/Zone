@@ -4,6 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View"/>
+
         <variable
             name="viewModel"
             type="com.khtn.zone.viewmodel.SetupProfileViewModel" />
@@ -11,15 +13,15 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:padding="@dimen/dp20">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="@dimen/dp20"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/dp20"
+            android:layout_marginVertical="@dimen/dp20">
 
             <com.khtn.zone.custom.imageView.ImageProfile
                 android:id="@+id/iv_profile"
@@ -45,7 +47,16 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/color_background"/>
+                android:background="@color/grey_160"/>
+
+            <TextView
+                android:id="@+id/error_setup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/dp10"
+                style="@style/TextError"
+                android:visibility="gone"
+                app:errorString="@{viewModel.errorSetup}"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -63,10 +74,27 @@
             android:layout_gravity="bottom|right"
             android:backgroundTint="@color/green_220"
             android:src="@drawable/ic_arrow_r8"
+            android:visibility="@{viewModel.progressSetup ? View.GONE : View.VISIBLE}"
             app:useCompatPadding="true"
             android:elevation="@dimen/dp5"
-            android:layout_margin="@dimen/dp15"
+            android:layout_margin="@dimen/dp30"
             app:tint="@color/white"
             tools:ignore="ContentDescription,RtlHardcoded" />
+
+        <LinearLayout
+            android:id="@+id/layout_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/black_"
+            android:weightSum="2"
+            android:visibility="@{viewModel.progressSetup ? View.VISIBLE : View.GONE}"
+            android:gravity="bottom|center_horizontal">
+
+            <ProgressBar
+                android:layout_width="@dimen/dp35"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

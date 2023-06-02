@@ -7,6 +7,7 @@
     <color name="color_primary">#0751da</color>
     <color name="color_stroke_grey">#e9e9e9</color>
     <color name="black">#FF000000</color>
+    <color name="black_">#33000000</color>
     <color name="blue_90">#1B1A57</color>
     <color name="blue_100">#495566</color>
     <color name="blue_120">#4F5E7B</color>
@@ -14,6 +15,7 @@
     <color name="blue_250">#CEDFFE</color>
     <color name="blue_280">#2F80ED</color>
     <color name="blue_250x">#3A7EFC</color>
+    <color name="default_icon">#4F5E7B</color>
     <color name="green_120">#347522</color>
     <color name="green_200">#6BC744</color>
     <color name="green_00">#DAFFCA</color>
@@ -30,4 +32,5 @@
     <color name="gray_400">#FFBDBDBD</color>
     <color name="gray_600">#FF757575</color>
     <color name="red_255">#FF0000</color>
+    <color name="item_tint">#4F5E7B</color>
 </resources>

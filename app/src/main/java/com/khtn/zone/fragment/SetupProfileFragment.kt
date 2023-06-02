@@ -4,13 +4,17 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.canhub.cropper.CropImage
 import com.google.firebase.firestore.CollectionReference
+import com.khtn.zone.R
 import com.khtn.zone.databinding.FragmentSetupProfileBinding
 import com.khtn.zone.model.UserStatus
 import com.khtn.zone.utils.*
@@ -31,7 +35,7 @@ class SetupProfileFragment: Fragment() {
     @Inject
     lateinit var userCollection: CollectionReference
 
-    private val profileViewModel: SetupProfileViewModel by viewModels()
+    private val setupProfileViewModel: SetupProfileViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,36 +52,80 @@ class SetupProfileFragment: Fragment() {
         UserUtils.updatePushToken(context, userCollection, true)
         EventBus.getDefault().post(UserStatus())
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewModel = profileViewModel
-        binding.ivProfile.setOnClickListener { ImageUtils.askPermission(this) }
-        binding.floatingButtonNext.setOnClickListener{ validate() }
+        binding.viewModel = setupProfileViewModel
+
         observer()
+        clickView()
     }
 
     private fun validate() {
-        val name = profileViewModel.name.value
-        if (!name.isNullOrEmpty() && name.length > 1 && !profileViewModel.progressProPic.value!!)
-            profileViewModel.storeProfileData()
+        val name = setupProfileViewModel.name.value
+        if (name.isNullOrEmpty() || name.length < 2) {
+            setupProfileViewModel.setError(getString(R.string.error_name_setup))
+            return
+        }
+        if (setupProfileViewModel.profilePicUrl.value.isNullOrEmpty() || setupProfileViewModel.progressProPic.value!!) {
+            setupProfileViewModel.setError(getString(R.string.error_profile_photo))
+            return
+        }
+        setupProfileViewModel.storeProfileData()
+    }
+
+    private fun clickView() {
+        binding.ivProfile.setOnClickListener { ImageUtils.askPermission(this) }
+        binding.floatingButtonNext.setOnClickListener{ validate() }
+        binding.edtName.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                setupProfileViewModel.setName(s.toString())
+            }
+        })
     }
 
     private fun observer() {
-        profileViewModel.profileUpdateState.observe(viewLifecycleOwner) {
+        setupProfileViewModel.profileUpdateState.observe(viewLifecycleOwner) {
             when (it) {
-                is UiState.Loading -> {}
+                is UiState.Loading -> {
+                    setupProfileViewModel.setProgressSetup(true)
+                }
 
-                is UiState.Failure -> {}
+                is UiState.Failure -> {
+                    setupProfileViewModel.setProgressSetup(false)
+                }
 
-                is UiState.Success -> {}
+                is UiState.Success -> {
+                    setupProfileViewModel.setProgressSetup(false)
+                    if (findNavController().isValidDestination(R.id.setupProfileFragment)) {
+                        findNavController().navigate(R.id.action_setupProfileFragment_to_singleChatHomeFragment)
+                    }
+                }
             }
         }
 
-        profileViewModel.checkUserNameState.observe(viewLifecycleOwner) {
+        setupProfileViewModel.checkUserNameState.observe(viewLifecycleOwner) {
             when (it) {
-                is UiState.Loading -> {}
+                is UiState.Loading -> {
+                    setupProfileViewModel.setProgressSetup(true)
+                }
 
-                is UiState.Failure -> {}
+                is UiState.Failure -> {
+                    setupProfileViewModel.setProgressSetup(false)
+                }
 
-                is UiState.Success -> {}
+                is UiState.Success -> {setupProfileViewModel.setProgressSetup(false)}
+            }
+        }
+
+        setupProfileViewModel.progressSetup.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.layoutProgress.show()
+                this.view?.forEachChildView { it -> it.isEnabled = false  }
+            } else {
+                binding.layoutProgress.hide()
+                this.view?.forEachChildView { it -> it.isEnabled = true  }
             }
         }
     }
@@ -94,7 +142,7 @@ class SetupProfileFragment: Fragment() {
     private fun onCropResult(data: Intent?) {
         try {
             val imagePath: Uri? = ImageUtils.getCroppedImage(data)
-            imagePath?.let { profileViewModel.uploadProfileImage(it) }
+            imagePath?.let { setupProfileViewModel.uploadProfileImage(it) }
         } catch (e: Exception) {
             e.printStackTrace()
         }

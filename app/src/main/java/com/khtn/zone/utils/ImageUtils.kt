@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.canhub.cropper.CropImage
 import com.canhub.cropper.CropImageView
+import com.google.android.material.imageview.ShapeableImageView
 import com.khtn.zone.R
 import com.khtn.zone.custom.dialog.DialogImageResourceSheet
 import com.khtn.zone.custom.dialog.SheetListener
@@ -42,6 +43,17 @@ object ImageUtils {
 
     fun loadUserImage(
         imageView: ImageView,
+        imgUrl: String
+    ){
+        Glide.with(imageView.context)
+            .load(imgUrl)
+            .placeholder(R.drawable.ic_other_user)
+            .error(R.drawable.ic_other_user)
+            .into(imageView)
+    }
+
+    fun loadUserImage(
+        imageView: ShapeableImageView,
         imgUrl: String
     ){
         Glide.with(imageView.context)

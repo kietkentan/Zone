@@ -1,9 +1,6 @@
 package com.khtn.zone.custom
 
-import android.widget.ImageView
-import androidx.core.net.toUri
-import androidx.core.view.setPadding
-import androidx.core.widget.ImageViewCompat
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.khtn.zone.custom.imageView.ImageProfile
 import com.khtn.zone.custom.textField.PhoneInput
@@ -76,4 +73,19 @@ fun setValue(
     profileUrl?.let { ImageUtils.loadUserImage(imageProfile.binding.igvProfile, it) }
     if (profileProgress == null || !profileProgress) imageProfile.binding.progressProfile.hide()
     else imageProfile.binding.progressProfile.show()
+}
+
+@BindingAdapter(
+    value = ["errorString"],
+    requireAll = false
+)
+fun setValue(
+    textView: TextView,
+    errorString: String?
+) {
+    if (errorString.isNullOrEmpty()) textView.hide()
+    else {
+        textView.text = errorString
+        textView.show()
+    }
 }

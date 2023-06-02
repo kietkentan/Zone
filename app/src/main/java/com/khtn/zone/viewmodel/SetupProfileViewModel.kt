@@ -9,10 +9,7 @@ import com.google.firebase.firestore.SetOptions
 import com.khtn.zone.base.BaseViewModel
 import com.khtn.zone.model.ModelDeviceDetails
 import com.khtn.zone.model.UserProfile
-import com.khtn.zone.utils.SharedPreferencesManager
-import com.khtn.zone.utils.UiState
-import com.khtn.zone.utils.UserUtils
-import com.khtn.zone.utils.toast
+import com.khtn.zone.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.serialization.decodeFromString
@@ -29,6 +26,10 @@ class SetupProfileViewModel @Inject constructor(
     val progressProPic: LiveData<Boolean>
         get() = _progressProPic
 
+    private val _progressSetup = MutableLiveData(false)
+    val progressSetup: LiveData<Boolean>
+        get() = _progressSetup
+
     private val _profileUpdateState = MutableLiveData<UiState<Any>>()
     val profileUpdateState: LiveData<UiState<Any>>
         get() = _profileUpdateState
@@ -44,6 +45,10 @@ class SetupProfileViewModel @Inject constructor(
     private val _profilePicUrl = MutableLiveData<String>()
     val profilePicUrl: LiveData<String>
         get() = _profilePicUrl
+
+    private val _errorSetup = MutableLiveData<String>()
+    val errorSetup: LiveData<String>
+        get() = _errorSetup
 
     private val storageRef = UserUtils.getStorageRef(context)
     private val docuRef = UserUtils.getDocumentRef(context)
@@ -91,15 +96,15 @@ class SetupProfileViewModel @Inject constructor(
                 mPreferencesManager.getUid()!!,
                 createdAt,
                 System.currentTimeMillis(),
-                profilePicUrl.value!!,
-                name.value!!.lowercase(Locale.getDefault()),
+                _profilePicUrl.value!!,
+                _name.value!!.lowercase(Locale.getDefault()),
                 about,
                 mobile = mPreferencesManager.getMobile(),
                 token = mPreferencesManager.getPushToken().toString(),
-                deviceDetails =
-                Json.decodeFromString<ModelDeviceDetails>(
+                deviceDetails = Json.decodeFromString<ModelDeviceDetails>(
                     UserUtils.getDeviceInfo(context).toString()
                 )
+
             )
             docuRef.set(profile, SetOptions.merge()).addOnSuccessListener {
                 mPreferencesManager.saveUserProfile(profile)
@@ -113,12 +118,20 @@ class SetupProfileViewModel @Inject constructor(
         }
     }
 
+    fun setProgressSetup(progress: Boolean) {
+        _progressSetup.value = progress
+    }
+
     fun setName(name: String) {
         _name.value = name
     }
 
+    fun setError(error: String) {
+        _errorSetup.value = error
+    }
+
     override fun onCleared() {
-        //LogMessage.v("ProfileViewModel Cleared")
+        "ProfileViewModel Cleared".printMeD()
         super.onCleared()
     }
 }

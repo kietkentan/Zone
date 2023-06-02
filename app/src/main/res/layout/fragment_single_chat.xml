@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="chatUser"
+            type="com.khtn.zone.database.data.ChatUser" />
+
+        <variable
+            name="viewmodel"
+            type="com.khtn.zone.viewmodel.SingleChatViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/view_chat_header"
+                layout="@layout/view_chat_toolbar"
+                bind:chatUser="@{chatUser}"
+                bind:viewmodel="@{viewmodel}" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <include
+                android:id="@+id/view_chat_bottom_input"
+                layout="@layout/view_chat_bottom_input"
+                bind:viewmodel="@{viewmodel}" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_full_screen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/grey_160"
+            android:visibility="gone"
+            tools:ignore="ContentDescription" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_voice"
+            android:layout_width="@dimen/dp65"
+            android:layout_height="@dimen/dp65"
+            android:layout_gravity="end|bottom"
+            android:visibility="gone"
+            bind:lottie_rawRes="@raw/lottie_voice"/>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

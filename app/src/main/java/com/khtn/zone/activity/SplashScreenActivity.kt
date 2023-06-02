@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.khtn.zone.R
 import com.khtn.zone.utils.LocaleHelper
 import com.khtn.zone.utils.checkAppStart
@@ -24,6 +25,7 @@ class SplashScreenActivity : AppCompatActivity() {
         loadLanguageConfig()
         setContentView(R.layout.activity_splash_screen)
         this.transparentStatusBar(isLightBackground = true)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         // setUpFirebaseMessage();
         setPortraitScreen()
         checkApp()

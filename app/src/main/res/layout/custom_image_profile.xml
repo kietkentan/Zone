@@ -2,13 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/igv_profile"
         android:layout_width="@dimen/dp120"
         android:layout_height="@dimen/dp120"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/ShapeImageStyle_Avatar"
         android:src="@drawable/ic_other_user"
         tools:ignore="ContentDescription" />
 

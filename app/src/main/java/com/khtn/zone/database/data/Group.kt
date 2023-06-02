@@ -19,7 +19,7 @@ data class Group(
     var createdAt: Long = 0,
     var about: String = "",
     var image: String = "",
-    @set:Exclude @get:Exclude var members: ArrayList<ChatUser>? = null, //only for storing in localdb
+    @set:Exclude @get:Exclude var members: ArrayList<ChatUser>? = null, // only for storing in localdb
     var profiles: ArrayList<UserProfile>? = null,
     @set:Exclude @get:Exclude var unRead: Int = 0
 ): Parcelable

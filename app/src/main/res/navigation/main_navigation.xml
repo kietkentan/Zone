@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
-    app:startDestination="@id/setupProfileFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_loginFragment_to_setupProfileFragment"
             app:destination="@id/setupProfileFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_singleChatHomeFragment"
+            app:destination="@id/singleChatHomeFragment" />
     </fragment>
     <fragment
         android:id="@+id/verifyFragment"
@@ -28,5 +31,29 @@
     <fragment
         android:id="@+id/setupProfileFragment"
         android:name="com.khtn.zone.fragment.SetupProfileFragment"
-        android:label="SetupProfileFragment" />
+        android:label="SetupProfileFragment" >
+        <action
+            android:id="@+id/action_setupProfileFragment_to_singleChatHomeFragment"
+            app:destination="@id/singleChatHomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/singleChatHomeFragment"
+        android:name="com.khtn.zone.fragment.SingleChatHomeFragment"
+        android:label="fragment_single_chat_home"
+        tools:layout="@layout/fragment_single_chat_home" >
+        <action
+            android:id="@+id/action_singleChatHomeFragment_to_singleChatFragment"
+            app:destination="@id/singleChatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/singleChatFragment"
+        android:name="com.khtn.zone.fragment.SingleChatFragment"
+        android:label="fragment_single_chat"
+        tools:layout="@layout/fragment_single_chat" >
+        <argument
+            android:name="chatUserProfile"
+            app:argType="com.khtn.zone.database.data.ChatUser"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 </navigation>

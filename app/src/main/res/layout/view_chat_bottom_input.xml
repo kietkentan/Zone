@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.khtn.zone.viewmodel.SingleChatViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/grey_160"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/dp10"
+            android:layout_marginVertical="@dimen/dp5"
+            tools:ignore="RtlSymmetry">
+
+            <ImageView
+                android:id="@+id/iv_add_some_file"
+                android:layout_width="@dimen/dp30"
+                android:layout_height="@dimen/dp30"
+                android:padding="@dimen/dp5"
+                android:layout_gravity="bottom"
+                android:src="@drawable/ic_add_circle"
+                tools:ignore="ContentDescription" />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.khtn.zone.custom.textField.CustomEditText
+                    android:id="@+id/edt_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:background="@null"
+                    android:hint="@string/write_message"
+                    android:text="@={viewmodel.message}"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:maxLines="4"
+                    android:padding="@dimen/dp8"
+                    style="@style/TextBlue90Semi12"
+                    android:importantForAutofill="no" />
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/iv_record"
+                android:layout_width="@dimen/dp30"
+                android:layout_height="@dimen/dp30"
+                android:background="@drawable/bg_blue_ring"
+                android:layout_gravity="bottom"
+                android:padding="@dimen/dp8"
+                android:src="@drawable/ic_mic"
+                tools:ignore="ContentDescription" />
+        </LinearLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_send"
+            android:layout_width="@dimen/dp30"
+            android:layout_height="@dimen/dp30"
+            android:layout_gravity="end|bottom"
+            android:layout_marginEnd="@dimen/dp5"
+            android:layout_marginBottom="@dimen/dp5"
+            android:visibility="gone"
+            app:lottie_colorFilter="@color/blue_280"
+            app:lottie_rawRes="@raw/lottie_send" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

@@ -115,7 +115,7 @@ object UserUtils {
     fun getDocumentRef(context: Context): DocumentReference {
         val db = FirebaseFirestore.getInstance()
         return db.collection("Users")
-            .document(SharedPreferencesManager(context = context).retrieveStringByKey(SharedPrefConstants.UID)!!)
+            .document(SharedPreferencesManager(context = context).getUid()!!)
     }
 
     fun getMessageSubCollectionRef(): Query {
