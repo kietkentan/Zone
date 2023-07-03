@@ -1,8 +1,5 @@
-@file:Suppress("DEPRECATION")
-
 package com.khtn.zone.utils
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
@@ -16,6 +13,7 @@ import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -23,6 +21,7 @@ import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.khtn.zone.R
+import com.khtn.zone.activity.MainActivity
 import com.khtn.zone.database.ChatUserDatabase
 import com.khtn.zone.database.data.GroupMessage
 import com.khtn.zone.model.Country
@@ -30,7 +29,8 @@ import com.khtn.zone.model.UserStatus
 import java.text.SimpleDateFormat
 
 object Utils {
-    private const val PERMISSION_REQ_CODE = 114
+    const val PERMISSION_REQ_CODE = 114
+    const val REQUEST_APP_SETTINGS = 168
 
     fun getDefaultCountry() = Country("VN", "Vietnam", "+84", "VND")
 
@@ -55,22 +55,33 @@ object Utils {
 
     fun isNoInternet(context: Context) = !isNetConnected(context)
 
+    @Suppress("DEPRECATION")
     fun checkPermission(
         context: Fragment,
         vararg permissions: String,
         reqCode: Int = PERMISSION_REQ_CODE
     ): Boolean {
-        var allPermitted = false
+        var allPermitted = true
+        var shouldShowRequestPermission = false
         for (permission in permissions) {
-            allPermitted = (ContextCompat.checkSelfPermission(context.requireContext(), permission)
+            shouldShowRequestPermission = shouldShowRequestPermissionRationale(context.requireActivity(), permission)
+            if (allPermitted)
+                allPermitted = (ContextCompat.checkSelfPermission(context.requireContext(), permission)
                     == PackageManager.PERMISSION_GRANTED)
-            if (!allPermitted) break
         }
-        if (allPermitted) return true
-        context.requestPermissions(
-            permissions,
-            reqCode
-        )
+
+        when {
+            allPermitted -> return true
+
+            shouldShowRequestPermission -> {
+                context.requestPermissions(
+                    permissions,
+                    reqCode
+                )
+            }
+
+            else -> (context.requireActivity() as MainActivity).goToSettings()
+        }
         return false
     }
 
@@ -80,6 +91,7 @@ object Utils {
 
     fun isPermissionOk(vararg results: Int): Boolean {
         var isAllGranted = true
+
         for (result in results) {
             if (PackageManager.PERMISSION_GRANTED != result) {
                 isAllGranted = false
@@ -89,28 +101,24 @@ object Utils {
         return isAllGranted
     }
 
-    fun askContactPermission(context: Fragment): Boolean {
-        return checkPermission(
-            context, Manifest.permission.READ_CONTACTS,
-            Manifest.permission.WRITE_CONTACTS
-        )
-    }
+    fun isPermissionOk(
+        context: Context,
+        vararg permissions: String
+    ): Boolean {
+        var isOk = true
 
-    fun isContactPermissionOk(context: Context): Boolean {
-        return (ContextCompat.checkSelfPermission(
-            context,
-            android.Manifest.permission.READ_CONTACTS
-        )
-                == PackageManager.PERMISSION_GRANTED)
-                && (ContextCompat.checkSelfPermission(
-            context,
-            android.Manifest.permission.WRITE_CONTACTS
-        )
-                == PackageManager.PERMISSION_GRANTED)
+        for (permission in permissions) {
+            isOk = (ContextCompat.checkSelfPermission(
+                context,
+                permission
+            ) == PackageManager.PERMISSION_GRANTED)
+        }
+        return isOk
     }
 
     fun showLoggedInAlert(
-        context: Activity, preference: SharedPreferencesManager,
+        context: Activity,
+        preference: SharedPreferencesManager,
         db: ChatUserDatabase
     ) {
         try {
@@ -141,13 +149,16 @@ object Utils {
             status.typing_status == UserStatusConstants.TYPING && uId == status.chat_user -> context.getString(
                 R.string.typing
             )
+
             status.status == UserStatusConstants.ONLINE -> context.getString(R.string.online)
+
             status.last_seen > 0L -> String.format(
                 "%s %s",
                 context.getString(R.string.last_seen),
                 getLastSeen(status.last_seen, context)
             )
-            else -> "..."
+
+            else -> "…"
         }
     }
 
@@ -235,6 +246,22 @@ object Utils {
         }
     }
 
+    fun getTimeAudio(time: Long): String {
+        var tick = time
+        var hours = ""
+        var minutes = ""
+        var seconds = ""
+
+        if (tick >= 3600) {
+            hours = if (tick / 3600 >= 10) "${tick / 3600}" else "0${tick / 3600}"
+            tick %= 3600
+        }
+        minutes = if (tick / 60 >= 10) "${tick / 60}" else "0${tick / 60}"
+        seconds = if (tick % 60 >= 10) "${tick % 60}" else "0${tick % 60}"
+
+        return if (hours.isEmpty()) "$minutes:$seconds" else "$hours:$minutes:$seconds"
+    }
+
     @SuppressLint("SimpleDateFormat")
     fun getLastSeen(
         lastSeen: Long,
@@ -253,6 +280,7 @@ object Utils {
                 context.getString(R.string.yesterday),
                 SimpleDateFormat("hh:mm").format(date)
             )
+
             else -> String.format(
                 "%s %s",
                 context.getString(R.string.today),

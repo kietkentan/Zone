@@ -69,8 +69,7 @@ class ArcProgress @JvmOverloads constructor(
         default_suffix_text = "%"
         default_bottom_text_size = resources.getDimension(R.dimen.sp10)
         default_stroke_width = resources.getDimension(R.dimen.dp4)
-        val attributes =
-            context.theme.obtainStyledAttributes(attrs, R.styleable.ArcProgress, defStyleAttr, 0)
+        val attributes = context.obtainStyledAttributes(attrs, R.styleable.ArcProgress)
         initByAttributes(attributes)
         attributes.recycle()
         initPainters()

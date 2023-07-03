@@ -23,12 +23,11 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/bg_nocode_ripple_8dp"
-            style="@style/TextWhiteSemi12"
+            style="@style/TextNoCode"
             app:drawableEndCompat="@drawable/ic_arrow_down"
             android:minWidth="@dimen/dp55"
             android:gravity="center"
-            android:padding="@dimen/dp6"
-            app:drawableTint="@color/white" />
+            android:padding="@dimen/dp6" />
 
         <EditText
             android:id="@+id/edt_mobile"

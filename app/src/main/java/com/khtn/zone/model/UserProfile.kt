@@ -13,6 +13,7 @@ data class UserProfile(
     var uId: String? = null,
     var createdAt: Long? = null,
     var updatedAt: Long? = null,
+    var listSticker: List<String> = arrayListOf(),
     var image: String = "",
     var userName: String = "",
     var about: String = "",

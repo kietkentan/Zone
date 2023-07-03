@@ -26,9 +26,7 @@
         android:layout_height="wrap_content"
         android:text="@string/app_name"
         android:layout_marginTop="@dimen/dp40"
-        android:textSize="@dimen/sp27"
-        android:textStyle="italic|bold"
-        android:textColor="@color/black"
+        style="@style/AppName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_logo" />

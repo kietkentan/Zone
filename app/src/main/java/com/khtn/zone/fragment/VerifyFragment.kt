@@ -78,11 +78,11 @@ class VerifyFragment : Fragment() {
 
             authViewModel.verifyProgress.observe(viewLifecycleOwner) {
                 if (it) {
-                    binding.progressVerify.show()
-                    binding.layoutResendOtp.hide()
+                    binding.progressVerify.showView()
+                    binding.layoutResendOtp.hideView()
                 } else {
-                    binding.progressVerify.hide()
-                    binding.layoutResendOtp.show()
+                    binding.progressVerify.hideView()
+                    binding.layoutResendOtp.showView()
                 }
             }
 
@@ -110,8 +110,6 @@ class VerifyFragment : Fragment() {
                 otp.length < OTP_LENGHT -> authViewModel.setErrorOTP(getString(R.string.invalid_verification_code))
                 Utils.isNoInternet(requireContext()) -> { snackNet(requireActivity()) }
                 else -> {
-                    "VCode:: ${authViewModel.verifyCode.value}".printMeD()
-                    "OTP:: $otp".printMeD()
                     val credential = PhoneAuthProvider.getCredential(authViewModel.verifyCode.value.toString(), otp)
                     authViewModel.setCredential(credential)
                 }

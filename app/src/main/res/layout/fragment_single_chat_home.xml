@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <com.khtn.zone.custom.view.Header
+            android:id="@+id/header_single_chat_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:headerTitle="Single Chat"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rec_single_chat_home"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/row_chat"/>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dp10"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/header_single_chat_home"
+            tools:listitem="@layout/row_chat" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

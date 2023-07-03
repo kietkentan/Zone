@@ -28,30 +28,26 @@ class AuthRepo @Inject constructor(
     private val auth: FirebaseAuth
 ): PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
     private val verificationId: MutableLiveData<String> = MutableLiveData()
-
     private val credential: MutableLiveData<PhoneAuthCredential> = MutableLiveData()
-
     private val taskResult: MutableLiveData<Task<AuthResult>> = MutableLiveData()
-
     private val failedState: MutableLiveData<LogInFailedState> = MutableLiveData()
-
     private var errorChange: ErrorChange? = null
-
-    init {
-        "AuthRepo init".printMeD()
-    }
 
     fun setMobile(country: Country, mobile: String) {
         Timber.v("Mobile $mobile")
         val number = country.noCode + " " + mobile
         auth.setLanguageCode(country.code)
-        val options = PhoneAuthOptions.newBuilder(auth)
-            .setPhoneNumber(number)
-            .setTimeout(60L, TimeUnit.SECONDS)
-            .setActivity(actContext)
-            .setCallbacks(this)
-            .build()
-        PhoneAuthProvider.verifyPhoneNumber(options)
+        try {
+            val options = PhoneAuthOptions.newBuilder(auth)
+                .setPhoneNumber(number)
+                .setTimeout(60L, TimeUnit.SECONDS)
+                .setActivity(actContext)
+                .setCallbacks(this)
+                .build()
+            PhoneAuthProvider.verifyPhoneNumber(options)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun setListener(listener: ErrorChange) {
@@ -67,7 +63,6 @@ class AuthRepo @Inject constructor(
     }
 
     override fun onVerificationFailed(exp: FirebaseException) {
-        "onVerificationFailed:: ${exp.message}".printMeD()
         failedState.value = LogInFailedState.Verification
         when (exp) {
             is FirebaseAuthInvalidCredentialsException ->

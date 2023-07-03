@@ -7,6 +7,7 @@ import com.google.firebase.firestore.*
 import com.khtn.zone.FirebasePush
 import com.khtn.zone.database.data.ChatUser
 import com.khtn.zone.database.data.Message
+import com.khtn.zone.di.UserCollection
 import com.khtn.zone.repo.DatabaseRepo
 import com.khtn.zone.utils.*
 import com.khtn.zone.viewmodel.toDataClass
@@ -20,6 +21,7 @@ import javax.inject.Singleton
 class ChatHandler @Inject constructor(
     @ApplicationContext private val context: Context,
     private val dbRepository: DatabaseRepo,
+    @UserCollection
     private val usersCollection: CollectionReference,
     private val preference: SharedPreferencesManager,
     private val messageStatusUpdater: MessageStatusUpdater
@@ -185,7 +187,8 @@ class ChatHandler @Inject constructor(
                 chatUserUtil.queryNewUserProfile(
                     context,
                     userId,
-                    listOfDocs.firstOrNull { it.contains(userId) }, unreadCount,
+                    listOfDocs.firstOrNull { it.contains(userId) },
+                    unreadCount,
                     showNotification = i == newContactIds.lastIndex
                 )
             }

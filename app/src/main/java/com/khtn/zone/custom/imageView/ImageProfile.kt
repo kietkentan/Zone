@@ -4,14 +4,12 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.RelativeLayout
-import androidx.core.net.toUri
 import com.khtn.zone.R
 import com.khtn.zone.databinding.CustomImageProfileBinding
 import com.khtn.zone.utils.ImageUtils
-import com.khtn.zone.utils.hide
-import com.khtn.zone.utils.show
+import com.khtn.zone.utils.hideView
+import com.khtn.zone.utils.showView
 
 class ImageProfile: RelativeLayout{
     val binding = CustomImageProfileBinding.inflate(LayoutInflater.from(context), this, true)
@@ -33,7 +31,7 @@ class ImageProfile: RelativeLayout{
     }
     private fun onClickListener() {
         profileUrl?.let { ImageUtils.loadUserImage(binding.igvProfile, it) }
-        if (!profileProgress) binding.progressProfile.hide()
-        else binding.progressProfile.show()
+        if (!profileProgress) binding.progressProfile.hideView()
+        else binding.progressProfile.showView()
     }
 }

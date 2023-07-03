@@ -15,6 +15,10 @@ annotation class MessageCollection
 @Retention(AnnotationRetention.BINARY)
 annotation class GroupCollection
 
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class UserCollection
+
 @InstallIn(SingletonComponent::class)
 @Module
 object AppModule {

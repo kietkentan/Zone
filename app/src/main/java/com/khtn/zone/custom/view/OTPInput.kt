@@ -77,7 +77,7 @@ class OTPInput: ConstraintLayout {
 
     private fun setFocus() {
         val otpCode = getOTPCode()
-        binding.tvErrorOtpInput.hide()
+        binding.tvErrorOtpInput.hideView()
 
         if (otpCode.isEmpty()) {
             currentFocus = 0

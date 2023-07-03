@@ -10,6 +10,7 @@ import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.khtn.zone.utils.FireStoreCollection
 import com.khtn.zone.utils.FirebaseStorageConstants
 import dagger.Module
 import dagger.Provides
@@ -32,24 +33,25 @@ object FirebaseModule {
         return FirebaseFirestore.getInstance()
     }
 
+    @UserCollection
     @Singleton
     @Provides
     fun provideUsersCollectionReference(firestore: FirebaseFirestore): CollectionReference {
-        return firestore.collection("users")
+        return firestore.collection(FireStoreCollection.USER)
     }
 
     @GroupCollection
     @Singleton
     @Provides
     fun provideGroupCollectionReference(firestore: FirebaseFirestore): CollectionReference {
-        return firestore.collection("groups")
+        return firestore.collection(FireStoreCollection.GROUP)
     }
 
     @MessageCollection
     @Singleton
     @Provides
     fun provideMessagesCollectionReference(firestore: FirebaseFirestore): CollectionReference {
-        return firestore.collection("messages")
+        return firestore.collection(FireStoreCollection.MESSAGE)
     }
 
     @Provides

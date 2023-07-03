@@ -22,6 +22,16 @@ fun String.printMeD() {
     Log.d("Zone:: ", this)
 }
 
+@SuppressLint("LogNotTimber")
+fun String.printMeDebug() {
+    Log.d("Debug:: ", this)
+}
+
+@SuppressLint("LogNotTimber")
+fun String.printMeError() {
+    Log.d("Error:: ", this)
+}
+
 fun Context.toast(msg: String) {
     Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 }
@@ -67,9 +77,9 @@ fun CustomProgressView.dismissIfShowing(){
 
 fun ProgressBar.toggle(show: Boolean) {
     if (show)
-        this.show()
+        this.showView()
     else
-        this.hide();
+        this.hideView();
 }
 
 fun EditText.trim() =

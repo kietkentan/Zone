@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="message"
+            type="com.khtn.zone.database.data.Message" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:weightSum="2"
+        tools:ignore="DisableBaselineAlignment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp2"
+            android:layout_weight="1"
+            android:paddingStart="@dimen/dp5"
+            tools:ignore="RtlSymmetry">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_item_chat_receive_ripple_8dp"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/dp12"
+                android:paddingVertical="5dp"
+                app:layout_constraintBottom_toTopOf="@id/txt_msg_status"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription,UselessParent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp25"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        tools:ignore="UselessParent">
+
+                        <ProgressBar
+                            android:id="@+id/progress_buffer"
+                            android:layout_width="@dimen/dp20"
+                            android:layout_height="@dimen/dp20"
+                            android:layout_centerInParent="true"
+                            android:visibility="@{message.status == 0 ? View.VISIBLE : View.GONE}" />
+
+                        <ImageView
+                            android:id="@+id/img_play"
+                            android:layout_width="@dimen/dp20"
+                            android:layout_height="@dimen/dp20"
+                            android:layout_centerHorizontal="true"
+                            android:padding="@dimen/dp3"
+                            android:src="@drawable/ic_action_play"
+                            android:visibility="@{message.status == 0 ? View.GONE : View.VISIBLE}"
+                            app:tint="#000000" />
+                    </RelativeLayout>
+
+                    <com.khtn.zone.custom.view.StoriesProgressView
+                        android:id="@+id/progress_bar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/dp5"
+                        android:layout_weight="1"
+                        app:backgroundInProgress="#000000"
+                        app:backgroundMaxProgress="#6A6A6A"
+                        app:backgroundProgress="#6A6A6A" />
+
+                    <TextView
+                        android:id="@+id/tv_time_audio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/dp5"
+                        android:textColor="#000000"
+                        android:textSize="@dimen/sp8" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txt_msg_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:textColor="#1B1A57"
+                    android:textSize="@dimen/sp8"
+                    app:showMsgTime="@{message}" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txt_msg_status"
+                messageStatus="@{message.status}"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp13"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="@dimen/dp5"
+                android:layout_marginBottom="@dimen/dp5"
+                android:paddingTop="@dimen/dp2"
+                android:textColor="#000000"
+                android:visibility="gone"
+                android:textSize="@dimen/sp8"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+</layout>

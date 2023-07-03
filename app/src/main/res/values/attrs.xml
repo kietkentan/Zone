@@ -46,8 +46,22 @@
 
     <declare-styleable name="ImageProfile">
         <attr name="profileUrl" format="string"/>
+        <attr name="profileUri" format="string"/>
         <attr name="profileProgress" format="boolean"/>
     </declare-styleable>
 
+    <declare-styleable name="Header">
+        <attr name="headerTitle" format="string"/>
+        <attr name="headerRightIcon" format="reference|string"/>
+    </declare-styleable>
+
+    <declare-styleable name="StoriesProgressView">
+        <attr name="progressCount" format="integer|reference"/>
+        <attr name="backgroundProgress" format="color|reference"/>
+        <attr name="backgroundInProgress" format="color|reference"/>
+        <attr name="backgroundMaxProgress" format="color|reference"/>
+    </declare-styleable>
+
     <attr name="errorString" format="string"/>
+    <attr name="srcAttachment" format="reference"/>
 </resources>

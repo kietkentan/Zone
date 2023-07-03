@@ -5,11 +5,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.firebase.firestore.IgnoreExtraProperties
 import com.khtn.zone.model.UserProfile
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @IgnoreExtraProperties
 @Serializable
-@kotlinx.parcelize.Parcelize
+@Parcelize
 @Entity
 data class ChatUser(
     @PrimaryKey
@@ -19,6 +20,6 @@ data class ChatUser(
     var documentId: String? = null,
     var locallySaved: Boolean = false,
     var unRead: Int = 0,
-    var isSearchedUser: Boolean = false,
+    var isSearchedUser: Boolean = true,
     var isSelected: Boolean = false
-) : Parcelable
+): Parcelable

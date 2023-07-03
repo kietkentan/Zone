@@ -1,10 +1,9 @@
 package com.khtn.zone.viewmodel
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,6 +14,7 @@ import androidx.work.WorkRequest
 import com.google.firebase.database.*
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.gson.reflect.TypeToken
 import com.khtn.zone.TYPE_NEW_MESSAGE
 import com.khtn.zone.core.MessageSender
@@ -23,6 +23,8 @@ import com.khtn.zone.core.OnMessageResponse
 import com.khtn.zone.database.data.ChatUser
 import com.khtn.zone.database.data.Message
 import com.khtn.zone.di.MessageCollection
+import com.khtn.zone.model.SetSticker
+import com.khtn.zone.model.Sticker
 import com.khtn.zone.utils.DataConstants.CHAT_USER_DATA
 import com.khtn.zone.utils.WorkerConstants.MESSAGE_DATA
 import com.khtn.zone.utils.WorkerConstants.MESSAGE_FILE_URI
@@ -67,6 +69,18 @@ class SingleChatViewModel @Inject constructor(
     private var canScroll = false
 
     private var chatUserOnline = false
+
+    private val _listSetSticker: MutableLiveData<List<SetSticker>?> = MutableLiveData()
+    val listSetSticker: LiveData<List<SetSticker>?>
+        get() = _listSetSticker
+
+    private val _listAllSticker: MutableLiveData<List<String>> = MutableLiveData()
+    val listAllSticker: LiveData<List<String>>
+        get() = _listAllSticker
+
+    private val _allSticker: MutableLiveData<Map<SetSticker, List<Sticker>>> = MutableLiveData()
+    val allSticker: LiveData<Map<SetSticker, List<Sticker>>>
+        get() = _allSticker
 
     init {
         statusListener = statusRef.addValueEventListener(object : ValueEventListener {
@@ -118,7 +132,6 @@ class SingleChatViewModel @Inject constructor(
         }
     }
 
-    @SuppressLint("LogNotTimber")
     private suspend fun updateCacheMessges(listOfMessage: List<Message>) {
         withContext(Dispatchers.Main) {
             val nonSendMsgs =
@@ -139,9 +152,8 @@ class SingleChatViewModel @Inject constructor(
     }
 
     private val messageListener = object : OnMessageResponse {
-        @SuppressLint("LogNotTimber")
         override fun onSuccess(message: Message) {
-            //Log.i(TAG.INFO, "messageListener OnSuccess ${message.textMessage?.text}")
+            "messageListener OnSuccess ${message.textMessage?.text}".printMeD()
             dbRepository.insertMessage(message)
             if (chatUser.user.token.isNotEmpty())
                 UserUtils.sendPush(
@@ -153,14 +165,12 @@ class SingleChatViewModel @Inject constructor(
                 )
         }
 
-        @SuppressLint("LogNotTimber")
         override fun onFailed(message: Message) {
-            //Log.i(TAG.INFO, "messageListener onFailed ${message.createdAt}")
+            "messageListener onFailed ${message.createdAt}".printMeD()
             dbRepository.insertMessage(message)
         }
     }
 
-    @SuppressLint("LogNotTimber")
     override fun onCleared() {
         //Log.i(TAG.INFO, "SingleChat cleared")
         statusListener?.let {
@@ -169,7 +179,6 @@ class SingleChatViewModel @Inject constructor(
         super.onCleared()
     }
 
-    @SuppressLint("LogNotTimber")
     fun setSeenAllMessage() {
         //.i(TAG.INFO, "SetSeenAllMessage called")
         if (this::chatUser.isInitialized) {
@@ -244,6 +253,65 @@ class SingleChatViewModel @Inject constructor(
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    fun getSetSticker(list: List<String>) {
+        firebaseFireStore.collection(FireStoreCollection.STICKER)
+            .whereIn("id", list)
+            .get()
+            .addOnSuccessListener {
+                val listSet: MutableList<SetSticker> = arrayListOf()
+
+                for (document in it) {
+                    val set = document.toObject(SetSticker::class.java)
+                    listSet.add(set)
+                }
+                _listSetSticker.postValue(listSet)
+            }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun getAllListSticker(list: List<String>) {
+        val st: MutableList<String> = mutableListOf()
+
+        firebaseFireStore.collection(FireStoreCollection.STICKER)
+            .whereIn("id", list)
+            .get()
+            .addOnSuccessListener {
+                for (document in it) {
+                    val sticker = document.get(FireStoreCollection.LIST_STICKER)
+                    val id = document.get(FireStoreCollection.ID)
+                    if (sticker != null && id != null) {
+                        val lSticker = sticker as List<String>
+                        st.addAll(lSticker)
+                    }
+                }
+                _listAllSticker.value = st
+            }
+            .addOnFailureListener {
+                it.printStackTrace()
+            }
+    }
+
+    fun getAllSticker(list: List<String>, set: List<SetSticker>) {
+        val map: HashMap<SetSticker, MutableList<Sticker>> = hashMapOf()
+
+        firebaseFireStore.collection(FireStoreCollection.STICKER_ITEM)
+            .whereIn("id", list)
+            .get()
+            .addOnSuccessListener {
+                for (document in it) {
+                    val sticker = document.toObject<Sticker>()
+                    val setSticker = set.first {it -> it.id == sticker.setStickerId}
+                    if (map[setSticker] == null)
+                        map[setSticker] = mutableListOf()
+                    map[setSticker]!!.add(sticker)
+                }
+                _allSticker.value = map
+            }
+            .addOnFailureListener {
+                it.printStackTrace()
+            }
     }
 }
 

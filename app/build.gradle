@@ -12,6 +12,7 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
     namespace 'com.khtn.zone'
+    buildToolsVersion "30.0.3"
     compileSdk 33
 
     defaultConfig {
@@ -21,7 +22,7 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
-
+        buildConfigField("String", "SERVER_KEY", SERVER_KEY)
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -50,6 +51,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.recyclerview:recyclerview:1.3.0'
+    implementation 'com.google.firebase:firebase-appcheck-ktx:17.0.1'
+    implementation 'com.google.firebase:firebase-appcheck-playintegrity:17.0.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -85,21 +88,22 @@ dependencies {
 
     //Jetpack Navigation Component
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.6.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.6.0'
 
     // Firebase
     implementation 'com.google.firebase:firebase-database-ktx:20.2.2'
     implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx:22.0.0'
-    implementation 'com.google.firebase:firebase-storage-ktx:20.2.0'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.2.1'
     implementation platform('com.google.firebase:firebase-bom:32.0.0')
+    implementation 'com.google.firebase:firebase-messaging-directboot:23.1.2'
     implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-messaging-ktx'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.1.2'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
     // Analytics
-    implementation 'com.google.android.gms:play-services-analytics:18.0.2'
+    implementation 'com.google.android.gms:play-services-analytics:18.0.3'
 
     // Work Manager
     implementation "androidx.work:work-runtime-ktx:2.8.1"
@@ -111,15 +115,15 @@ dependencies {
     // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:2.6.0-alpha01"
 
-    //Kotlin reflect
+    // Kotlin reflect
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.7.10")
 
     // Image zoom
-    //implementation 'com.github.stfalcon-studio:StfalconImageViewer:v1.0.1'
+    implementation 'com.github.stfalcon-studio:StfalconImageViewer:v1.0.1'
 
     // Retrofit and GSON
-    implementation "com.squareup.retrofit2:retrofit:2.6.0"
-    implementation "com.squareup.retrofit2:converter-gson:2.6.0"
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
 
     // Event bus
     implementation 'org.greenrobot:eventbus:3.2.0'
@@ -130,9 +134,13 @@ dependencies {
     // For device to device notification sending
     implementation 'com.github.a914-gowtham:fcm-sender:1.0.2'
 
-    //Image loader
+    // Image helper
     implementation 'com.github.bumptech.glide:glide:4.15.1'
     implementation 'com.github.CanHub:Android-Image-Cropper:3.3.5'
+
+    // Play Core
+    implementation 'com.google.android.play:integrity:1.1.0'
+    implementation group: 'org.bitbucket.b_c', name: 'jose4j', version: '0.7.12'
 }
 
 hilt {

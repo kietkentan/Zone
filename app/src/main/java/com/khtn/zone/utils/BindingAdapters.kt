@@ -1,6 +1,5 @@
 package com.khtn.zone.utils
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
@@ -9,10 +8,10 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.TextUtils
 import android.view.View
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.core.view.setPadding
 import androidx.core.widget.ImageViewCompat
 import androidx.databinding.BindingAdapter
@@ -20,22 +19,18 @@ import androidx.databinding.InverseMethod
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.gif.GifDrawable
-import com.bumptech.glide.request.target.ImageViewTarget
 import com.google.android.material.chip.Chip
 import com.khtn.zone.MyApplication
 import com.khtn.zone.R
 import com.khtn.zone.database.data.*
+import com.khtn.zone.utils.ImageUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.*
-import javax.inject.Inject
 
-
-@Suppress("KotlinConstantConditions")
 object BindingAdapters {
 
     @BindingAdapter("main", "secondText")
@@ -68,8 +63,7 @@ object BindingAdapters {
         view: ImageView,
         url: String?
     ) {
-        if (url.isNullOrEmpty())
-            return
+        if (url.isNullOrEmpty()) return
         else {
             ImageViewCompat.setImageTintList(view, null) // removing image tint
             view.setPadding(0)
@@ -113,7 +107,7 @@ object BindingAdapters {
     fun loadImage(imgView: ImageView, message: Message) {
         val url = message.imageMessage?.uri
         val imageType = message.imageMessage?.imageType
-        loadMsgImage(imgView, url!!, imageType!!)
+        ImageUtils.loadMsgImage(imgView, url!!, imageType!!)
     }
 
     @BindingAdapter("loadGroupMsgImage")
@@ -124,76 +118,7 @@ object BindingAdapters {
     ) {
         val url = message.imageMessage?.uri
         val imageType = message.imageMessage?.imageType
-        loadMsgImage(imgView, url.toString(), imageType.toString())
-    }
-
-    @SuppressLint("CheckResult")
-    private fun loadMsgImage(
-        imgView: ImageView,
-        url: String,
-        imageType: String
-    ) {
-        try {
-            val layoutParam = imgView.layoutParams
-            if (imageType == "gif") {
-                Glide.with(imgView.context)
-                    .asGif()
-                    .load(url)
-                    .placeholder(R.drawable.gif)
-                    .error(R.drawable.gif)
-                    .into(object: ImageViewTarget<GifDrawable>(imgView) {
-                        override fun setResource(resource: GifDrawable?) {
-                            val height = resource?.firstFrame?.height
-                            val width = resource?.firstFrame?.width
-
-                            height?.let {
-                                width?.let {
-                                    val w = imgView.context.applicationContext.resources.displayMetrics.widthPixels.pxToDp *
-                                            if (height/width <= 1.2f) 2/3 else 1/2
-                                    layoutParam.width = w
-                                    layoutParam.height = height*w/width
-                                }
-                            }.run {
-                                layoutParam.width = 0
-                                layoutParam.height = 0
-                            }
-                            imgView.layoutParams = layoutParam
-                            imgView.setImageDrawable(resource)
-                        }
-                    })
-            } else {
-                val isSticker = imageType == "sticker"
-                val placeHolder =
-                    if (isSticker) R.drawable.ic_sticker else R.drawable.ic_gal_pholder
-                Glide.with(imgView.context)
-                    .asBitmap()
-                    .load(url)
-                    .placeholder(placeHolder)
-                    .error(placeHolder)
-                    .into(object: ImageViewTarget<Bitmap>(imgView) {
-                        override fun setResource(resource: Bitmap?) {
-                            val height = resource?.height
-                            val width = resource?.width
-
-                            height?.let {
-                                width?.let {
-                                    val w = imgView.context.applicationContext.resources.displayMetrics.widthPixels.pxToDp *
-                                            if (height/width <= 1.2f) 2/3 else 1/2
-                                    layoutParam.width = w
-                                    layoutParam.height = height*w/width
-                                }
-                            }.run {
-                                layoutParam.width = 0
-                                layoutParam.height = 0
-                            }
-                            imgView.layoutParams = layoutParam
-                            imgView.setImageBitmap(resource)
-                        }
-                    })
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        ImageUtils.loadMsgImage(imgView, url.toString(), imageType.toString())
     }
 
     fun getLastMsgTxt(msg: Message): String {
@@ -311,11 +236,15 @@ object BindingAdapters {
         status: Int
     ) {
         txtStatus.text = when (status) {
-            0 -> "Sending.."
-            1 -> "Sent"
-            2 -> "Delivered"
-            3 -> "Seen"
-            else -> "Failed"
+            MessageStatusConstants.SENDING -> txtStatus.context.getString(R.string.sending)
+
+            MessageStatusConstants.SENT -> txtStatus.context.getString(R.string.sent)
+
+            MessageStatusConstants.DELIVERED -> txtStatus.context.getString(R.string.delivered)
+
+            MessageStatusConstants.SEEN -> txtStatus.context.getString(R.string.seen)
+
+            else -> txtStatus.context.getString(R.string.failed)
         }
     }
 
@@ -326,15 +255,19 @@ object BindingAdapters {
         val myStatus = statusList.first()
         if (message.from == SharedPreferencesManager(context = txtStatus.context).retrieveStringByKey(SharedPrefConstants.UID))
             statusList.removeAt(0)
-        val delivered = message.status.any { it == 2 || it == 3 }  // if anyone has seen the message
-        val seen = message.status.all { it == 3 }  // all members seen the messge
+        val delivered = message.status.any { it == MessageStatusConstants.DELIVERED || it == MessageStatusConstants.SEEN }  // if anyone has seen the message
+        val seen = message.status.all { it == MessageStatusConstants.SEEN }  // all members seen the messge
 
         txtStatus.text = when {
-            myStatus == 0 -> "Sending"
-            seen -> "Seen"
-            delivered -> "Delivered"
-            myStatus == 1 -> "Sent"
-            else -> "Failed"
+            myStatus == MessageStatusConstants.SENDING -> txtStatus.context.getString(R.string.sending)
+
+            seen -> txtStatus.context.getString(R.string.seen)
+
+            delivered -> txtStatus.context.getString(R.string.delivered)
+
+            myStatus == MessageStatusConstants.SENT -> txtStatus.context.getString(R.string.sent)
+
+            else -> txtStatus.context.getString(R.string.failed)
         }
     }
 
@@ -347,8 +280,8 @@ object BindingAdapters {
         state?.let {
             view.visibility = when (it) {
                 UiState.Loading -> View.VISIBLE
-                else ->
-                    View.GONE
+
+                else -> View.GONE
             }
         }
     }
@@ -357,22 +290,9 @@ object BindingAdapters {
     @JvmStatic
     fun setUnReadCount(
         txtView: TextView,
-        msgList: List<Message>
-    ) {
-        val fromUser = SharedPreferencesManager(context = txtView.context).retrieveStringByKey(SharedPrefConstants.UID)
-        val unReadCount = msgList.filter { it.to == fromUser && it.status < 3 }.size
-        txtView.text = unReadCount.toString()
-        txtView.visibility = if (unReadCount == 0) View.GONE else View.VISIBLE
-    }
-
-    @BindingAdapter("setUnReadCount2")
-    @JvmStatic
-    fun setUnReadCount(
-        txtView: TextView,
         count: Int
     ) {
-        Timber.v("setUnReadCount2 $count")
-        txtView.text = count.toString()
+        txtView.text = if (count < 10) count.toString() else "N+"
         txtView.visibility = if (count == 0) View.GONE else View.VISIBLE
     }
 
@@ -384,9 +304,9 @@ object BindingAdapters {
     ) {
         if (isSelected) {
             view.playAnimation()
-            view.show()
+            view.showView()
         } else
-            view.hide()
+            view.hideView()
     }
 
     @BindingAdapter("showTxtView")
@@ -398,7 +318,7 @@ object BindingAdapters {
         if (user.user.image.isEmpty())
             txtView.text = user.localName.first().toString()
         else
-            txtView.hide()
+            txtView.hideView()
     }
 
     @BindingAdapter("setMemberNames")
@@ -464,10 +384,10 @@ object BindingAdapters {
         unReadCount: Int
     ) {
         if (unReadCount == 0)
-            txtView.hide()
+            txtView.hideView()
         else {
             txtView.text = unReadCount.toString()
-            txtView.show()
+            txtView.showView()
         }
     }
 
@@ -491,8 +411,17 @@ object BindingAdapters {
         val messageOwner = users.first { message.from == it.id }
         txtView.text = messageOwner.user.userName
         if (messageOwner.locallySaved)
-            txtView.hide()
+            txtView.hideView()
         else
-            txtView.show()
+            txtView.showView()
+    }
+
+    @BindingAdapter("srcAttachment")
+    @JvmStatic
+    fun setResourceAttachment(
+        imgView: ImageView,
+        @DrawableRes resource: Int
+    ) {
+        imgView.setImageResource(resource)
     }
 }

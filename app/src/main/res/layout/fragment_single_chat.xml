@@ -13,33 +13,49 @@
             type="com.khtn.zone.viewmodel.SingleChatViewModel" />
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusable="true"
         android:fitsSystemWindows="true">
 
+        <include
+            android:id="@+id/view_chat_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            bind:layout_constraintTop_toTopOf="parent"
+            layout="@layout/view_single_chat_toolbar"
+            bind:viewmodel="@{viewmodel}" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rec_message"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            bind:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+            bind:layout_constraintTop_toBottomOf="@id/view_chat_header" />
+
         <LinearLayout
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <include
-                android:id="@+id/view_chat_header"
-                layout="@layout/view_chat_toolbar"
-                bind:chatUser="@{chatUser}"
-                bind:viewmodel="@{viewmodel}" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            bind:layout_constraintBottom_toBottomOf="parent">
 
             <include
                 android:id="@+id/view_chat_bottom_input"
                 layout="@layout/view_chat_bottom_input"
                 bind:viewmodel="@{viewmodel}" />
+
+            <include
+                android:id="@+id/view_attachment"
+                layout="@layout/view_attachment"/>
+
+            <com.khtn.zone.custom.view.AllSetSticker
+                android:id="@+id/view_sticker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
         </LinearLayout>
 
         <ImageView
@@ -54,8 +70,9 @@
             android:id="@+id/lottie_voice"
             android:layout_width="@dimen/dp65"
             android:layout_height="@dimen/dp65"
-            android:layout_gravity="end|bottom"
             android:visibility="gone"
-            bind:lottie_rawRes="@raw/lottie_voice"/>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            bind:layout_constraintBottom_toBottomOf="@+id/rec_message"
+            bind:layout_constraintEnd_toEndOf="parent"
+            bind:lottie_rawRes="@raw/lottie_voice" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,5 +1,7 @@
 package com.khtn.zone.utils
 
+import android.animation.Animator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -10,18 +12,40 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import java.security.AccessController.getContext
 
-
-fun View.hide() {
+fun View.hideView() {
     visibility = View.GONE
 }
 
-fun View.show() {
+fun View.hideAnimation(height: Float) {
+    val mAnimator = slideAnimator(height, 0f, this)
+
+    mAnimator?.repeatCount = 0
+    mAnimator!!.addListener(object : Animator.AnimatorListener {
+        override fun onAnimationEnd(animator: Animator) {
+            // Height = 0, but it set visibility to GONE
+            this@hideAnimation.hideView()
+        }
+
+        override fun onAnimationStart(animator: Animator) {}
+        override fun onAnimationCancel(animator: Animator) {}
+        override fun onAnimationRepeat(animator: Animator) {}
+    })
+    mAnimator.start()
+}
+
+fun View.showView() {
     visibility = View.VISIBLE
+}
+
+fun View.showAnimation(height: Float) {
+    this.showView()
+    val mAnimator = slideAnimator(0f, height, this)
+    mAnimator!!.start()
 }
 
 fun View.disable() {
@@ -41,6 +65,23 @@ fun View.forEachChildView(closure: (View) -> Unit) {
     }
 }
 
+fun View.setMargin(
+    left: Int? = null,
+    top: Int? = null,
+    right: Int? = null,
+    bottom: Int? = null
+) {
+    val params = this.layoutParams as ViewGroup.MarginLayoutParams
+    left?.let { params.leftMargin = it }
+    top?.let { params.topMargin = it }
+    right?.let { params.rightMargin = it }
+    bottom?.let { params.bottomMargin = it }
+    this.layoutParams = params
+}
+
+val EditText.value: String
+    get() = this.text!!.trim().toString()
+
 fun Fragment.toast(msg: String?) {
     Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
 }
@@ -49,6 +90,7 @@ fun Activity.closeKeyBoard() {
     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     currentFocus?.let {
         imm.hideSoftInputFromWindow(it.windowToken, 0)
+        it.clearFocus()
     }
 }
 
@@ -105,5 +147,13 @@ val Float.dpToPx: Float
 val Float.pxToDp: Float
     get() = (this / Resources.getSystem().displayMetrics.density)
 
-val String.toEmail: String
-    get() = "$this@domain.com"
+private fun slideAnimator(start: Float, end: Float, view: View): ValueAnimator? {
+    val animator = ValueAnimator.ofFloat(start, end)
+    animator.addUpdateListener { valueAnimator -> // Update Height
+        val value = valueAnimator.animatedValue as Float
+        val layoutParams: ViewGroup.LayoutParams = view.layoutParams
+        layoutParams.height = value.toInt()
+        view.layoutParams = layoutParams
+    }
+    return animator
+}

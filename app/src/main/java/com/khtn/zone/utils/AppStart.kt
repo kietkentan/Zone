@@ -29,7 +29,6 @@ private var appStart: AppStart? = null
  * Finds out started for the first time (ever or in the current version).
  * @return the type of app start
  */
-@SuppressLint("LogNotTimber")
 fun checkAppStart(
     context: Context,
     sharedPreferences: SharedPreferences
@@ -51,15 +50,12 @@ fun checkAppStart(
             .putInt(LAST_APP_VERSION, currentVersionCode)
             .apply() // must use commit here or app may not update prefs in time and app will loop into walk through
     } catch (e: NameNotFoundException) {
-        Log.w(
-            "TAG_U",
-            "Unable to determine current app version from package manager. Defensively assuming normal app start."
-        )
+        "Unable to determine current app version from package manager. Defensively assuming normal app start.".printMeD()
     }
+    appStart.toString().printMeD()
     return appStart
 }
 
-@SuppressLint("LogNotTimber")
 fun checkAppStart(
     currentVersionCode: Int,
     lastVersionCode: Int
@@ -69,10 +65,6 @@ fun checkAppStart(
     } else if (lastVersionCode < currentVersionCode) {
         AppStart.FIRST_TIME_VERSION
     } else if (lastVersionCode > currentVersionCode) {
-        Log.w(
-            "TAG_U",
-            "Current version code ($currentVersionCode) is less then the one recognized on last startup ($lastVersionCode). Defensively assuming normal app start."
-        )
         AppStart.NORMAL
     } else {
         AppStart.NORMAL

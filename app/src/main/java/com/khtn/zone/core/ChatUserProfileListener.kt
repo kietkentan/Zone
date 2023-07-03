@@ -5,10 +5,12 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ListenerRegistration
 import com.khtn.zone.database.data.ChatUser
 import com.khtn.zone.database.data.Group
+import com.khtn.zone.di.UserCollection
 import com.khtn.zone.utils.SharedPreferencesManager
 import com.khtn.zone.utils.UserUtils
 import com.khtn.zone.model.UserProfile
 import com.khtn.zone.repo.DatabaseRepo
+import com.khtn.zone.utils.ContactUtils
 import com.khtn.zone.utils.Utils
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
@@ -23,6 +25,7 @@ import javax.inject.Singleton
 class ChatUserProfileListener @Inject
 constructor(
     @ApplicationContext val context: Context,
+    @UserCollection
     private val userCollectionRef: CollectionReference,
     private val preference: SharedPreferencesManager,
     private val dbRepository: DatabaseRepo
@@ -97,9 +100,13 @@ constructor(
         chatUser: ChatUser,
         mobileNo: String
     ) {
-        if (Utils.isContactPermissionOk(context)) {
+        val isPermissionContact = Utils.isPermissionOk(
+            context = context,
+            permissions = ContactUtils.CONTACT_PERMISSION
+        )
+        if (isPermissionContact) {
             val contacts = UserUtils.fetchContacts(context)
-            val savedContact = contacts.firstOrNull { it.mobile.contains(mobileNo) }
+            val savedContact = contacts.firstOrNull { it.mobile.number.contains(mobileNo) }
             if (savedContact != null) {
                 chatUser.localName = savedContact.name
                 chatUser.locallySaved = true

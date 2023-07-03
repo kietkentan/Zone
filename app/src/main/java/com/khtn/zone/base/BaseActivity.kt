@@ -23,6 +23,7 @@ import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
 open class BaseActivity: AppCompatActivity() {
     private var connectedRef: DatabaseReference? = null
@@ -83,7 +84,7 @@ open class BaseActivity: AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val connected: Boolean = (snapshot.value ?: false) as Boolean
                     if (connected) {
-                        //Log.w(TAG.INFO, "Online status updated")
+                        "Online status updated".printMeD()
                         status.setValue(UserStatusConstants.ONLINE)
                         lastOnlineRef.onDisconnect().setValue(ServerValue.TIMESTAMP)
                         status.onDisconnect().setValue(UserStatusConstants.OFFLINE)
@@ -92,7 +93,7 @@ open class BaseActivity: AppCompatActivity() {
 
                 @SuppressLint("LogNotTimber")
                 override fun onCancelled(error: DatabaseError) {
-                    //Log.e(TAG.ERROR, "Listener was cancelled at .info/connected ${error.message}")
+                    error.message.printMeError()
                 }
             })
         } catch (e: Exception) {

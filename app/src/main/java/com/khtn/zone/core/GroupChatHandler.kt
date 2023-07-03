@@ -6,6 +6,7 @@ import com.khtn.zone.FirebasePush
 import com.khtn.zone.database.data.Group
 import com.khtn.zone.database.data.GroupMessage
 import com.khtn.zone.di.GroupCollection
+import com.khtn.zone.di.UserCollection
 import com.khtn.zone.utils.SharedPreferencesManager
 import com.khtn.zone.utils.UserUtils
 import com.khtn.zone.repo.DatabaseRepo
@@ -24,6 +25,7 @@ import javax.inject.Singleton
 class GroupChatHandler @Inject constructor(
     @ApplicationContext private val context: Context,
     private val preference: SharedPreferencesManager,
+    @UserCollection
     private val userCollection: CollectionReference,
     @GroupCollection
     private val groupCollection: CollectionReference,

@@ -26,12 +26,12 @@
             tools:ignore="RtlSymmetry">
 
             <ImageView
-                android:id="@+id/iv_add_some_file"
+                android:id="@+id/iv_add_icon"
                 android:layout_width="@dimen/dp30"
                 android:layout_height="@dimen/dp30"
                 android:padding="@dimen/dp5"
                 android:layout_gravity="bottom"
-                android:src="@drawable/ic_add_circle"
+                android:src="@drawable/ic_add_icon"
                 tools:ignore="ContentDescription" />
 
             <RelativeLayout
@@ -53,6 +53,16 @@
                     style="@style/TextBlue90Semi12"
                     android:importantForAutofill="no" />
             </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/iv_add_some_file"
+                android:layout_width="@dimen/dp30"
+                android:layout_height="@dimen/dp30"
+                android:padding="@dimen/dp5"
+                android:layout_marginEnd="@dimen/dp5"
+                android:layout_gravity="bottom"
+                android:src="@drawable/ic_attachment"
+                tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/iv_record"

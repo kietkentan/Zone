@@ -48,7 +48,7 @@ class UploadWorker @AssistedInject constructor(
             "chats/${message.to}/$sourceName"
         )
         val task: UploadTask = if (url.contains(".mp3")) {
-            val stream = FileInputStream(url)  //audio message
+            val stream = FileInputStream(url)  // audio message
             child.putStream(stream)
         } else
             child.putFile(Uri.parse(message.imageMessage?.uri))
@@ -83,7 +83,9 @@ class UploadWorker @AssistedInject constructor(
     }
 
     private fun sendMessage(
-        message: Message, downloadUrl: String, result: Array<Result>,
+        message: Message,
+        downloadUrl: String,
+        result: Array<Result>,
         countDownLatch: CountDownLatch
     ) {
         val chatUser =
@@ -92,7 +94,8 @@ class UploadWorker @AssistedInject constructor(
         val messageSender = MessageSender(
             msgCollection,
             dbRepository,
-            chatUser, object : OnMessageResponse {
+            chatUser,
+            object : OnMessageResponse {
                 override fun onSuccess(message: Message) {
                     UserUtils.sendPush(
                         applicationContext,
@@ -113,6 +116,7 @@ class UploadWorker @AssistedInject constructor(
             }
         )
         messageSender.checkAndSend(message.from, message.to, message)
+        dbRepository.insertMessage(message)
     }
 
     private fun setUrl(message: Message, imgUrl: String) {

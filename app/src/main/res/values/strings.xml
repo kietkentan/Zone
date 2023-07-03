@@ -19,12 +19,12 @@
     <string name="select_from_your_device">Chọn ảnh từ thiết bị</string>
     <string name="cancel">Hủy</string>
     <string name="camera_not_available">Camera không khả dụng</string>
-    <string name="file_p_error">Quyền bị từ chối. Vui lòng kích hoạt quyền!</string>
+    <string name="permission_error">Quyền bị từ chối. Vui lòng kích hoạt quyền!</string>
     <string name="typing">Đang nhập…</string>
     <string name="online">Đang hoạt động</string>
     <string name="last_seen">Xem lần cuối</string>
-    <string name="yesterday">Hôm qua</string>
-    <string name="today">Hôm nay</string>
+    <string name="yesterday">hôm qua</string>
+    <string name="today">hôm nay</string>
     <string name="notifications">Thông báo</string>
     <string name="not_description">Bật thông báo</string>
     <string name="err_no_net">Không có kết nối Internet</string>
@@ -56,5 +56,22 @@
     <string name="chat_with_groups">Nhóm</string>
     <string name="contacts">Danh bạ</string>
     <string name="profile">Cá nhân</string>
-    <string name="write_message">Tin nhắn...</string>
+    <string name="write_message">Tin nhắn…</string>
+    <string name="add_friend">Kết bạn</string>
+    <string name="recording">Đang ghi…</string>
+    <string name="nothing_recorded">Không có gì được ghi lại!</string>
+    <string name="attachment_add_image">Hình ảnh/Đoạn phim</string>
+    <string name="attachment_add_file">Tài liệu</string>
+    <string name="attachment_quick_message">Tin nhắn nhanh</string>
+    <string name="unknown">Người lạ</string>
+    <string name="default_notification_channel_id" translatable="false">default</string>
+    <string name="mark_as_read">Đã đọc</string>
+    <string name="new_messages">%d tin nhắn mới</string>
+    <string name="new_messages_from">%d tin nhắn mới từ %d người bạn</string>
+    <string name="reply">Trả lời</string>
+    <string name="sent">Đã gửi</string>
+    <string name="sending">Đang gửi...</string>
+    <string name="delivered">Đã nhận</string>
+    <string name="seen">Đã xem</string>
+    <string name="failed">Không thành công</string>
 </resources>

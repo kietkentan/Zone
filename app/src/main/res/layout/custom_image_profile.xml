@@ -9,7 +9,8 @@
         android:id="@+id/igv_profile"
         android:layout_width="@dimen/dp120"
         android:layout_height="@dimen/dp120"
-        android:scaleType="centerCrop"
+        android:scaleType="centerInside"
+        android:background="@color/color_background"
         app:shapeAppearanceOverlay="@style/ShapeImageStyle_Avatar"
         android:src="@drawable/ic_other_user"
         tools:ignore="ContentDescription" />

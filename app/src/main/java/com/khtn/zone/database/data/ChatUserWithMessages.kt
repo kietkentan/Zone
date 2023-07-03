@@ -13,4 +13,4 @@ class ChatUserWithMessages(
         entityColumn = "chatUserId"
     )
     val messages: List<Message>
-) : Parcelable
+): Parcelable

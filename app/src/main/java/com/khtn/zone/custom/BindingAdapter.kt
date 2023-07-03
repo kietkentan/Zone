@@ -1,5 +1,6 @@
 package com.khtn.zone.custom
 
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.khtn.zone.custom.imageView.ImageProfile
@@ -7,8 +8,8 @@ import com.khtn.zone.custom.textField.PhoneInput
 import com.khtn.zone.custom.textField.SearchInput
 import com.khtn.zone.custom.view.OTPInput
 import com.khtn.zone.utils.ImageUtils
-import com.khtn.zone.utils.hide
-import com.khtn.zone.utils.show
+import com.khtn.zone.utils.hideView
+import com.khtn.zone.utils.showView
 
 @BindingAdapter(
     value = ["textPhone", "textPhoneHint", "textNoCode", "textPhoneTitle", "textPhoneError"],
@@ -26,10 +27,10 @@ fun setValue(
     textPhoneHint?.let { phoneInput.binding.edtMobile.hint = it }
     textNoCode?.let { phoneInput.binding.tvCountryCode.text = it }
     textPhoneTitle?.let { phoneInput.binding.tvPhoneTitle.text = it }
-    if (textPhoneError.isNullOrEmpty()) phoneInput.binding.tvErrorPhoneInput.hide()
+    if (textPhoneError.isNullOrEmpty()) phoneInput.binding.tvErrorPhoneInput.hideView()
     else {
         phoneInput.binding.tvErrorPhoneInput.text = textPhoneError
-        phoneInput.binding.tvErrorPhoneInput.show()
+        phoneInput.binding.tvErrorPhoneInput.showView()
     }
 }
 
@@ -54,25 +55,34 @@ fun setValue(
     otpInput: OTPInput,
     otpError: String?
 ) {
-    if (otpError.isNullOrEmpty()) otpInput.binding.tvErrorOtpInput.hide()
+    if (otpError.isNullOrEmpty()) otpInput.binding.tvErrorOtpInput.hideView()
     else {
         otpInput.binding.tvErrorOtpInput.text = otpError
-        otpInput.binding.tvErrorOtpInput.show()
+        otpInput.binding.tvErrorOtpInput.showView()
     }
 }
 
 @BindingAdapter(
-    value = ["profileUrl", "profileProgress"],
+    value = ["profileUrl", "profileUri", "profileProgress"],
     requireAll = false
 )
 fun setValue(
     imageProfile: ImageProfile,
+    profileUri: String?,
     profileUrl: String?,
     profileProgress: Boolean?
 ) {
-    profileUrl?.let { ImageUtils.loadUserImage(imageProfile.binding.igvProfile, it) }
-    if (profileProgress == null || !profileProgress) imageProfile.binding.progressProfile.hide()
-    else imageProfile.binding.progressProfile.show()
+    profileUri?.let {
+        imageProfile.binding.igvProfile.scaleType = ImageView.ScaleType.CENTER_CROP
+        ImageUtils.loadUserImage(imageProfile.binding.igvProfile, it)
+
+    }
+    profileUrl?.let {
+        imageProfile.binding.igvProfile.scaleType = ImageView.ScaleType.CENTER_CROP
+        ImageUtils.loadUserImage(imageProfile.binding.igvProfile, it)
+    }
+    if (profileProgress == null || !profileProgress) imageProfile.binding.progressProfile.hideView()
+    else imageProfile.binding.progressProfile.showView()
 }
 
 @BindingAdapter(
@@ -83,9 +93,25 @@ fun setValue(
     textView: TextView,
     errorString: String?
 ) {
-    if (errorString.isNullOrEmpty()) textView.hide()
+    if (errorString.isNullOrEmpty()) textView.hideView()
     else {
         textView.text = errorString
-        textView.show()
+        textView.showView()
     }
 }
+
+/*
+@BindingAdapter(
+    value = ["headerTitle", "headerRightIcon"],
+    requireAll = false
+)
+fun setValue(
+    header: Header,
+    headerTitle: String?,
+    headerRightImage: String?,
+    headerRightIcon:  Drawable?
+) {
+    headerTitle?.let { header.binding.tvHeaderTitle.text = it }
+    headerRightImage?.let { ImageUtils.loadUserImage(header.binding.ivHeaderRightIcon, it) }
+    headerRightIcon?.let { header.binding.ivHeaderRightIcon.setImageDrawable(it) }
+}*/

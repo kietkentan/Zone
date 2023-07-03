@@ -36,7 +36,6 @@ class AuthViewModel @Inject constructor(
     private val firestore: FirebaseFirestore
 ): BaseViewModel() {
     init {
-        "LogInViewModel init".printMeD()
         authRepo.setListener(object : ErrorChange {
             override fun onErrorChange(error: String) {
                 _errorOTP.value = error
@@ -105,7 +104,6 @@ class AuthViewModel @Inject constructor(
     }
 
     fun resendClicked() {
-        "Resend Clicked".printMeD()
         if (_canResend.value == true) {
             setVerifyProgress(true)
             setEmptyText()
@@ -224,7 +222,6 @@ class AuthViewModel @Inject constructor(
             .addOnSuccessListener { data ->
                 Timber.v("Uss:: ${preference.getUid()}")
                 preference.setUid(user?.uid.toString())
-                Timber.v("Uss11:: ${preference.getUid()}")
                 preference.setLogin()
                 preference.setLogInTime()
                 setVerifyProgress(false)

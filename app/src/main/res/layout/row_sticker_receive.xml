@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="message"
+            type="com.khtn.zone.database.data.Message" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:weightSum="4"
+        tools:ignore="DisableBaselineAlignment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp2"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/image_msg"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                loadImage="@{message}"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/txt_msg_status"
+                tools:ignore="ContentDescription"/>
+
+            <TextView
+                android:id="@+id/txt_msg_status"
+                messageStatus="@{message.status}"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp13"
+                android:layout_gravity="center_vertical"
+                android:textColor="#000000"
+                android:visibility="gone"
+                android:layout_marginEnd="@dimen/dp5"
+                android:layout_marginBottom="@dimen/dp5"
+                android:paddingTop="@dimen/dp2"
+                android:textSize="@dimen/sp8"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</layout>

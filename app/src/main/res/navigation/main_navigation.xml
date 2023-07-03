@@ -56,4 +56,13 @@
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>
+    <fragment
+        android:id="@+id/contactFragment"
+        android:name="com.khtn.zone.fragment.ContactFragment"
+        android:label="fragment_contact"
+        tools:layout="@layout/fragment_contact" >
+        <action
+            android:id="@+id/action_contactFragment_to_singleChatFragment"
+            app:destination="@id/singleChatFragment" />
+    </fragment>
 </navigation>

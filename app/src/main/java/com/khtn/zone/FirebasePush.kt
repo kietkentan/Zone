@@ -5,7 +5,6 @@ import android.app.Notification
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.Person
@@ -20,6 +19,7 @@ import com.khtn.zone.core.GroupQuery
 import com.khtn.zone.core.MessageStatusUpdater
 import com.khtn.zone.database.data.*
 import com.khtn.zone.di.GroupCollection
+import com.khtn.zone.di.UserCollection
 import com.khtn.zone.utils.*
 import com.khtn.zone.utils.listener.OnSuccessListener
 import com.khtn.zone.model.PushMessage
@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import javax.inject.Inject
 
 const val TYPE_LOGGED_IN = "new_logged_in"
@@ -44,7 +45,7 @@ const val SUMMARY_ID = 0
 const val KEY_TEXT_REPLY = "key_text_reply"
 
 @AndroidEntryPoint
-class FirebasePush : FirebaseMessagingService(), OnSuccessListener {
+class FirebasePush: FirebaseMessagingService(), OnSuccessListener {
 
     @Inject
     lateinit var preference: SharedPreferencesManager
@@ -52,6 +53,7 @@ class FirebasePush : FirebaseMessagingService(), OnSuccessListener {
     @Inject
     lateinit var dbRepository: DatabaseRepo
 
+    @UserCollection
     @Inject
     lateinit var usersCollection: CollectionReference
 
@@ -76,25 +78,27 @@ class FirebasePush : FirebaseMessagingService(), OnSuccessListener {
     }
 
     override fun onNewToken(token: String) {
+        "Token: $token".printMeD()
         preference.saveStringByKey(SharedPrefConstants.TOKEN, token)
     }
 
     @SuppressLint("LogNotTimber")
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
+        "Re: ${remoteMessage.notification?.body}".printMeD()
 
         try {
-            //Log.i(TAG.INFO, "Data Payload: ${remoteMessage.data}")
-            if (!preference.retrieveBooleanByKey(SharedPrefConstants.LOGIN)
-                || !preference.retrieveBooleanByKey(SharedPrefConstants.LAST_LOGGED_DEVICE_SAME, true))
+            if (!preference.retrieveBooleanByKey(SharedPrefConstants.LOGIN) ||
+                !preference.retrieveBooleanByKey(SharedPrefConstants.LAST_LOGGED_DEVICE_SAME, true))
                 return
             sentTime = remoteMessage.sentTime
             val data = remoteMessage.data
             pushMsg = Json.decodeFromString(data["data"].toString())
-            /* pushMsg.to?.let {
-                 if (it!=userId)
-                     return
-             }*/
+            pushMsg.to?.let {
+                "UserId = $it".printMeD()
+                if (it != userId)
+                    return
+            }
             handleNotification()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -102,68 +106,64 @@ class FirebasePush : FirebaseMessagingService(), OnSuccessListener {
     }
 
     private fun handleNotification() {
+        "Type: ${pushMsg.type}".printMeD()
         when (pushMsg.type) {
             TYPE_LOGGED_IN -> {
                 preference.saveBooleanByKey(SharedPrefConstants.LAST_LOGGED_DEVICE_SAME, false)
                 val intent = Intent(ActionConstants.ACTION_LOGGED_IN_ANOTHER_DEVICE)
                 sendBroadcast(intent)
             }
-            TYPE_NEW_MESSAGE -> {
-                handleNewMessage()
-            }
-            TYPE_NEW_GROUP -> {
-                handleNewGroup()
-            }
-            TYPE_NEW_GROUP_MESSAGE -> {
-                handleGroupMsg()
-            }
-            else -> {
 
-            }
+            TYPE_NEW_MESSAGE -> { handleNewMessage() }
+
+            TYPE_NEW_GROUP -> { handleNewGroup() }
+
+            TYPE_NEW_GROUP_MESSAGE -> { handleGroupMsg() }
+
+            else -> {}
         }
     }
 
     private fun handleGroupMsg() {
         //it would be updated by snapshot listeners when app is alive
-        if (!MyApplication.isAppRunning) {
-            val message = Json.decodeFromString<GroupMessage>(pushMsg.message_body.toString())
-            CoroutineScope(Dispatchers.IO).launch {
-                dbRepository.insertMessage(message)
-                val group = dbRepository.getGroupById(message.groupId)
-                val messages = dbRepository.getChatsOfGroupList(group?.id.toString())
-                if (group != null) {
-                    group.unRead = messages.filter {
-                        it.from != userId &&
-                                Utils.myIndexOfStatus(userId!!, it) < 3
-                    }.size
-                    dbRepository.insertGroup(group)
+        val message = Json.decodeFromString<GroupMessage>(pushMsg.message_body.toString())
+        CoroutineScope(Dispatchers.IO).launch {
+            dbRepository.insertMessage(message)
+            val group = dbRepository.getGroupById(message.groupId)
+            val messages = dbRepository.getChatsOfGroupList(group?.id.toString())
+            if (group != null) {
+                group.unRead = messages.filter {
+                    it.from != userId &&
+                            Utils.myIndexOfStatus(userId!!, it) < 3
+                }.size
+                dbRepository.insertGroup(group)
 
-                    withContext(Dispatchers.Main) {
-                        showGroupNotification(this@FirebasePush, dbRepository)
-                        //update delivery status
-                        groupMessageStatusUpdater.updateToDelivery(userId!!, messages, group.id)
-                    }
-                } else {
-                    val groupQuery = GroupQuery(message.groupId, dbRepository, preference)
-                    groupQuery.getGroupData(groupCollection)
+                withContext(Dispatchers.Main) {
+                    showGroupNotification(this@FirebasePush, dbRepository)
+                    //update delivery status
+                    groupMessageStatusUpdater.updateToDelivery(userId!!, messages, group.id)
                 }
+            } else {
+                val groupQuery = GroupQuery(message.groupId, dbRepository, preference)
+                groupQuery.getGroupData(groupCollection)
             }
+
         }
     }
 
     private fun handleNewGroup() {
         //it would be updated by snapshot listeners when app is alive
-        if (!MyApplication.isAppRunning) {
-            val group = Json.decodeFromString<Group>(pushMsg.message_body.toString())
-            val groupQuery = GroupQuery(group.id, dbRepository, preference)
-            groupQuery.getGroupData(groupCollection)
-        }
+        val group = Json.decodeFromString<Group>(pushMsg.message_body.toString())
+        val groupQuery = GroupQuery(group.id, dbRepository, preference)
+        groupQuery.getGroupData(groupCollection)
+
     }
 
     private fun handleNewMessage() {
         val message = Json.decodeFromString<Message>(pushMsg.message_body.toString())
-        if (message.to != userId || MyApplication.isAppRunning) {
-            //Timber.v("Push notification ignored")
+        if (message.to != userId) {
+            "notSame".printMeD()
+            Timber.v("Push notification ignored")
             return
         }
         val chatUserId = UserUtils.getChatUserId(userId!!, message)  // chatUserId from message
@@ -229,6 +229,7 @@ class FirebasePush : FirebaseMessagingService(), OnSuccessListener {
             }
         }
 
+        @SuppressLint("MissingPermission")
         private fun checkGroupMessages(
             context: Context,
             groupWithMsgs: List<GroupWithMessages>
@@ -240,8 +241,8 @@ class FirebasePush : FirebaseMessagingService(), OnSuccessListener {
             val groupNotifications = ArrayList<Notification>()
             if (groupWithMsgs.isNotEmpty()) {
                 for (groupMsg in groupWithMsgs) {
-                    /*  if (groupMsg.messages.last().from==myUserId)
-                          continue*/
+                    if (groupMsg.messages.last().from == myUserId)
+                          continue
                     personCount += 1
                     val person: Person = Person.Builder().setIcon(null)
                         .setKey(groupMsg.group.id).setName(Utils.getGroupName(groupMsg.group.id))
@@ -272,11 +273,11 @@ class FirebasePush : FirebaseMessagingService(), OnSuccessListener {
                 manager.notify(SUMMARY_ID, summaryNotification)
         }
 
+        @SuppressLint("MissingPermission")
         private fun checkMessages(
             context: Context,
             chatUserWithMessages: List<ChatUserWithMessages>
         ) {
-
             if (chatUserWithMessages.isEmpty())
                 return
 
@@ -288,10 +289,12 @@ class FirebasePush : FirebaseMessagingService(), OnSuccessListener {
 
             for (user in chatUserWithMessages) {
                 val messages = user.messages.filter { it.status < 3 && it.from != myUserId }
-                if (messages.isEmpty())
+                if (messages.isEmpty()) {
+                    "isEmpty".printMeD()
                     continue
+                }
                 personCount += 1
-                //Timber.v("DocId ${user.user.documentId}")
+                Timber.v("DocId ${user.user.documentId}")
                 val person: Person = Person.Builder().setIcon(null)
                     .setKey(user.user.id).setName(user.user.localName).build()
                 val builder = Utils.createBuilder(context, manager)
@@ -301,7 +304,7 @@ class FirebasePush : FirebaseMessagingService(), OnSuccessListener {
                 if (!user.user.documentId.isNullOrBlank()) {
                     builder.addAction(
                         R.drawable.ic_drafts,
-                        "mark as read",
+                        context.getString(R.string.mark_as_read),
                         NotificationUtils.getMarkAsPIntent(context, user)
                     )
                     builder.addAction(NotificationUtils.getReplyAction(context, user))
@@ -313,7 +316,7 @@ class FirebasePush : FirebaseMessagingService(), OnSuccessListener {
             val summaryNotification = NotificationUtils.getSummaryNotification(context, manager)
             for ((index, notification) in notifications.withIndex()) {
                 val notIdString = chatUserWithMessages[index].user.user.createdAt.toString()
-                val notId = notIdString.substring(notIdString.length - 4).toInt() //last 4 digits as notificationId
+                val notId = notIdString.substring(notIdString.length - 4).toInt() // last 4 digits as notificationId
                 manager.notify(notId, notification)
             }
 

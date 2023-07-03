@@ -9,6 +9,8 @@ import com.khtn.zone.database.data.ChatUser
 import com.khtn.zone.database.data.Message
 import com.khtn.zone.repo.DatabaseRepo
 import com.khtn.zone.utils.FireStoreCollection
+import com.khtn.zone.utils.printMeD
+import com.khtn.zone.utils.printMeError
 import timber.log.Timber
 
 interface OnMessageResponse {
@@ -23,7 +25,6 @@ class MessageSender(
     private val listener: OnMessageResponse
 ) {
 
-    @SuppressLint("LogNotTimber")
     fun checkAndSend(
         fromUser: String,
         toUser: String,
@@ -59,10 +60,10 @@ class MessageSender(
                                             mapOf("chat_members" to FieldValue.arrayUnion(fromUser, toUser)),
                                             SetOptions.merge()
                                         ).addOnSuccessListener {
-                                            //Log.i(TAG.INFO, "chat member update successfully")
+                                            "Chat member update successfully".printMeD()
                                             send("${fromUser}_${toUser}", message)
                                         }.addOnFailureListener {
-                                            //Log.e(TAG.ERROR, "chat member update failed ${it.message}")
+                                            "Chat member update failed ${it.message}".printMeError()
                                         }
                                 }
                             }
@@ -71,7 +72,6 @@ class MessageSender(
         }
     }
 
-    @SuppressLint("LogNotTimber")
     private fun send(
         doc: String,
         message: Message
@@ -88,25 +88,15 @@ class MessageSender(
                     message,
                     SetOptions.merge()
                 ).addOnSuccessListener {
-                    //Log.i(TAG.INFO, "Message sender Sucesss ${message.createdAt}")
+                    "Message sender Sucesss ${message.createdAt}".printMeD()
                     message.chatUserId = chatUserId
                     listener.onSuccess(message)
                 }.addOnFailureListener {
                     message.chatUserId = chatUserId
                     message.status = 4
-                    //Log.e(TAG.ERROR, "Message sender Failed ${it.message}")
+                    "Message sender Failed ${it.message}".printMeError()
                     listener.onFailed(message)
                 }
-            /*          msgCollection.document(doc)
-                          .update("messages",
-                              FieldValue.arrayUnion(message.serializeToMap())).addOnSuccessListener {
-                              LogMessage.v("Message sender Sucesss ${message.textMessage?.text}")
-                              listener.onSuccess(message)
-                          }.addOnFailureListener {
-                              message.status=4
-                              LogMessage.v("Message sender Failed ${it.message}")
-                              listener.onFailed(message)
-                          }*/
         } catch (e: Exception) {
             e.printStackTrace()
         }

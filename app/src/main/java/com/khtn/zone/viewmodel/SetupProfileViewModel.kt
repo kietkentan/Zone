@@ -42,9 +42,21 @@ class SetupProfileViewModel @Inject constructor(
     val name: LiveData<String>
         get() = _name
 
+    private val _listSticker = MutableLiveData<List<String>>()
+    val listSticker: LiveData<List<String>>
+        get() = _listSticker
+
     private val _profilePicUrl = MutableLiveData<String>()
     val profilePicUrl: LiveData<String>
         get() = _profilePicUrl
+
+    private val _profilePicPath = MutableLiveData<Uri>()
+    val profilePicPath: LiveData<Uri>
+        get() = _profilePicPath
+
+    private val _uploadProfilePic = MutableLiveData<UiState<Boolean>>()
+    val uploadProfilePic: LiveData<UiState<Boolean>>
+        get() = _uploadProfilePic
 
     private val _errorSetup = MutableLiveData<String>()
     val errorSetup: LiveData<String>
@@ -61,31 +73,46 @@ class SetupProfileViewModel @Inject constructor(
         userProfile?.let {
             _name.value = userProfile.userName
             _profilePicUrl.value = userProfile.image
+            _listSticker.value = userProfile.listSticker
             about = userProfile.about
             createdAt = userProfile.createdAt ?: System.currentTimeMillis()
+            _profileUpdateState.postValue(UiState.Success(true))
         }
     }
 
-    fun uploadProfileImage(imagePath: Uri) {
+    fun setUriProfilePicture(uri: Uri) {
+        _profilePicPath.value = uri
+    }
+
+    fun uploadProfileImage() {
         try {
+            _profileUpdateState.value = UiState.Loading
             _progressProPic.value = true
+            _uploadProfilePic.value = UiState.Loading
             val child = storageRef.child("profile_picture_${System.currentTimeMillis()}.jpg")
-            val task = child.putFile(imagePath)
-            task.addOnSuccessListener {
-                child.downloadUrl.addOnCompleteListener { taskResult ->
-                    _progressProPic.value = false
-                    _profilePicUrl.value = taskResult.result.toString()
-                }.addOnFailureListener {
-                    OnFailureListener { e ->
+            _profilePicPath.value?.let {
+                val task = child.putFile(it)
+                task.addOnSuccessListener {
+                    child.downloadUrl.addOnCompleteListener { taskResult ->
                         _progressProPic.value = false
-                        context.toast(e.message.toString())
+                        _uploadProfilePic.value = UiState.Success(true)
+                        _profilePicUrl.value = taskResult.result.toString()
+                        storeProfileData()
+                    }.addOnFailureListener {
+                        OnFailureListener { e ->
+                            _progressProPic.value = false
+                            _uploadProfilePic.value = UiState.Failure(null)
+                            context.toast(e.message.toString())
+                        }
                     }
+                }.addOnProgressListener { taskSnapshot ->
+                    val progress = 100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount
+                    "Upload: $progress".printMeD()
                 }
-            }.addOnProgressListener { taskSnapshot ->
-                100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount
             }
         } catch (e: Exception) {
             e.printStackTrace()
+            _profileUpdateState.value = UiState.Failure(e.hashCode())
         }
     }
 
@@ -96,8 +123,9 @@ class SetupProfileViewModel @Inject constructor(
                 mPreferencesManager.getUid()!!,
                 createdAt,
                 System.currentTimeMillis(),
+                arrayListOf(),
                 _profilePicUrl.value!!,
-                _name.value!!.lowercase(Locale.getDefault()),
+                _name.value!!,
                 about,
                 mobile = mPreferencesManager.getMobile(),
                 token = mPreferencesManager.getPushToken().toString(),
@@ -115,6 +143,7 @@ class SetupProfileViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
+            _profileUpdateState.value = UiState.Failure(e.hashCode())
         }
     }
 
@@ -131,7 +160,6 @@ class SetupProfileViewModel @Inject constructor(
     }
 
     override fun onCleared() {
-        "ProfileViewModel Cleared".printMeD()
         super.onCleared()
     }
 }

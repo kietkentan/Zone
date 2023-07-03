@@ -8,6 +8,7 @@ import com.khtn.zone.utils.listener.OnSuccessListener
 import com.khtn.zone.utils.UserUtils
 import com.khtn.zone.model.UserProfile
 import com.khtn.zone.repo.DatabaseRepo
+import com.khtn.zone.utils.ContactUtils
 import com.khtn.zone.utils.Utils
 
 class ChatUserUtil(
@@ -28,13 +29,18 @@ class ChatUserUtil(
                         val mobile =
                             userProfile?.mobile?.country + " " + userProfile?.mobile?.number
                         val chatUser = ChatUser(userProfile?.uId!!, mobile, userProfile)
+                        val isPermissionContact = Utils.isPermissionOk(
+                            context = context,
+                            permissions = ContactUtils.CONTACT_PERMISSION
+                        )
+
                         chatUser.unRead = unReadCount
                         if (docId != null)
                             chatUser.documentId = docId
-                        if (Utils.isContactPermissionOk(context)) {
+                        if (isPermissionContact) {
                             val contacts = UserUtils.fetchContacts(context)
                             val savedContact =
-                                contacts.firstOrNull { it.mobile.contains(userProfile.mobile!!.number) }
+                                contacts.firstOrNull { it.mobile.number.contains(userProfile.mobile!!.number) }
                             savedContact?.let {
                                 chatUser.localName = it.name
                                 chatUser.locallySaved = true

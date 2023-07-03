@@ -9,9 +9,13 @@ object FireStoreCollection {
     const val LAST_SEEN = "last_seen"
     const val M_CHAT_USER = "chatuser"
     const val MESSAGE = "messages"
-    const val USER = "Users"
+    const val USER = "users"
     const val MOBILE_NUMBER = "mobile.number"
     const val STATUS = "status"
+    const val STICKER = "sticker"
+    const val STICKER_ITEM = "sticker_item"
+    const val LIST_STICKER = "listSticker"
+    const val ID = "id"
 }
 
 object SharedPrefConstants {
@@ -31,12 +35,19 @@ object SharedPrefConstants {
 
 object FirebaseStorageConstants {
     const val ROOT_DIRECTORY = "app"
+    const val USER = "user"
 }
 
 object ImageResourceSheetOptions {
     const val CAMERA = 0
     const val GALLERY = 1
     const val CANCEL = 2
+}
+
+object AttachmentOptions {
+    const val IMAGE_VIDEO = 0
+    const val FILE = 1
+    const val QUICK_MESSAGE = 2
 }
 
 object UserStatusConstants {
@@ -60,6 +71,28 @@ object DataConstants {
     const val CHAT_USER_DATA = "chat_user_data"
     const val GROUP_DATA = "group_data"
     const val CHAT_DATA = "chat_data"
+}
+
+object MessageTypeConstants {
+    const val TEXT = "text"
+    const val AUDIO = "audio"
+    const val IMAGE = "image"
+    const val VIDEO = "video"
+    const val FILE = "file"
+}
+
+object MessageStatusConstants {
+    const val SENDING = 0
+    const val SENT = 1
+    const val DELIVERED = 2
+    const val SEEN = 3
+    const val FAILED = 4
+}
+
+object ImageTypeConstants {
+    const val GIF = "gif"
+    const val STICKER = "sticker"
+    const val IMAGE = "image"
 }
 
 object FirebaseCloudMessagingConstants {

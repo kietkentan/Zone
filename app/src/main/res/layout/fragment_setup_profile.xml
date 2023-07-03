@@ -28,6 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:profileUrl="@{viewModel.profilePicUrl}"
+                app:profileUri="@{viewModel.profilePicPath.toString()}"
                 app:profileProgress="@{viewModel.progressProPic}"
                 android:layout_gravity="center_horizontal"/>
 
@@ -78,7 +79,7 @@
             app:useCompatPadding="true"
             android:elevation="@dimen/dp5"
             android:layout_margin="@dimen/dp30"
-            app:tint="@color/white"
+            app:tint="#ffffff"
             tools:ignore="ContentDescription,RtlHardcoded" />
 
         <LinearLayout

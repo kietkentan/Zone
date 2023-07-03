@@ -16,13 +16,14 @@ import com.canhub.cropper.CropImage
 import com.google.firebase.firestore.CollectionReference
 import com.khtn.zone.R
 import com.khtn.zone.databinding.FragmentSetupProfileBinding
+import com.khtn.zone.di.UserCollection
 import com.khtn.zone.model.UserStatus
 import com.khtn.zone.utils.*
+import com.khtn.zone.utils.Utils.isPermissionOk
 import com.khtn.zone.viewmodel.SetupProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
-
 
 @AndroidEntryPoint
 class SetupProfileFragment: Fragment() {
@@ -32,6 +33,7 @@ class SetupProfileFragment: Fragment() {
     @Inject
     lateinit var preference: SharedPreferencesManager
 
+    @UserCollection
     @Inject
     lateinit var userCollection: CollectionReference
 
@@ -64,16 +66,22 @@ class SetupProfileFragment: Fragment() {
             setupProfileViewModel.setError(getString(R.string.error_name_setup))
             return
         }
-        if (setupProfileViewModel.profilePicUrl.value.isNullOrEmpty() || setupProfileViewModel.progressProPic.value!!) {
+        if (setupProfileViewModel.profilePicPath.value.toString().isEmpty() || setupProfileViewModel.progressProPic.value!!) {
             setupProfileViewModel.setError(getString(R.string.error_profile_photo))
             return
         }
-        setupProfileViewModel.storeProfileData()
+        setupProfileViewModel.uploadProfileImage()
     }
 
     private fun clickView() {
-        binding.ivProfile.setOnClickListener { ImageUtils.askPermission(this) }
-        binding.floatingButtonNext.setOnClickListener{ validate() }
+        binding.ivProfile.setOnClickListener {
+            ImageUtils.askImageCameraPermission(this)
+        }
+
+        binding.floatingButtonNext.setOnClickListener{
+            validate()
+        }
+
         binding.edtName.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -115,47 +123,71 @@ class SetupProfileFragment: Fragment() {
                     setupProfileViewModel.setProgressSetup(false)
                 }
 
-                is UiState.Success -> {setupProfileViewModel.setProgressSetup(false)}
+                is UiState.Success -> {
+                    setupProfileViewModel.setProgressSetup(false)
+                }
             }
         }
 
-        setupProfileViewModel.progressSetup.observe(viewLifecycleOwner) {
-            if (it) {
-                binding.layoutProgress.show()
-                this.view?.forEachChildView { it -> it.isEnabled = false  }
+        setupProfileViewModel.progressSetup.observe(viewLifecycleOwner) { progress ->
+            if (progress) {
+                binding.layoutProgress.showView()
+                this.view?.forEachChildView { it.isEnabled = false  }
             } else {
-                binding.layoutProgress.hide()
-                this.view?.forEachChildView { it -> it.isEnabled = true  }
+                binding.layoutProgress.hideView()
+                this.view?.forEachChildView { it.isEnabled = true  }
             }
         }
     }
 
     @Deprecated("Deprecated in Java")
     @Suppress("DEPRECATION")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
         super.onActivityResult(requestCode, resultCode, data)
-        "onActivityResult: ${data?.data}".printMeD()
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) onCropResult(data)
-        else ImageUtils.cropImage(context, data, true)
+
+        when (requestCode) {
+            CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> onCropResult(data)
+
+            ImageUtils.TAKE_PHOTO, ImageUtils.FROM_GALLERY -> ImageUtils.cropImage(context, data, true)
+
+            Utils.REQUEST_APP_SETTINGS -> {
+                val isPermissionImageCamera = isPermissionOk(
+                    context = requireContext(),
+                    permissions = ImageUtils.IMAGE_CAMERA_PERMISSION
+                )
+
+                if (isPermissionImageCamera) ImageUtils.showCameraOptions(this)
+            }
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    @Suppress("DEPRECATION")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == ImageUtils.REQUEST_IMAGE_CAMERA_PERMISSION) {
+            val isPermissionOk = isPermissionOk(*grantResults)
+
+            if (isPermissionOk) ImageUtils.showCameraOptions(this)
+            else toast(getString(R.string.permission_error))
+        }
     }
 
     private fun onCropResult(data: Intent?) {
         try {
             val imagePath: Uri? = ImageUtils.getCroppedImage(data)
-            imagePath?.let { setupProfileViewModel.uploadProfileImage(it) }
+            imagePath?.let { setupProfileViewModel.setUriProfilePicture(it) }
         } catch (e: Exception) {
             e.printStackTrace()
         }
-    }
-
-    @Suppress("DEPRECATION")
-    @Deprecated("Deprecated in Java")
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        ImageUtils.onImagePerResult(this, *grantResults)
     }
 }

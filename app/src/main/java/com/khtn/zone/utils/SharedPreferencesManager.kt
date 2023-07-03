@@ -81,13 +81,13 @@ class SharedPreferencesManager @Inject constructor(@ApplicationContext private v
     }
 
     fun setLogin(){
-        retrieveBooleanByKey(SharedPrefConstants.LOGIN, true)}
+        saveBooleanByKey(SharedPrefConstants.LOGIN, true)}
 
     fun setLastDevice(same: Boolean){
-        retrieveBooleanByKey(SharedPrefConstants.LAST_LOGGED_DEVICE_SAME, same)}
+        saveBooleanByKey(SharedPrefConstants.LAST_LOGGED_DEVICE_SAME, same)}
 
     fun setLogInTime(){
-        saveLongByKey(SharedPrefConstants.LOGIN_TIME,System.currentTimeMillis())
+        saveLongByKey(SharedPrefConstants.LOGIN_TIME, System.currentTimeMillis())
     }
 
     fun getLogInTime() =

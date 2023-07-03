@@ -22,16 +22,13 @@ object NotificationUtils {
         manager: NotificationManagerCompat
     ): Notification {
         return Utils.createBuilder(context, manager, true)
-            .setContentTitle("emailObject.getSummary()")
-            .setContentText("${FirebasePush.messageCount} new messages")
+            .setContentTitle("Summary")
+            .setContentText(String.format(context.getString(R.string.new_messages), FirebasePush.messageCount))
             .setSmallIcon(R.drawable.ic_stat_name)
             .setStyle(
                 NotificationCompat.InboxStyle()
-                    .addLine("Alex Faarborg Check this out")
-                    .addLine("Jeff Chang Launch Party")
-                    .addLine("Jeff Chang Launch Party")
-                    .setBigContentTitle("${FirebasePush.messageCount} new messages")
-                    .setSummaryText("${FirebasePush.messageCount} new messages from ${FirebasePush.personCount} friends")
+                    .setBigContentTitle(String.format(context.getString(R.string.new_messages), FirebasePush.messageCount))
+                    .setSummaryText(String.format(context.getString(R.string.new_messages_from), FirebasePush.messageCount, FirebasePush.personCount))
             )
             .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_CHILDREN)
             .setGroup(GROUP_KEY)
@@ -44,14 +41,15 @@ object NotificationUtils {
         context: Context,
         user: ChatUserWithMessages
     ): NotificationCompat.Action {
-        val replyLabel = "Reply"
+        val replyLabel = context.getString(R.string.reply)
         val remoteInput: RemoteInput = RemoteInput.Builder(KEY_TEXT_REPLY).run {
             setLabel(replyLabel)
             build()
         }
         return NotificationCompat.Action.Builder(
             R.drawable.ic_send,
-            "Reply", getReplyPIntent(context, user)
+            replyLabel,
+            getReplyPIntent(context, user)
         )
             .addRemoteInput(remoteInput)
             .build()
@@ -61,14 +59,15 @@ object NotificationUtils {
         context: Context,
         user: GroupWithMessages
     ): NotificationCompat.Action {
-        val replyLabel = "Reply"
+        val replyLabel = context.getString(R.string.reply)
         val remoteInput: RemoteInput = RemoteInput.Builder(KEY_TEXT_REPLY).run {
             setLabel(replyLabel)
             build()
         }
         return NotificationCompat.Action.Builder(
             R.drawable.ic_send,
-            "Reply", getGroupReplyPIntent(context, user)
+            replyLabel,
+            getGroupReplyPIntent(context, user)
         )
             .addRemoteInput(remoteInput)
             .build()
@@ -80,8 +79,10 @@ object NotificationUtils {
         intent.flags = (Intent.FLAG_ACTIVITY_CLEAR_TASK
                 or Intent.FLAG_ACTIVITY_NEW_TASK)
         return PendingIntent.getActivity(
-            context, 2, intent, PendingIntent.FLAG_ONE_SHOT or
-                    PendingIntent.FLAG_UPDATE_CURRENT
+            context,
+            2,
+            intent,
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_UPDATE_CURRENT
         )
     }
 

@@ -9,12 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.khtn.zone.databinding.RowChatBinding
 import com.khtn.zone.database.data.ChatUserWithMessages
 import com.khtn.zone.utils.SharedPreferencesManager
+import com.khtn.zone.utils.hideView
 import com.khtn.zone.utils.listener.ItemClickListener
+import com.khtn.zone.utils.printMeD
+import com.khtn.zone.utils.showView
 import java.util.*
 import javax.inject.Inject
 
-class SingleChatHomeAdapter(private val context: Context) :
-    ListAdapter<ChatUserWithMessages, RecyclerView.ViewHolder>(DiffCallbackChats()) {
+class SingleChatHomeAdapter(private val context: Context): ListAdapter<ChatUserWithMessages, RecyclerView.ViewHolder>(DiffCallbackChats()) {
 
     @Inject
     lateinit var preference: SharedPreferencesManager
@@ -65,8 +67,13 @@ class SingleChatHomeAdapter(private val context: Context) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ChatUserWithMessages) {
             binding.chatUser = item
+
+            if (bindingAdapterPosition != allChatList.size - 1)
+                binding.viewBottomChatHome.showView()
+            else binding.viewBottomChatHome.hideView()
+
             binding.viewRoot.setOnClickListener { v ->
-                itemClickListener.onItemClicked(v,bindingAdapterPosition)
+                itemClickListener.onItemClicked(v, bindingAdapterPosition)
             }
             binding.executePendingBindings()
         }
@@ -76,10 +83,10 @@ class SingleChatHomeAdapter(private val context: Context) :
 
 class DiffCallbackChats : DiffUtil.ItemCallback<ChatUserWithMessages>() {
     override fun areItemsTheSame(oldItem: ChatUserWithMessages, newItem: ChatUserWithMessages): Boolean {
-        return oldItem.user.id == oldItem.user.id
+        return oldItem.user.id == newItem.user.id
     }
 
     override fun areContentsTheSame(oldItem: ChatUserWithMessages, newItem: ChatUserWithMessages): Boolean {
-        return oldItem.messages == newItem.messages && oldItem.user==newItem.user
+        return oldItem.messages == newItem.messages && oldItem.user == newItem.user
     }
 }

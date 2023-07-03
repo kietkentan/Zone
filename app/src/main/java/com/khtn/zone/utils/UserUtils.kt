@@ -11,14 +11,15 @@ import android.os.Build
 import android.provider.ContactsContract
 import android.provider.Settings
 import com.fcmsender.FCMSender
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.khtn.zone.MyApplication
@@ -32,6 +33,7 @@ import com.khtn.zone.database.dao.GroupMessageDao
 import com.khtn.zone.database.data.*
 import com.khtn.zone.model.Contact
 import com.khtn.zone.model.ModelDeviceDetails
+import com.khtn.zone.model.ModelMobile
 import com.khtn.zone.model.UserProfile
 import com.khtn.zone.model.UserStatus
 import com.khtn.zone.repo.DatabaseRepo
@@ -63,14 +65,19 @@ object UserUtils {
     ) {
         try {
             if (Utils.isNetConnected(context)) {
-                FirebaseInstallations.getInstance().getToken(false).addOnSuccessListener { result ->
+                FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        task.exception?.printStackTrace()
+                        return@OnCompleteListener
+                    }
+
                     SharedPreferencesManager(context = context).saveStringByKey(
                         SharedPrefConstants.TOKEN,
-                        result.token
+                        task.result
                     )
                     if (isSave)
                         updateDeviceDetails(context, userCollection)
-                }
+                })
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -102,30 +109,30 @@ object UserUtils {
             userCollection.document(preference.retrieveStringByKey(SharedPrefConstants.UID)!!)
                 .update(updateData).addOnSuccessListener {
                 preference.saveUserProfile(profile!!)
-                //Log.i(TAG.INFO, "Token Updated $token##")
+                "Token Updated $token##".printMeD()
             }
         }
     }
 
     fun getStorageRef(context: Context): StorageReference {
-        val ref = Firebase.storage.getReference("Users")
+        val ref = Firebase.storage.getReference(FirebaseStorageConstants.USER)
         return ref.child(SharedPreferencesManager(context = context).retrieveStringByKey(SharedPrefConstants.UID).toString())
     }
 
     fun getDocumentRef(context: Context): DocumentReference {
         val db = FirebaseFirestore.getInstance()
-        return db.collection("Users")
+        return db.collection(FireStoreCollection.USER)
             .document(SharedPreferencesManager(context = context).getUid()!!)
     }
 
     fun getMessageSubCollectionRef(): Query {
         val db = FirebaseFirestore.getInstance()
-        return db.collectionGroup("messages")
+        return db.collectionGroup(FireStoreCollection.MESSAGE)
     }
 
     fun getGroupMsgSubCollectionRef(): Query {
         val db = FirebaseFirestore.getInstance()
-        return db.collectionGroup("group_messages")
+        return db.collectionGroup(FireStoreCollection.GROUP_MESSAGE)
     }
 
     @SuppressLint("Range")
@@ -153,13 +160,13 @@ object UserUtils {
                 continue
             names.add(name)
             numbers.add(number)
-            contacts.add(Contact(name, number))
+            contacts.add(Contact(name, ModelMobile(number = number)))
         }
         cursor.close()
         val hashMap = getCountryCodeRemovedList(context, contacts)
         contacts.clear()
         for (number in hashMap.keys) {
-            contacts.add(Contact(hashMap[number].toString(), number))
+            contacts.add(Contact(hashMap[number].toString(), ModelMobile(number = number)))
         }
         return contacts.sortedWith(compareBy { it.name })
     }
@@ -170,8 +177,8 @@ object UserUtils {
     ): HashMap<String, String> {
         val hashMap: HashMap<String, String> = HashMap() //hashmap to get rid of duplication
         contacts.forEach { contact ->
-            if (contact.mobile.length <= 5 ||
-                contact.mobile.contains(SharedPreferencesManager(context = context).getMobile()?.number!!)
+            if (contact.mobile.number.length <= 5 ||
+                contact.mobile.number.contains(SharedPreferencesManager(context = context).getMobile()?.number!!)
             )
                 return@forEach
             val mobile = contact.mobile
@@ -181,7 +188,7 @@ object UserUtils {
                     break
                 }
             }*/
-            hashMap[mobile.replace(" ", "")] = contact.name
+            hashMap[mobile.number.replace(" ", "")] = contact.name
         }
         return hashMap
     }
@@ -276,11 +283,11 @@ object UserUtils {
                 .toTokenOrTopic(token)
                 .responseListener(object : FCMSender.ResponseListener {
                     override fun onFailure(errorCode: Int, message: String) {
-                        //Log.e(TAG.ERROR, "notification sent Failed to $token")
+                        "notification sent Failed to $token".printMeD()
                     }
 
                     override fun onSuccess(response: String) {
-                        //Log.i(TAG.INFO, "notification sent Successfully to $token")
+                        "notification sent Successfully to $token".printMeD()
                     }
                 }).build()
             push.sendPush(context)
@@ -333,7 +340,7 @@ object UserUtils {
         val allContacts = fetchContacts(MyApplication.appContext).toMutableList()
         val listOfMobiles = ArrayList<String>()
         allContacts.forEach {
-            listOfMobiles.add(it.mobile)
+            listOfMobiles.add(it.mobile.number)
         }
         if (listOfMobiles.isEmpty())
             return false
@@ -393,7 +400,7 @@ object UserUtils {
                     withContext(Dispatchers.Main) {
                         for (doc in queriedList) {
                             val savedNumber =
-                                localContacts.firstOrNull { it.mobile == doc.mobile?.number }
+                                localContacts.firstOrNull { it.mobile.number == doc.mobile?.number }
                             if (savedNumber != null) {
                                 val chatUser = getChatUser(doc, chatUsers, savedNumber.name)
                                 finalList.add(chatUser)

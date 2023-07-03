@@ -80,7 +80,7 @@
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/btn_get_otp"
-                            style="@style/TextWhiteSemi12"
+                            style="@style/TextSemiButton"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_button_green_ripple_5dp"
