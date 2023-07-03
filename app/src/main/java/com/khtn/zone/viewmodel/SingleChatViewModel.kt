@@ -59,7 +59,7 @@ class SingleChatViewModel @Inject constructor(
     private val statusRef: DatabaseReference = database.getReference("${FireStoreCollection.USER}/$toUser")
     private var statusListener: ValueEventListener? = null
     val chatUserOnlineStatus = MutableLiveData(UserStatus())
-    private val messageStatusUpdater = MessageStatusUpdater(messageCollection, firebaseFireStore)
+    private val messageStatusUpdater = MessageStatusUpdater(messageCollection, firebaseFireStore, dbRepository)
     private lateinit var chatUser: ChatUser
 
     private val typingHandler = Handler(Looper.getMainLooper())

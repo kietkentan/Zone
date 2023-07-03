@@ -1,12 +1,11 @@
 package com.khtn.zone.core
 
-import android.annotation.SuppressLint
-import android.util.Log
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.khtn.zone.database.data.ChatUser
 import com.khtn.zone.database.data.Message
 import com.khtn.zone.di.MessageCollection
+import com.khtn.zone.repo.DatabaseRepo
 import com.khtn.zone.utils.FireStoreCollection
 import com.khtn.zone.viewmodel.serializeToMap
 import timber.log.Timber
@@ -17,9 +16,9 @@ import javax.inject.Singleton
 class MessageStatusUpdater @Inject constructor(
     @MessageCollection
     private val msgCollection: CollectionReference,
-    private val firebaseFirestore: FirebaseFirestore
+    private val firebaseFirestore: FirebaseFirestore,
+    private val dbRepository: DatabaseRepo,
 ) {
-    @SuppressLint("LogNotTimber")
     fun updateToDelivery(
         messageList: List<Message>,
         vararg chatUsers: ChatUser
@@ -45,16 +44,16 @@ class MessageStatusUpdater @Inject constructor(
                             .document(msg.createdAt.toString()), msg.serializeToMap()
                     )
                 }
+                //dbRepository.insertMultipleMessage(filterList.toMutableList())
             }
         }
         batch.commit().addOnSuccessListener {
-            //Log.i(TAG.INFO, "Batch update success from home")
+            Timber.v("Batch update success from home")
         }.addOnFailureListener {
-            //Log.e(TAG.ERROR, "Batch update failure ${it.message} from home")
+            Timber.v("Batch update failure ${it.message} from home")
         }
     }
 
-    @SuppressLint("LogNotTimber")
     fun updateToSeen(
         toUser: String,
         docId: String?,
@@ -69,7 +68,7 @@ class MessageStatusUpdater @Inject constructor(
             .filter { msg -> msg.from == toUser && msg.status != 3 }
             .map {
                 it.status = 3
-                it.chatUserId = null
+                it.chatUserId = it.chatUserId
                 it.deliveryTime = it.deliveryTime
                 it.seenTime = currentTime
                 it
@@ -82,13 +81,15 @@ class MessageStatusUpdater @Inject constructor(
                         .document(message.createdAt.toString()), message.serializeToMap()
                 )
             }
+            //dbRepository.insertMultipleMessage(filterList.toMutableList())
+
             batch.commit().addOnSuccessListener {
-                //Log.i(TAG.INFO, "All Message Seen Batch update success")
+                Timber.v("All Message Seen Batch update success")
             }.addOnFailureListener {
-                //Log.e(TAG.ERROR, "All Message Seen Batch update failure ${it.message}")
+                Timber.v("All Message Seen Batch update failure ${it.message}")
             }
         } else {
-            //Log.i(TAG.INFO, "All message already seen")
+            Timber.v("All message already seen")
         }
     }
 }

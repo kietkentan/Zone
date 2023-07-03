@@ -73,4 +73,7 @@
     <string name="delivered">Delivered</string>
     <string name="seen">Seen</string>
     <string name="failed">Failed</string>
+    <string name="new_audio">New recording file sent</string>
+    <string name="new_video">New video sent</string>
+    <string name="new_file">New file sent</string>
 </resources>

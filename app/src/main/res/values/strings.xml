@@ -74,4 +74,7 @@
     <string name="delivered">Đã nhận</string>
     <string name="seen">Đã xem</string>
     <string name="failed">Không thành công</string>
+    <string name="new_audio">Đã gửi tệp ghi âm mới</string>
+    <string name="new_video">Đã gửi video mới</string>
+    <string name="new_file">Đã gửi tệp đính kèm mới</string>
 </resources>

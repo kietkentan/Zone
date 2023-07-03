@@ -196,7 +196,7 @@ object NotificationUtils {
             user.messages.filter { it.status < 3 && it.from != SharedPreferencesManager(context).retrieveStringByKey(SharedPrefConstants.UID) }
         for (message in messages) {
             FirebasePush.messageCount += 1
-            style.addMessage(BindingAdapters.getLastMsgTxt(message), message.createdAt, chatPerson)
+            style.addMessage(BindingAdapters.getLastMsgTxt(context, message), message.createdAt, chatPerson)
         }
         return style
     }
@@ -216,17 +216,18 @@ object NotificationUtils {
         }
         if (filterMessages.isNotEmpty()) {
             for (msg in filterMessages)
-                style.addMessage(getGroupMsg(members, msg), msg.createdAt, person)
+                style.addMessage(getGroupMsg(context, members, msg), msg.createdAt, person)
             FirebasePush.messageCount += 1
         }
         return style
     }
 
     private fun getGroupMsg(
+        context: Context,
         members: ArrayList<ChatUser>,
         msg: GroupMessage
     ): String {
         val user = members.first { it.id == msg.from }.localName
-        return "$user : ${BindingAdapters.getLastMsgTxt(msg)}"
+        return "$user : ${BindingAdapters.getLastMsgTxt(context, msg)}"
     }
 }

@@ -235,7 +235,8 @@ class SingleChatFragment : Fragment(), ItemClickListener, StickerListener,Custom
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         val isPermissionOk = isPermissionOk(*grantResults)
 
-        if (!isPermissionOk) toast(getString(R.string.permission_error))
+        if (!isPermissionOk && (requestCode == REQUEST_AUDIO_PERMISSION || requestCode == ContactUtils.REQUEST_CONTACT_PERMISSION))
+            toast(getString(R.string.permission_error))
         else {
             when (requestCode) {
                 REQUEST_AUDIO_PERMISSION -> startRecording()
@@ -277,7 +278,6 @@ class SingleChatFragment : Fragment(), ItemClickListener, StickerListener,Custom
             ImageUtils.TAKE_PHOTO, ImageUtils.FROM_GALLERY -> ImageUtils.cropImage(requireActivity(), data, true)
 
             Utils.REQUEST_APP_SETTINGS -> {
-                "app setting: $lastActionCallPermission".printMeD()
                 when (lastActionCallPermission) {
                     SETTING_RECORD -> {
                         val isPermissionOk = isPermissionOk(

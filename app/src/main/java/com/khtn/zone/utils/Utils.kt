@@ -62,13 +62,15 @@ object Utils {
         reqCode: Int = PERMISSION_REQ_CODE
     ): Boolean {
         var allPermitted = true
-        var shouldShowRequestPermission = false
+        var shouldShowRequestPermission = true
         for (permission in permissions) {
             shouldShowRequestPermission = shouldShowRequestPermissionRationale(context.requireActivity(), permission)
             if (allPermitted)
                 allPermitted = (ContextCompat.checkSelfPermission(context.requireContext(), permission)
                     == PackageManager.PERMISSION_GRANTED)
         }
+
+        "allPer: $allPermitted - should: $shouldShowRequestPermission".printMeD()
 
         when {
             allPermitted -> return true

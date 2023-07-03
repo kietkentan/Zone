@@ -129,7 +129,7 @@ class SingleChatAdapter(
                 holder.bind(context, getItem(position), msgClickListener)
 
             is TxtReceiveVHolder ->
-                holder.bind(context, getItem(position))
+                holder.bind(context, getItem(position), msgClickListener)
 
             is ImageSentVHolder ->
                 holder.bind(context, getItem(position), msgClickListener)
@@ -219,7 +219,7 @@ class SingleChatAdapter(
     }
 
     class TxtReceiveVHolder(val binding: RowReceiveMessageBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(context: Context, item: Message) {
+        fun bind(context: Context, item: Message, msgClickListener: ItemClickListener) {
             binding.message = item
 
             if (bindingAdapterPosition == lastPositionMessageClicked)
@@ -238,6 +238,10 @@ class SingleChatAdapter(
                     binding.txtMsg.setBackgroundResource(R.drawable.bg_item_chat_receive_ripple_8dp)
                     binding.txtMsgTime.showView()
                 }
+            }
+
+            binding.layoutMsg.setOnClickListener {
+                msgClickListener.onItemClicked(it, bindingAdapterPosition)
             }
 
             binding.executePendingBindings()

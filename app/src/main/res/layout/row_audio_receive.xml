@@ -75,8 +75,8 @@
                         android:layout_marginStart="@dimen/dp5"
                         android:layout_weight="1"
                         app:backgroundInProgress="#000000"
-                        app:backgroundMaxProgress="#6A6A6A"
-                        app:backgroundProgress="#6A6A6A" />
+                        app:backgroundMaxProgress="#C8C8C8"
+                        app:backgroundProgress="#C8C8C8" />
 
                     <TextView
                         android:id="@+id/tv_time_audio"

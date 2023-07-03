@@ -18,17 +18,16 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseMethod
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
+import android.content.Context
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.chip.Chip
 import com.khtn.zone.MyApplication
 import com.khtn.zone.R
 import com.khtn.zone.database.data.*
-import com.khtn.zone.utils.ImageUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.util.*
 
 object BindingAdapters {
@@ -75,7 +74,7 @@ object BindingAdapters {
     @JvmStatic
     fun setLastMessage(txtView: TextView, msgList: List<Message>) {
         val lastMsg = msgList.last()
-        txtView.text = getLastMsgTxt(lastMsg)
+        txtView.text = getLastMsgTxt(txtView.context, lastMsg)
     }
 
     @InverseMethod("messageBsg")
@@ -121,46 +120,36 @@ object BindingAdapters {
         ImageUtils.loadMsgImage(imgView, url.toString(), imageType.toString())
     }
 
-    fun getLastMsgTxt(msg: Message): String {
+    fun getLastMsgTxt(context: Context, msg: Message): String {
         return when (msg.type) {
-            "text" -> {
-                msg.textMessage?.text.toString()
-            }
-            "audio" -> {
-                "Audio"
-            }
-            "image" -> {
-                msg.imageMessage?.imageType.toString().capitalize(Locale.getDefault())
-            }
-            "video" -> {
-                "Video"
-            }
-            "file" -> {
-                "File"
-            }
+            MessageTypeConstants.TEXT -> msg.textMessage?.text.toString()
+
+            MessageTypeConstants.AUDIO -> context.getString(R.string.new_audio)
+
+            MessageTypeConstants.IMAGE -> msg.imageMessage?.imageType.toString().capitalize(Locale.getDefault())
+
+            MessageTypeConstants.VIDEO -> context.getString(R.string.new_video)
+
+            MessageTypeConstants.FILE -> context.getString(R.string.new_file)
+
             else -> {
                 "Steotho Image"
             }
         }
     }
 
-    fun getLastMsgTxt(msg: GroupMessage): String {
+    fun getLastMsgTxt(context: Context, msg: GroupMessage): String {
         return when (msg.type) {
-            "text" -> {
-                msg.textMessage?.text.toString()
-            }
-            "audio" -> {
-                "Audio"
-            }
-            "image" -> {
-                msg.imageMessage?.imageType.toString().capitalize(Locale.getDefault())
-            }
-            "video" -> {
-                "Video"
-            }
-            "file" -> {
-                "File"
-            }
+            MessageTypeConstants.TEXT -> msg.textMessage?.text.toString()
+
+            MessageTypeConstants.AUDIO -> context.getString(R.string.new_audio)
+
+            MessageTypeConstants.IMAGE -> msg.imageMessage?.imageType.toString().capitalize(Locale.getDefault())
+
+            MessageTypeConstants.VIDEO -> context.getString(R.string.new_video)
+
+            MessageTypeConstants.FILE -> context.getString(R.string.new_file)
+
             else -> {
                 "Steotho image"
             }
@@ -359,7 +348,7 @@ object BindingAdapters {
         } else {
             val message = messages.last()
             val localName = group.group.members?.first { it.id == message.from }?.localName
-            val txtMsg = "$localName : ${getLastMsgTxt(message)}"
+            val txtMsg = "$localName : ${getLastMsgTxt(txtView.context, message)}"
             txtView.text = txtMsg
         }
     }
