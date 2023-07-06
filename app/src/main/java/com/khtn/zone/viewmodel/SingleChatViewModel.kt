@@ -59,7 +59,7 @@ class SingleChatViewModel @Inject constructor(
     private val statusRef: DatabaseReference = database.getReference("${FireStoreCollection.USER}/$toUser")
     private var statusListener: ValueEventListener? = null
     val chatUserOnlineStatus = MutableLiveData(UserStatus())
-    private val messageStatusUpdater = MessageStatusUpdater(messageCollection, firebaseFireStore, dbRepository)
+    private val messageStatusUpdater = MessageStatusUpdater(messageCollection, firebaseFireStore)
     private lateinit var chatUser: ChatUser
 
     private val typingHandler = Handler(Looper.getMainLooper())
@@ -136,7 +136,7 @@ class SingleChatViewModel @Inject constructor(
         withContext(Dispatchers.Main) {
             val nonSendMsgs =
                 listOfMessage.filter { it.from == fromUser && it.status == 0 && it.type == "text" }
-            //Log.i(TAG.INFO, "nonSendMsgs Size ${nonSendMsgs.size}")
+            "nonSendMsgs Size ${nonSendMsgs.size}".printMeD()
             if (nonSendMsgs.isNotEmpty()) {
                 for (cachedMsg in nonSendMsgs) {
                     val messageSender = MessageSender(

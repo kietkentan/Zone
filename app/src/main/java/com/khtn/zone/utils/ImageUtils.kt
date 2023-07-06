@@ -7,6 +7,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
@@ -16,7 +17,13 @@ import android.text.TextUtils
 import android.webkit.MimeTypeMap
 import android.widget.ImageView
 import android.widget.ProgressBar
+import androidx.annotation.DrawableRes
 import androidx.core.content.FileProvider
+import androidx.exifinterface.media.ExifInterface
+import androidx.exifinterface.media.ExifInterface.ORIENTATION_NORMAL
+import androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_270
+import androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_90
+import androidx.exifinterface.media.ExifInterface.TAG_ORIENTATION
 import androidx.fragment.app.Fragment
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import com.bumptech.glide.Glide
@@ -26,6 +33,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.ImageViewTarget
+import com.bumptech.glide.request.target.Target
 import com.canhub.cropper.CropImage
 import com.canhub.cropper.CropImageView
 import com.google.android.material.imageview.ShapeableImageView
@@ -36,6 +44,7 @@ import com.khtn.zone.custom.dialog.SheetListener
 import com.khtn.zone.model.SetSticker
 import com.khtn.zone.model.Sticker
 import java.io.*
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
 
@@ -79,6 +88,17 @@ object ImageUtils {
             .into(imageView)
     }
 
+    fun loadImageDrawable(
+        imageView: ImageView,
+        @DrawableRes imgUrl: Int
+    ){
+        Glide.with(imageView.context)
+            .load(imgUrl)
+            .placeholder(R.color.white)
+            .error(R.color.white)
+            .into(imageView)
+    }
+
     fun loadSingleSticker(
         imageView: ImageView,
         progressBar: ProgressBar,
@@ -95,13 +115,13 @@ object ImageUtils {
                 .placeholder(R.drawable.holder_sticker)
                 .error(R.drawable.holder_sticker)
                 .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(p0: GlideException?, p1: Any?, p2: com.bumptech.glide.request.target.Target<Drawable>?, p3: Boolean): Boolean {
+                    override fun onLoadFailed(p0: GlideException?, p1: Any?, p2: Target<Drawable>?, p3: Boolean): Boolean {
                         return false
                     }
 
-                    override fun onResourceReady(p0: Drawable?, p1: Any?, p2: com.bumptech.glide.request.target.Target<Drawable>?, p3: DataSource?, p4: Boolean): Boolean {
+                    override fun onResourceReady(p0: Drawable?, p1: Any?, p2: Target<Drawable>?, p3: DataSource?, p4: Boolean): Boolean {
                         if (sticker.type == ImageTypeConstants.GIF) {
-                            (p0 as GifDrawable).setLoopCount(1)
+                            (p0 as GifDrawable).setLoopCount(5)
                             p0.registerAnimationCallback(object : Animatable2Compat.AnimationCallback() {
                                 override fun onAnimationEnd(drawable: Drawable) {
                                     progressBar.hideView()
@@ -132,11 +152,11 @@ object ImageUtils {
                 .placeholder(R.drawable.holder_sticker)
                 .error(R.drawable.holder_sticker)
                 .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(p0: GlideException?, p1: Any?, p2: com.bumptech.glide.request.target.Target<Drawable>?, p3: Boolean): Boolean {
+                    override fun onLoadFailed(p0: GlideException?, p1: Any?, p2: Target<Drawable>?, p3: Boolean): Boolean {
                         return false
                     }
 
-                    override fun onResourceReady(p0: Drawable?, p1: Any?, p2: com.bumptech.glide.request.target.Target<Drawable>?, p3: DataSource?, p4: Boolean): Boolean {
+                    override fun onResourceReady(p0: Drawable?, p1: Any?, p2: Target<Drawable>?, p3: DataSource?, p4: Boolean): Boolean {
                         if (setSticker.type == ImageTypeConstants.GIF) {
                             (p0 as GifDrawable).setLoopCount(1)
                             p0.registerAnimationCallback(object : Animatable2Compat.AnimationCallback() {
@@ -156,42 +176,32 @@ object ImageUtils {
         }
     }
 
-    @Suppress("KotlinConstantConditions")
     fun loadMsgImage(
         imgView: ImageView,
         url: String,
         imageType: String,
+        size: Pair<Int, Int>? = null,
         isGiftSticker: Boolean = false
     ) {
         try {
             val layoutParam = imgView.layoutParams
+            val height = size?.second ?: 1
+            val width = size?.first ?: 1
+            val w: Int = (MyApplication.getMaxWidth() * if (height/width <= 1.2f) 0.6 else 0.5).roundToInt()
+            val h: Int = (height*w)/width
+
             when (imageType) {
                 ImageTypeConstants.GIF -> {
+                    layoutParam.width = w
+                    layoutParam.height = h
+
+                    imgView.layoutParams = layoutParam
                     Glide.with(imgView.context)
                         .asGif()
                         .load(url)
                         .placeholder(R.drawable.gif)
                         .error(R.drawable.gif)
-                        .into(object: ImageViewTarget<GifDrawable>(imgView) {
-                            override fun setResource(resource: GifDrawable?) {
-                                val height = resource?.firstFrame?.height
-                                val width = resource?.firstFrame?.width
-
-                                height?.let {
-                                    width?.let {
-                                        val w = imgView.context.applicationContext.resources.displayMetrics.widthPixels.pxToDp *
-                                                if (height/width <= 1.2f) 4/5 else 1/2
-                                        layoutParam.width = w
-                                        layoutParam.height = height*w/width
-                                    }
-                                }.run {
-                                    layoutParam.width = 0
-                                    layoutParam.height = 0
-                                }
-                                imgView.layoutParams = layoutParam
-                                imgView.setImageDrawable(resource)
-                            }
-                        })
+                        .into(imgView)
                 }
 
                 ImageTypeConstants.STICKER -> {
@@ -200,13 +210,13 @@ object ImageUtils {
                         .placeholder(R.drawable.holder_sticker)
                         .error(R.drawable.holder_sticker)
                         .listener(object : RequestListener<Drawable> {
-                            override fun onLoadFailed(p0: GlideException?, p1: Any?, p2: com.bumptech.glide.request.target.Target<Drawable>?, p3: Boolean): Boolean {
+                            override fun onLoadFailed(p0: GlideException?, p1: Any?, p2: Target<Drawable>?, p3: Boolean): Boolean {
                                 return false
                             }
 
-                            override fun onResourceReady(p0: Drawable?, p1: Any?, p2: com.bumptech.glide.request.target.Target<Drawable>?, p3: DataSource?, p4: Boolean): Boolean {
+                            override fun onResourceReady(p0: Drawable?, p1: Any?, p2: Target<Drawable>?, p3: DataSource?, p4: Boolean): Boolean {
                                 if (isGiftSticker)
-                                        (p0 as GifDrawable).setLoopCount(1)
+                                        (p0 as GifDrawable).setLoopCount(5)
 
                                 return false
                             }
@@ -215,31 +225,15 @@ object ImageUtils {
                 }
 
                 else -> {
+                    layoutParam.width = w
+                    layoutParam.height = h
+                    imgView.layoutParams = layoutParam
                     Glide.with(imgView.context)
                         .asBitmap()
                         .load(url)
                         .placeholder(R.drawable.ic_gal_pholder)
                         .error(R.drawable.ic_gal_pholder)
-                        .into(object: ImageViewTarget<Bitmap>(imgView) {
-                            override fun setResource(resource: Bitmap?) {
-                                val height = resource?.height
-                                val width = resource?.width
-
-                                height?.let {
-                                    width?.let {
-                                        val w = imgView.context.applicationContext.resources.displayMetrics.widthPixels.pxToDp *
-                                                if (height/width <= 1.2f) 4/5 else 1/2
-                                        layoutParam.width = w
-                                        layoutParam.height = height*w/width
-                                    }
-                                }.run {
-                                    layoutParam.width = 0
-                                    layoutParam.height = 0
-                                }
-                                imgView.layoutParams = layoutParam
-                                imgView.setImageBitmap(resource)
-                            }
-                        })
+                        .into(imgView)
                 }
             }
         } catch (e: Exception) {
@@ -335,6 +329,7 @@ object ImageUtils {
         }
     }
 
+    @Suppress("DEPRECATION")
     fun getCroppedImage(data: Intent?): Uri? {
         try {
             val result = CropImage.getActivityResult(data)
@@ -347,6 +342,28 @@ object ImageUtils {
 
     private fun getPhotoUri(data: Intent?): Uri? {
         return if (data == null || data.data == null) photoUri else data.data
+    }
+
+    fun getImageSize(activity: Activity, uri: Uri): Pair<Int, Int> {
+        var input = activity.contentResolver?.openInputStream(uri)!!
+        val options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        BitmapFactory.decodeStream(input, null, options)
+
+        input = activity.contentResolver?.openInputStream(uri)!!
+
+        var orientation = ExifInterface(input).getAttribute(TAG_ORIENTATION)?.toInt()
+        if (orientation == null) {
+            orientation = ORIENTATION_NORMAL
+        }
+        if (orientation == ORIENTATION_ROTATE_90 || orientation == ORIENTATION_ROTATE_270) {
+            val outWidth = options.outWidth
+            val outHeight = options.outHeight
+            options.outWidth = outHeight
+            options.outHeight = outWidth
+        }
+
+        return Pair(options.outWidth, options.outHeight)
     }
 
     private fun createImageFolder(
@@ -376,8 +393,7 @@ object ImageUtils {
     ) {
         if (Utils.isPermissionOk(*result))
             showCameraOptions(context)
-        else
-            context.toast(context.getString(R.string.permission_error))
+        else context.toast(context.getString(R.string.permission_error))
     }
 
     @SuppressLint("Range")

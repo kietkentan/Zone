@@ -13,8 +13,8 @@
     <string name="intro_desc_3">Với tính năng kết nối bạn bè gần đây, bạn sẽ tìm được người có thể trò chuyện cùng mình.</string>
     <string name="intro_desc_4">Để cùng tương tác, trò chuyện với bạn bè khắp nơi.</string>
     <string name="phone_number">Số điện thoại</string>
-    <string name="vietnamese">Tiếng Việt</string>
-    <string name="english">Tiếng Anh</string>
+    <string name="vietnamese" translatable="false">Tiếng Việt</string>
+    <string name="english" translatable="false">English</string>
     <string name="take_photo">Chụp ảnh</string>
     <string name="select_from_your_device">Chọn ảnh từ thiết bị</string>
     <string name="cancel">Hủy</string>
@@ -70,11 +70,26 @@
     <string name="new_messages_from">%d tin nhắn mới từ %d người bạn</string>
     <string name="reply">Trả lời</string>
     <string name="sent">Đã gửi</string>
-    <string name="sending">Đang gửi...</string>
+    <string name="sending">Đang gửi…</string>
     <string name="delivered">Đã nhận</string>
     <string name="seen">Đã xem</string>
     <string name="failed">Không thành công</string>
     <string name="new_audio">Đã gửi tệp ghi âm mới</string>
     <string name="new_video">Đã gửi video mới</string>
     <string name="new_file">Đã gửi tệp đính kèm mới</string>
+    <string name="is_typing">đang nhập…</string>
+    <string name="setting">Thiết lập</string>
+    <string name="profile_updated">Cập nhật thông tin thành công!</string>
+    <string name="dark_mode">Chế độ ban đêm</string>
+    <string name="edit_infor">Chỉnh sửa thông tin cá nhân</string>
+    <string name="do_u_want_logout">Bạn muốn đăng xuất?</string>
+    <string name="no_worries">Đừng lo lắng, khi bạn đăng nhập lại, tin nhắn của bạn sẽ được khôi phục tự động</string>
+    <string name="create_new_group">Tạo nhóm mới</string>
+    <string name="suggest">Gợi ý</string>
+    <string name="search_for_name_and_phone">Tìm theo tên hoặc số điện thoại</string>
+    <string name="selected">Đã chọn: %d</string>
+    <string name="group_naming">Đặt tên nhóm</string>
+    <string name="unnamed_group">Nhóm chưa đặt tên</string>
+    <string name="click_to_add_the_name">Bấm để đặt tên</string>
+    <string name="invalid_group_name">Tên nhóm không hợp lệ hoặc đã bỏ trống</string>
 </resources>

@@ -8,33 +8,51 @@
     android:padding="@dimen/dp20">
 
     <TextView
+        android:id="@+id/tv_title_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/dp8"
         android:textSize="@dimen/sp17"
-        android:textColor="@color/blue_90"
-        android:text="@string/logged_in_another_device"/>
+        android:gravity="center_horizontal"
+        android:textColor="@color/blue_90"/>
 
     <TextView
+        android:id="@+id/tv_small_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="3"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/dp10"
         android:textSize="@dimen/sp12"
-        android:textColor="@color/blue_120"
-        android:text="@string/login_again"/>
+        android:textColor="@color/blue_120"/>
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minWidth="@dimen/dp80"
-        android:id="@+id/txt_log_out"
-        android:textSize="@dimen/sp12"
-        android:gravity="center"
         android:layout_marginTop="@dimen/dp10"
-        android:layout_gravity="end"
-        android:textColor="@color/green_220"
-        android:padding="@dimen/dp8"
-        android:text="@string/logout"/>
+        android:layout_gravity="end">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="@dimen/dp80"
+            android:id="@+id/tv_button_1"
+            android:textSize="@dimen/sp12"
+            android:background="@drawable/bg_text_green_ripple_5dp"
+            android:gravity="center"
+            android:textColor="@color/green_220"
+            android:padding="@dimen/dp8"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="@dimen/dp80"
+            android:id="@+id/tv_button_2"
+            android:textSize="@dimen/sp12"
+            android:layout_marginStart="@dimen/dp10"
+            android:background="@drawable/bg_text_green_ripple_5dp"
+            android:gravity="center"
+            android:textColor="@color/green_220"
+            android:padding="@dimen/dp8"/>
+    </LinearLayout>
 </LinearLayout>

@@ -3,15 +3,12 @@ package com.khtn.zone.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.auth.FirebaseAuth
 import com.khtn.zone.R
 import com.khtn.zone.adapter.OnBoardingAdapter
 import com.khtn.zone.databinding.ActivityOnBoardingBinding
@@ -39,6 +36,8 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivityOnBoardingBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        loadLanguageConfig()
         this.transparentStatusBar(isLightBackground = true)
 
         binding.viewPagerOnboard.adapter = OnBoardingAdapter(list, supportFragmentManager, lifecycle)
@@ -114,6 +113,10 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener {
         eventGA.eventAuth("login_user" /* custom event GA */, "item")
         startActivity(Intent(this@OnBoardingActivity, MainActivity::class.java))
         finish()
+    }
+
+    private fun loadLanguageConfig() {
+        LocaleHelper.loadLanguageConfig(this)
     }
 
     private fun checkLanguage() {

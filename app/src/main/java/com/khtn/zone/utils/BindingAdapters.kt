@@ -19,6 +19,7 @@ import androidx.databinding.InverseMethod
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import android.content.Context
+import android.net.Uri
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.chip.Chip
 import com.khtn.zone.MyApplication
@@ -70,6 +71,20 @@ object BindingAdapters {
         ImageUtils.loadUserImage(view, url)
     }
 
+    @BindingAdapter("imageUri")
+    @JvmStatic
+    fun loadImage(
+        view: ImageView,
+        uri: Uri?
+    ) {
+        if (uri.toString().isEmpty()) return
+        else {
+            ImageViewCompat.setImageTintList(view, null) // removing image tint
+            view.setPadding(0)
+        }
+        ImageUtils.loadUserImage(view, uri.toString())
+    }
+
     @BindingAdapter("lastMessage")
     @JvmStatic
     fun setLastMessage(txtView: TextView, msgList: List<Message>) {
@@ -103,10 +118,14 @@ object BindingAdapters {
 
     @BindingAdapter("loadImage")
     @JvmStatic
-    fun loadImage(imgView: ImageView, message: Message) {
+    fun loadImage(
+        imgView: ImageView,
+        message: Message
+    ) {
         val url = message.imageMessage?.uri
         val imageType = message.imageMessage?.imageType
-        ImageUtils.loadMsgImage(imgView, url!!, imageType!!)
+        val size = message.imageMessage?.size
+        ImageUtils.loadMsgImage(imgView, url!!, imageType!!, size,message.imageMessage!!.sticker?.type == ImageTypeConstants.GIF)
     }
 
     @BindingAdapter("loadGroupMsgImage")
@@ -240,12 +259,11 @@ object BindingAdapters {
     @BindingAdapter("groupMessageStatus")
     @JvmStatic
     fun groupMsgStatus(txtStatus: TextView, message: GroupMessage) {
+        "group: $message".printMeD()
         val statusList = message.status
         val myStatus = statusList.first()
-        if (message.from == SharedPreferencesManager(context = txtStatus.context).retrieveStringByKey(SharedPrefConstants.UID))
-            statusList.removeAt(0)
-        val delivered = message.status.any { it == MessageStatusConstants.DELIVERED || it == MessageStatusConstants.SEEN }  // if anyone has seen the message
-        val seen = message.status.all { it == MessageStatusConstants.SEEN }  // all members seen the messge
+        val delivered = message.status.any { it == 2 || it == 3 }  //if anyone has seen the message
+        val seen = message.status.all { it == 3 }  //all members seen the message
 
         txtStatus.text = when {
             myStatus == MessageStatusConstants.SENDING -> txtStatus.context.getString(R.string.sending)

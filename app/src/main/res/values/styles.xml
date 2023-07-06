@@ -18,6 +18,16 @@
 
     </style>
 
+    <style name="Theme_Dialog_Small" parent="android:Theme.Holo.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowEnterAnimation">@anim/anim_dialog_up</item>
+        <item name="android:windowExitAnimation">@anim/anim_dialog_down</item>
+    </style>
+
     <style name="AppName">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/sp27</item>
@@ -80,6 +90,14 @@
         <item name="android:textSize">@dimen/sp12</item>
         <item name="android:fontFamily">@font/font_semi</item>
         <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="ToolbarTitle">
+        <item name="android:textSize">@dimen/sp12</item>
+    </style>
+
+    <style name="ToolbarSubTitle">
+        <item name="android:textSize">@dimen/sp8</item>
     </style>
 
     <style name="TextBlackSemi8">

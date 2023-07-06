@@ -42,7 +42,6 @@
                         android:id="@+id/image_profile"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_other_user"
                         android:scaleType="centerCrop"
                         app:imageUrl="@{chatUser.user.user.image}" />
                 </androidx.cardview.widget.CardView>

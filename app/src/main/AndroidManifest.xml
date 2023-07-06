@@ -90,6 +90,11 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+            <nav-graph android:value="@navigation/main_navigation" />
         </activity>
 
         <provider

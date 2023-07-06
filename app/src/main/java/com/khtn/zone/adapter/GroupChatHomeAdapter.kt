@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.khtn.zone.databinding.RowGroupChatBinding
 import com.khtn.zone.database.data.GroupWithMessages
 import com.khtn.zone.utils.SharedPreferencesManager
+import com.khtn.zone.utils.hideView
 import com.khtn.zone.utils.listener.ItemClickListener
+import com.khtn.zone.utils.showView
 import java.util.*
 import javax.inject.Inject
 
@@ -66,6 +68,11 @@ class GroupChatHomeAdapter(private val context: Context) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: GroupWithMessages) {
             binding.groupChat = item
+
+            if (bindingAdapterPosition != allList.size - 1)
+                binding.viewBottomChatHome.showView()
+            else binding.viewBottomChatHome.hideView()
+
             binding.viewRoot.setOnClickListener { v ->
                 itemClickListener.onItemClicked(v, bindingAdapterPosition)
             }

@@ -10,6 +10,8 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/dp40"
         android:layout_weight="1"
+        android:textColorHint="@color/color_background"
+        android:background="@android:color/transparent"
         android:importantForAutofill="no"
         android:inputType="text"
         android:maxLines="1"
@@ -19,7 +21,7 @@
         android:id="@+id/btn_right"
         android:layout_width="@dimen/dp40"
         android:layout_height="@dimen/dp40"
-        android:background="@drawable/bg_text_green_ripple_5dp"
+        android:background="@null"
         android:scaleType="centerInside"
         android:src="@drawable/ic_search"
         tools:ignore="ContentDescription" />

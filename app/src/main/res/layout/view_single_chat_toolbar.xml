@@ -9,10 +9,6 @@
         <variable
             name="chatUser"
             type="com.khtn.zone.database.data.ChatUser" />
-
-        <variable
-            name="viewmodel"
-            type="com.khtn.zone.viewmodel.SingleChatViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

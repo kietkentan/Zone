@@ -44,6 +44,12 @@
         <action
             android:id="@+id/action_singleChatHomeFragment_to_singleChatFragment"
             app:destination="@id/singleChatFragment" />
+        <action
+            android:id="@+id/action_singleChatHomeFragment_to_groupChatHomeFragment"
+            app:destination="@id/groupChatHomeFragment" />
+        <action
+            android:id="@+id/action_singleChatHomeFragment_to_groupChatFragment"
+            app:destination="@id/groupChatFragment" />
     </fragment>
     <fragment
         android:id="@+id/singleChatFragment"
@@ -64,5 +70,41 @@
         <action
             android:id="@+id/action_contactFragment_to_singleChatFragment"
             app:destination="@id/singleChatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupChatHomeFragment"
+        android:name="com.khtn.zone.fragment.GroupChatHomeFragment"
+        android:label="GroupChatHomeFragment" >
+        <action
+            android:id="@+id/action_groupChatHomeFragment_to_groupChatFragment"
+            app:destination="@id/groupChatFragment" />
+        <action
+            android:id="@+id/action_groupChatHomeFragment_to_createGroupChatFragment"
+            app:destination="@id/createGroupChatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupChatFragment"
+        android:name="com.khtn.zone.fragment.GroupChatFragment"
+        android:label="GroupChatFragment" >
+        <argument
+            android:name="group"
+            app:argType="com.khtn.zone.database.data.Group"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_groupChatFragment_to_groupChatHomeFragment"
+            app:destination="@id/groupChatHomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.khtn.zone.fragment.ProfileFragment"
+        android:label="ProfileFragment" />
+    <fragment
+        android:id="@+id/createGroupChatFragment"
+        android:name="com.khtn.zone.fragment.CreateGroupChatFragment"
+        android:label="CreateGroupChatFragment" >
+        <action
+            android:id="@+id/action_createGroupChatFragment_to_groupChatFragment"
+            app:destination="@id/groupChatFragment" />
     </fragment>
 </navigation>

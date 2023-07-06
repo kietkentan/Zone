@@ -6,11 +6,12 @@ import androidx.room.PrimaryKey
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.IgnoreExtraProperties
 import com.khtn.zone.model.UserProfile
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @IgnoreExtraProperties
 @Serializable
-@kotlinx.parcelize.Parcelize
+@Parcelize
 @Entity
 data class Group(
     @PrimaryKey

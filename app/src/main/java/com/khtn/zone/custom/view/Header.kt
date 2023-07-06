@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import androidx.annotation.DrawableRes
 import com.khtn.zone.R
 import com.khtn.zone.databinding.ViewHeaderBinding
 import com.khtn.zone.utils.ImageUtils
@@ -30,6 +31,15 @@ class Header: LinearLayout {
         ImageUtils.loadUserImage(binding.ivHeaderRightIcon, url)
     }
 
+    fun setRightIcon(@DrawableRes res: Int, pading: Int? = 0) {
+        ImageUtils.loadImageDrawable(binding.ivHeaderRightIcon, res)
+        pading?.let {
+            binding.ivHeaderRightIcon.setPadding(
+                it, it, it, it
+            )
+        }
+    }
+
     private fun initView() {
         title?.let { binding.tvHeaderTitle.text = it }
         iconAvatar?.let { ImageUtils.loadUserImage(binding.ivHeaderRightIcon, it) }
@@ -42,7 +52,9 @@ class Header: LinearLayout {
         iconDrawable = attributes.getDrawable(R.styleable.Header_headerRightIcon)
     }
 
-    fun setRightIconClickListener(unit: Unit) {
-        binding.ivHeaderRightIcon.setOnClickListener{ unit }
+    fun setRightIconClickListener(unit: () -> Unit) {
+        binding.ivHeaderRightIcon.setOnClickListener{
+            unit.invoke()
+        }
     }
 }

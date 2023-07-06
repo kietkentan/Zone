@@ -18,7 +18,7 @@ data class GroupMessage(
     val to: ArrayList<String>,
     val senderName: String,
     val senderImage: String,
-    val status: ArrayList<Int>, //0 th index is status of from user
+    val status: ArrayList<Int>, // 0 th index is status of from user
     val deliveryTime: ArrayList<Long>,
     val seenTime: ArrayList<Long>,
     var type: String = "text", // 0 = text, 1 = audio, 2 = image, 3 = video, 4 = file, 5 = s_image

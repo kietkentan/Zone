@@ -5,7 +5,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.khtn.zone.database.data.ChatUser
 import com.khtn.zone.database.data.Message
 import com.khtn.zone.di.MessageCollection
-import com.khtn.zone.repo.DatabaseRepo
 import com.khtn.zone.utils.FireStoreCollection
 import com.khtn.zone.viewmodel.serializeToMap
 import timber.log.Timber
@@ -16,8 +15,7 @@ import javax.inject.Singleton
 class MessageStatusUpdater @Inject constructor(
     @MessageCollection
     private val msgCollection: CollectionReference,
-    private val firebaseFirestore: FirebaseFirestore,
-    private val dbRepository: DatabaseRepo,
+    private val firebaseFirestore: FirebaseFirestore
 ) {
     fun updateToDelivery(
         messageList: List<Message>,
@@ -44,7 +42,6 @@ class MessageStatusUpdater @Inject constructor(
                             .document(msg.createdAt.toString()), msg.serializeToMap()
                     )
                 }
-                //dbRepository.insertMultipleMessage(filterList.toMutableList())
             }
         }
         batch.commit().addOnSuccessListener {
@@ -81,7 +78,6 @@ class MessageStatusUpdater @Inject constructor(
                         .document(message.createdAt.toString()), message.serializeToMap()
                 )
             }
-            //dbRepository.insertMultipleMessage(filterList.toMutableList())
 
             batch.commit().addOnSuccessListener {
                 Timber.v("All Message Seen Batch update success")

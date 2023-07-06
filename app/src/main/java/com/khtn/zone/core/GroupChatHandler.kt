@@ -52,10 +52,8 @@ class GroupChatHandler @Inject constructor(
     }
 
     fun initHandler() {
-        if (instanceCreated)
-            return
-        else
-            instanceCreated = true
+        if (instanceCreated) return
+        else instanceCreated = true
         userId = preference.getUid()
         Timber.v("GroupChatHandler init")
         preference.clearCurrentGroup()

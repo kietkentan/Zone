@@ -110,7 +110,6 @@ class SingleChatHomeFragment : Fragment(), ItemClickListener {
         }
 
         sharedViewModel.state.observe(viewLifecycleOwner) { state ->
-            "$state".printMeD()
             if (state is ScreenState.IdleState) {
                 CoroutineScope(Dispatchers.IO).launch {
                     updateList(viewModel.getChatUsersAsList())
@@ -168,10 +167,6 @@ class SingleChatHomeFragment : Fragment(), ItemClickListener {
     }
 
     override fun onItemLongClicked(v: View, position: Int) {
-
-    }
-
-    override fun onStickerClicked(sticker: Sticker) {
 
     }
 }

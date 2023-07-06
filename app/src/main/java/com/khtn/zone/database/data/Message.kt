@@ -55,7 +55,7 @@ data class ImageMessage(
     var uri: String? = null,
     var imageType: String = ImageTypeConstants.IMAGE,
     var sticker: Sticker? = null,
-    var isGiftSticker: Boolean? = false
+    var size: Pair<Int, Int>? = null
 ): Parcelable
 
 @Serializable

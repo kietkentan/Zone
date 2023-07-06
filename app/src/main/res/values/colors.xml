@@ -2,6 +2,7 @@
 <resources>
     <color name="color_accent">#FF03DAC5</color>
     <color name="color_background">#C8C8C8</color>
+    <color name="color_background_profile">#E6E6E6</color>
     <color name="color_background_receive">#F7F7F7</color>
     <color name="color_default_bg">#f8f9fa</color>
     <color name="color_time">#333333</color>

@@ -24,8 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             bind:layout_constraintTop_toTopOf="parent"
-            layout="@layout/view_single_chat_toolbar"
-            bind:viewmodel="@{viewmodel}" />
+            layout="@layout/view_single_chat_toolbar" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rec_message"

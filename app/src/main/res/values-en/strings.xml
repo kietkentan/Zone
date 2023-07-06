@@ -13,8 +13,6 @@
     <string name="intro_desc_3">With nearby friend connections, you\'ll find people you can chat with.</string>
     <string name="intro_desc_4">To interact together, chat with friends everywhere.</string>
     <string name="phone_number">Phone Number</string>
-    <string name="vietnamese">Vietnamese</string>
-    <string name="english">English</string>
     <string name="take_photo">Take photo</string>
     <string name="select_from_your_device">Select from your device</string>
     <string name="cancel">Cancel</string>
@@ -69,11 +67,26 @@
     <string name="new_messages_from">%d new messages from %d friends</string>
     <string name="reply">Reply</string>
     <string name="sent">Sent</string>
-    <string name="sending">Sending...</string>
+    <string name="sending">Sending…</string>
     <string name="delivered">Delivered</string>
     <string name="seen">Seen</string>
     <string name="failed">Failed</string>
     <string name="new_audio">New recording file sent</string>
     <string name="new_video">New video sent</string>
     <string name="new_file">New file sent</string>
+    <string name="is_typing">is typing…</string>
+    <string name="setting">Setting</string>
+    <string name="profile_updated">Profile updated!</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="edit_infor">Edit ìnormation</string>
+    <string name="do_u_want_logout">Want to log out?</string>
+    <string name="no_worries">No worries, when you login again, your messages will be recovered automatically</string>
+    <string name="create_new_group">Create new group</string>
+    <string name="suggest">Suggest</string>
+    <string name="search_for_name_and_phone">Search by name or phone number</string>
+    <string name="selected">Selected: %d</string>
+    <string name="group_naming">Group naming</string>
+    <string name="unnamed_group">Unnamed groups</string>
+    <string name="click_to_add_the_name">Click to add a name</string>
+    <string name="invalid_group_name">Invalid or vacant group name</string>
 </resources>

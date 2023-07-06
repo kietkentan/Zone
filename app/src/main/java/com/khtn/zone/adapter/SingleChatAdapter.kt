@@ -29,6 +29,7 @@ import com.khtn.zone.utils.event.EventAudioMessage
 import com.khtn.zone.utils.hideView
 import com.khtn.zone.utils.listener.ItemClickListener
 import com.khtn.zone.utils.printMeD
+import com.khtn.zone.utils.setMargin
 import com.khtn.zone.utils.showAnimation
 import com.khtn.zone.utils.showView
 import kotlinx.coroutines.Runnable
@@ -210,6 +211,13 @@ class SingleChatAdapter(
                 }
             }
 
+            if (bindingAdapterPosition > 0) {
+                val message = messageList[bindingAdapterPosition - 1]
+
+                if (item.from != message.from)
+                    binding.layout.setMargin(top = context.resources.getDimension(R.dimen.dp5).toInt())
+            }
+
             binding.layoutMsg.setOnClickListener {
                 msgClickListener.onItemClicked(it, bindingAdapterPosition)
             }
@@ -240,6 +248,13 @@ class SingleChatAdapter(
                 }
             }
 
+            if (bindingAdapterPosition > 0) {
+                val message = messageList[bindingAdapterPosition - 1]
+
+                if (item.from != message.from)
+                    binding.layout.setMargin(top = context.resources.getDimension(R.dimen.dp5).toInt())
+            }
+
             binding.layoutMsg.setOnClickListener {
                 msgClickListener.onItemClicked(it, bindingAdapterPosition)
             }
@@ -262,6 +277,13 @@ class SingleChatAdapter(
                 binding.txtMsgStatus.visibility = View.INVISIBLE
             else binding.txtMsgStatus.hideView()
 
+            if (bindingAdapterPosition > 0) {
+                val message = messageList[bindingAdapterPosition - 1]
+
+                if (item.from != message.from)
+                    binding.layout.setMargin(top = context.resources.getDimension(R.dimen.dp5).toInt())
+            }
+
             binding.executePendingBindings()
         }
     }
@@ -280,6 +302,13 @@ class SingleChatAdapter(
                 binding.txtMsgStatus.visibility = View.INVISIBLE
             else binding.txtMsgStatus.hideView()
 
+            if (bindingAdapterPosition > 0) {
+                val message = messageList[bindingAdapterPosition - 1]
+
+                if (item.from != message.from)
+                    binding.layout.setMargin(top = context.resources.getDimension(R.dimen.dp5).toInt())
+            }
+
             binding.executePendingBindings()
         }
     }
@@ -295,8 +324,15 @@ class SingleChatAdapter(
                 binding.txtMsgStatus.visibility = View.INVISIBLE
             else binding.txtMsgStatus.hideView()
 
+            if (bindingAdapterPosition > 0) {
+                val message = messageList[bindingAdapterPosition - 1]
+
+                if (item.from != message.from)
+                    binding.layout.setMargin(top = context.resources.getDimension(R.dimen.dp5).toInt())
+            }
+
             binding.imageMsg.setOnClickListener {
-                msgClickListener.onStickerClicked(item.imageMessage!!.sticker!!)
+                msgClickListener.onItemClicked(it, bindingAdapterPosition)
             }
 
             binding.executePendingBindings()
@@ -314,8 +350,15 @@ class SingleChatAdapter(
                 binding.txtMsgStatus.visibility = View.INVISIBLE
             else binding.txtMsgStatus.hideView()
 
+            if (bindingAdapterPosition > 0) {
+                val message = messageList[bindingAdapterPosition - 1]
+
+                if (item.from != message.from)
+                    binding.layout.setMargin(top = context.resources.getDimension(R.dimen.dp5).toInt())
+            }
+
             binding.imageMsg.setOnClickListener {
-                msgClickListener.onStickerClicked(item.imageMessage!!.sticker!!)
+                msgClickListener.onItemClicked(it, bindingAdapterPosition)
             }
 
             binding.executePendingBindings()
@@ -332,6 +375,13 @@ class SingleChatAdapter(
             else if (bindingAdapterPosition != lastPositionMessageClicked && bindingAdapterPosition == messageList.lastIndex)
                 binding.txtMsgStatus.visibility = View.INVISIBLE
             else binding.txtMsgStatus.hideView()
+
+            if (bindingAdapterPosition > 0) {
+                val message = messageList[bindingAdapterPosition - 1]
+
+                if (item.from != message.from)
+                    binding.layout.setMargin(top = context.resources.getDimension(R.dimen.dp5).toInt())
+            }
 
             binding.progressBar.setStoriesCountDebug(1, 0)
             binding.progressBar.setAllStoryDuration(item.audioMessage?.duration!!.toLong() * 1000)
@@ -426,6 +476,13 @@ class SingleChatAdapter(
             else if (bindingAdapterPosition != lastPositionMessageClicked && bindingAdapterPosition == messageList.lastIndex)
                 binding.txtMsgStatus.visibility = View.INVISIBLE
             else binding.txtMsgStatus.hideView()
+
+            if (bindingAdapterPosition > 0) {
+                val message = messageList[bindingAdapterPosition - 1]
+
+                if (item.from != message.from)
+                    binding.layout.setMargin(top = context.resources.getDimension(R.dimen.dp5).toInt())
+            }
 
             binding.progressBar.setStoriesCountDebug(1, 0)
             binding.progressBar.setAllStoryDuration(item.audioMessage?.duration!!.toLong() * 1000)

@@ -11,7 +11,6 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.app.NotificationCompat
@@ -22,9 +21,11 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.khtn.zone.R
 import com.khtn.zone.activity.MainActivity
+import com.khtn.zone.custom.dialog.AlertDialog
 import com.khtn.zone.database.ChatUserDatabase
 import com.khtn.zone.database.data.GroupMessage
 import com.khtn.zone.model.Country
+import com.khtn.zone.model.TypeDialog
 import com.khtn.zone.model.UserStatus
 import java.text.SimpleDateFormat
 
@@ -124,19 +125,39 @@ object Utils {
         db: ChatUserDatabase
     ) {
         try {
-            val dialog = Dialog(context)
-            dialog.setCancelable(false)
-            dialog.setContentView(R.layout.alert_dialog)
-            dialog.window!!.setLayout(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-            dialog.findViewById<TextView>(R.id.txt_log_out).setOnClickListener {
-                dialog.dismiss()
-                UserUtils.logOut(context, preference, db)
+            val typeDialog = TypeDialog.DIALOG_1_BUTTON
+            typeDialog.apply {
+                title = context.getString(R.string.logged_in_another_device)
+                message = context.getString(R.string.login_again)
+                firstBtnMessage = context.getString(R.string.logout)
+                firstaction = { UserUtils.logOut(context, preference, db) }
             }
-            dialog.show()
-        } catch (_: Exception) {
+
+            AlertDialog(context).showDialog(typeDialog)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun showLogoutAlert(
+        context: Activity,
+        preference: SharedPreferencesManager,
+        db: ChatUserDatabase
+    ) {
+        try {
+            val typeDialog = TypeDialog.DIALOG_2_BUTTON
+            typeDialog.apply {
+                title = context.getString(R.string.do_u_want_logout)
+                message = context.getString(R.string.no_worries)
+                firstBtnMessage = context.getString(R.string.cancel)
+                secondBtnMessage = context.getString(R.string.logout)
+                firstaction = {}
+                secondAction = { UserUtils.logOut(context, preference, db) }
+            }
+
+            AlertDialog(context).showDialog(typeDialog)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -251,15 +272,13 @@ object Utils {
     fun getTimeAudio(time: Long): String {
         var tick = time
         var hours = ""
-        var minutes = ""
-        var seconds = ""
 
         if (tick >= 3600) {
             hours = if (tick / 3600 >= 10) "${tick / 3600}" else "0${tick / 3600}"
             tick %= 3600
         }
-        minutes = if (tick / 60 >= 10) "${tick / 60}" else "0${tick / 60}"
-        seconds = if (tick % 60 >= 10) "${tick % 60}" else "0${tick % 60}"
+        val minutes: String = if (tick / 60 >= 10) "${tick / 60}" else "0${tick / 60}"
+        val seconds: String = if (tick % 60 >= 10) "${tick % 60}" else "0${tick % 60}"
 
         return if (hours.isEmpty()) "$minutes:$seconds" else "$hours:$minutes:$seconds"
     }

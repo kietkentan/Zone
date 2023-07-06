@@ -1,23 +1,18 @@
 package com.khtn.zone.activity
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.provider.Settings
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.messaging.FirebaseMessaging
 import com.khtn.zone.R
 import com.khtn.zone.base.BaseActivity
 import com.khtn.zone.database.data.ChatUser
@@ -25,8 +20,11 @@ import com.khtn.zone.database.data.Group
 import com.khtn.zone.databinding.ActivityMainBinding
 import com.khtn.zone.fragment.SingleChatHomeFragmentDirections
 import com.khtn.zone.utils.ActionConstants
+import com.khtn.zone.utils.ContactUtils
 import com.khtn.zone.utils.DataConstants
+import com.khtn.zone.utils.LocaleHelper
 import com.khtn.zone.utils.Utils
+import com.khtn.zone.utils.closeKeyBoard
 import com.khtn.zone.utils.hideView
 import com.khtn.zone.utils.isValidDestination
 import com.khtn.zone.utils.printMeD
@@ -44,7 +42,6 @@ class MainActivity: BaseActivity() {
     private var navHostFragment: NavHostFragment? = null
     private lateinit var navController: NavController
     private var doubleBackPress: Boolean = false
-    private val nonce = "RW5jb2RlIGJhc2U2NCBab25l"
 
     private val sharedViewModel: SharedViewModel by viewModels()
 
@@ -54,6 +51,7 @@ class MainActivity: BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        loadLanguageConfig()
         this.transparentStatusBar(isLightBackground = true)
 
         onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
@@ -75,8 +73,29 @@ class MainActivity: BaseActivity() {
             }
         })
 
+        binding.floatingButtonMain.setOnClickListener {
+            /*if (searchItem.isActionViewExpanded)
+                searchItem.collapseActionView()*/
+            ContactUtils.askContactPermission(returnFragment()!!) {
+                /*if (navController.isValidDestination(R.id.singleChatHomeFragment))
+                    navController.navigate(R.id.action_FSingleChatHome_to_FContacts)
+                else */if (navController.isValidDestination(R.id.groupChatHomeFragment))
+                    navController.navigate(R.id.action_groupChatHomeFragment_to_createGroupChatFragment)
+            }
+        }
+
         initView()
         observer()
+    }
+
+    private fun returnFragment(): Fragment? {
+        val navHostFragment: Fragment? =
+            supportFragmentManager.findFragmentById(R.id.nav_host)
+        return navHostFragment?.childFragmentManager?.fragments?.get(0)
+    }
+
+    private fun loadLanguageConfig() {
+        LocaleHelper.loadLanguageConfig(this)
     }
 
     @Suppress("DEPRECATION")
@@ -112,9 +131,9 @@ class MainActivity: BaseActivity() {
                         )
                     navController.navigate(action)
                 } else if (isNewGroupMessage && navController.isValidDestination(R.id.singleChatHomeFragment)) {
-                    /*preference.setCurrentGroup(groupData!!.id)
-                    val action = FSingleChatHomeDirections.actionFSingleChatHomeToFGroupChat(groupData)
-                    navController.navigate(action)*/
+                    preference.setCurrentGroup(groupData!!.id)
+                    val action = SingleChatHomeFragmentDirections.actionSingleChatHomeFragmentToGroupChatFragment(groupData)
+                    navController.navigate(action)
                 }
 
                 if (!preference.isSameDevice())
@@ -123,6 +142,10 @@ class MainActivity: BaseActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    fun showLogoutAlert() {
+        Utils.showLogoutAlert(this, preference, db)
     }
 
     private fun observer() {
@@ -219,21 +242,24 @@ class MainActivity: BaseActivity() {
                     binding.bottomNav.selectedItemId = R.id.nav_chats
                     showView()
                 }
-                /*R.id.FGroupChatHome -> {
+
+                R.id.groupChatHomeFragment -> {
                     binding.bottomNav.selectedItemId = R.id.nav_groups
                     showView()
-                }*/
+                }
+
                 R.id.contactFragment -> {
                     binding.bottomNav.selectedItemId = R.id.nav_contacts
                     showView()
                     binding.floatingButtonMain.hideView()
                 }
-                /*
-                R.id.FMyProfile -> {
+
+                R.id.profileFragment -> {
                     binding.bottomNav.selectedItemId = R.id.nav_profile
                     showView()
-                    binding.fab.hide()
-                }*/
+                    binding.floatingButtonMain.hideView()
+                }
+
                 else -> {
                     binding.bottomNav.hideView()
                     binding.floatingButtonMain.hideView()
@@ -267,33 +293,36 @@ class MainActivity: BaseActivity() {
                     }
                     true
                 }
-                /*R.id.nav_group -> {
-                    if (isNotSameDestination(R.id.FGroupChatHome)) {
-                        searchItem.collapseActionView()
-                        Navigation.findNavController(this, R.id.nav_host_fragment)
-                            .navigate(R.id.FGroupChatHome)
+
+                R.id.nav_groups -> {
+                    if (isNotSameDestination(R.id.groupChatHomeFragment)) {
+                        // searchItem.collapseActionView()
+                        navController.navigate(R.id.groupChatHomeFragment)
                     }
                     true
-                }*/
+                }
+
                 R.id.nav_contacts -> {
                     if (isNotSameDestination(R.id.contactFragment)) {
+                        // searchItem.collapseActionView()
                         navController.navigate(R.id.contactFragment)
                     }
 
                     true
-                }/*
-                else -> {
-                    if (isNotSameDestination(R.id.FMyProfile)) {
-                        searchItem.collapseActionView()
-                        Navigation.findNavController(this, R.id.nav_host_fragment)
-                            .navigate(R.id.FMyProfile)
+                }
+
+                R.id.nav_profile -> {
+                    if (isNotSameDestination(R.id.profileFragment)) {
+                        // searchItem.collapseActionView()
+                        navController.navigate(R.id.profileFragment)
                     }
+
                     true
-                }*/
+                }
+
                 else -> {
                     true
                 }
             }
-
         }
 }

@@ -7,14 +7,20 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.firestore.CollectionReference
 import com.khtn.zone.R
 import com.khtn.zone.di.UserCollection
+import com.khtn.zone.utils.LocaleHelper
 import com.khtn.zone.utils.SharedPreferencesManager
+import com.khtn.zone.utils.SupportLanguage
 import com.khtn.zone.utils.UserUtils
 import com.khtn.zone.utils.checkAppStart
+import com.khtn.zone.utils.disable
+import com.khtn.zone.utils.enabled
 import com.khtn.zone.utils.printMeD
 import com.khtn.zone.utils.transparentStatusBar
 import com.khtn.zone.viewmodel.SharedViewModel
@@ -41,6 +47,7 @@ class SplashScreenActivity : AppCompatActivity() {
         this.transparentStatusBar(isLightBackground = true)
         //setUpFirebaseMessage();
         setPortraitScreen()
+        loadLanguageConfig()
 
         sharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
         UserUtils.updatePushToken(this, userCollection,false)
@@ -58,6 +65,10 @@ class SplashScreenActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+    }
+
+    private fun loadLanguageConfig() {
+        LocaleHelper.loadLanguageConfig(this)
     }
 
     private fun checkApp(): String {

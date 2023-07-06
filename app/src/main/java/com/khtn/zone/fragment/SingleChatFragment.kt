@@ -44,6 +44,7 @@ import com.khtn.zone.databinding.FragmentSingleChatBinding
 import com.khtn.zone.model.MyImage
 import com.khtn.zone.model.Sticker
 import com.khtn.zone.model.UserProfile
+import com.khtn.zone.utils.AttachmentOptions
 import com.khtn.zone.utils.ContactUtils
 import com.khtn.zone.utils.ImageTypeConstants
 import com.khtn.zone.utils.ImageUtils
@@ -82,7 +83,7 @@ import java.util.Date
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SingleChatFragment : Fragment(), ItemClickListener, StickerListener,CustomEditText.KeyBoardInputCallbackListener {
+class SingleChatFragment : Fragment(), ItemClickListener, StickerListener, CustomEditText.KeyBoardInputCallbackListener {
     private val args by navArgs<SingleChatFragmentArgs>()
 
     @Inject
@@ -149,7 +150,10 @@ class SingleChatFragment : Fragment(), ItemClickListener, StickerListener,Custom
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.viewmodel = viewModel
@@ -220,6 +224,7 @@ class SingleChatFragment : Fragment(), ItemClickListener, StickerListener,Custom
 
     override fun onDestroyView() {
         super.onDestroyView()
+        requireActivity().closeKeyBoard()
         stopRecording()
         SingleChatAdapter.stopPlaying()
         EventBus.getDefault().unregister(this)
@@ -254,7 +259,7 @@ class SingleChatFragment : Fragment(), ItemClickListener, StickerListener,Custom
         data: Intent?
     ) {
         super.onActivityResult(requestCode, resultCode, data)
-
+        "ReCode: $requestCode\nData: ${data?.data}".printMeD()
         when (requestCode) {
             REQUEST_ADD_CONTACT -> {
                 if (resultCode == Activity.RESULT_OK) {
@@ -293,6 +298,14 @@ class SingleChatFragment : Fragment(), ItemClickListener, StickerListener,Custom
                             permissions = ContactUtils.CONTACT_PERMISSION
                         )
                         if (isPermissionOk) openSaveIntent()
+                    }
+
+                    SETTING_IMAGE_FROM_GALLERY -> {
+                        val isPermissionOk = isPermissionOk(
+                            context = requireContext(),
+                            permissions = ImageUtils.IMAGE_CAMERA_PERMISSION
+                        )
+                        if (isPermissionOk) ImageUtils.showCameraOptions(this)
                     }
                 }
             }
@@ -421,7 +434,18 @@ class SingleChatFragment : Fragment(), ItemClickListener, StickerListener,Custom
     }
 
     private fun onAttachmentOptions(position: Int) {
+        when (position) {
+            AttachmentOptions.IMAGE_VIDEO -> {
+                lastActionCallPermission = SETTING_IMAGE_FROM_GALLERY
+                ImageUtils.askImageCameraPermission(this)
+            }
 
+            AttachmentOptions.QUICK_MESSAGE -> {}
+
+            AttachmentOptions.FILE -> {}
+
+            else -> {}
+        }
     }
 
     private fun initResume() {
@@ -491,6 +515,7 @@ class SingleChatFragment : Fragment(), ItemClickListener, StickerListener,Custom
             linearLayoutManager = LinearLayoutManager(context)
             gridLayoutManager = GridLayoutManager(context, 4)
             gridLayoutManager2 = GridLayoutManager(context, 4)
+
             fromUser.listSticker.let {
                 viewModel.getSetSticker(it)
                 viewModel.getAllListSticker(it)
@@ -683,8 +708,7 @@ class SingleChatFragment : Fragment(), ItemClickListener, StickerListener,Custom
             imageMessage = ImageMessage(
                 uri = sticker.url,
                 imageType = ImageTypeConstants.STICKER,
-                sticker = sticker,
-                isGiftSticker = sticker.type == ImageTypeConstants.GIF
+                sticker = sticker
             )
             chatUsers = ArrayList()
         }
@@ -715,11 +739,16 @@ class SingleChatFragment : Fragment(), ItemClickListener, StickerListener,Custom
     private fun onCropResult(data: Intent?) {
         try {
             val imagePath: Uri? = ImageUtils.getCroppedImage(data)
+            val size = imagePath?.let { ImageUtils.getImageSize(requireActivity(), it) }
+            "size: $size".printMeD()
 
             if (imagePath != null) {
                 val message = createMessage().apply {
                     type = MessageTypeConstants.IMAGE
-                    imageMessage = ImageMessage(imagePath.toString())
+                    imageMessage = ImageMessage(
+                        uri = imagePath.toString(),
+                        size = size
+                    )
                     chatUsers = ArrayList()
                 }
                 viewModel.uploadToCloud(message, imagePath.toString())
@@ -788,10 +817,6 @@ class SingleChatFragment : Fragment(), ItemClickListener, StickerListener,Custom
 
     override fun onItemLongClicked(v: View, position: Int) {
 
-    }
-
-    override fun onStickerClicked(sticker: Sticker) {
-        "StickerClicked".printMeD()
     }
 
     override fun onCommitContent(

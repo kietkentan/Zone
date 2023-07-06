@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-open class BaseActivity: AppCompatActivity() {
+abstract class BaseActivity: AppCompatActivity(), Base {
     private var connectedRef: DatabaseReference? = null
 
     @Inject
@@ -119,4 +119,13 @@ open class BaseActivity: AppCompatActivity() {
         unregisterReceiver(newLogInReceiver)
         super.onDestroy()
     }
+
+    override fun hideKey() {
+        "hide".printMeD()
+        closeKeyBoard()
+    }
+}
+
+interface Base {
+    fun hideKey()
 }
