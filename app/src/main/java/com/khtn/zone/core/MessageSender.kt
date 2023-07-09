@@ -1,7 +1,5 @@
 package com.khtn.zone.core
 
-import android.annotation.SuppressLint
-import android.util.Log
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.SetOptions

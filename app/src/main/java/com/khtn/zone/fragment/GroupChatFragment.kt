@@ -221,7 +221,7 @@ class GroupChatFragment: Fragment(), ItemClickListener, StickerListener, CustomE
         }
 
         binding.viewChatHeader.ivBack.setOnClickListener {
-            findNavController().popBackStack()
+            findNavController().navigate(R.id.action_groupChatFragment_to_groupChatHomeFragment)
         }
 
         binding.viewChatBottomInput.ivRecord.setOnClickListener {
@@ -522,7 +522,7 @@ class GroupChatFragment: Fragment(), ItemClickListener, StickerListener, CustomE
 
                         isEnabled -> {
                             isEnabled = false
-                            requireActivity().onBackPressedDispatcher.onBackPressed()
+                            findNavController().navigate(R.id.action_groupChatFragment_to_groupChatHomeFragment)
                         }
                     }
                 }

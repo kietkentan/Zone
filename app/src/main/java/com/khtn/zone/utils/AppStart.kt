@@ -52,7 +52,6 @@ fun checkAppStart(
     } catch (e: NameNotFoundException) {
         "Unable to determine current app version from package manager. Defensively assuming normal app start.".printMeD()
     }
-    appStart.toString().printMeD()
     return appStart
 }
 

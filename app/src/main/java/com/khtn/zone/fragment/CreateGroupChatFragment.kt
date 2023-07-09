@@ -157,7 +157,6 @@ class CreateGroupChatFragment : Fragment(), ItemRemoveListener {
                         preference.setCurrentGroup(group.id)
                         val action = CreateGroupChatFragmentDirections.actionCreateGroupChatFragmentToGroupChatFragment(group)
                         findNavController().navigate(action)
-
                     }
                 }
 

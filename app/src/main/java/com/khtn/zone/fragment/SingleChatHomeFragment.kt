@@ -80,7 +80,10 @@ class SingleChatHomeFragment : Fragment(), ItemClickListener {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         activity = requireActivity()
@@ -126,7 +129,7 @@ class SingleChatHomeFragment : Fragment(), ItemClickListener {
         withContext(Dispatchers.Main) {
             val filteredList = list.filter { it.messages.isNotEmpty() }
             if (filteredList.isNotEmpty()) {
-                //binding.imageEmpty.gone()
+                // binding.imageEmpty.gone()
                 chatList = filteredList as MutableList<ChatUserWithMessages>
                 // sort by recent message
                 chatList = filteredList.sortedByDescending { it.messages.last().createdAt }
@@ -136,8 +139,8 @@ class SingleChatHomeFragment : Fragment(), ItemClickListener {
                 if (sharedViewModel.state.value is ScreenState.SearchState)
                     homeChatAdapter.filter(sharedViewModel.lastQuery.value.toString())
             } else {
+                // binding.imageEmpty.show()
             }
-                //binding.imageEmpty.show()
         }
     }
 
@@ -146,7 +149,8 @@ class SingleChatHomeFragment : Fragment(), ItemClickListener {
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
-        grantResults: IntArray) {
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (Utils.isPermissionOk(*grantResults)){
             if (findNavController().isValidDestination(R.id.singleChatHomeFragment)) {

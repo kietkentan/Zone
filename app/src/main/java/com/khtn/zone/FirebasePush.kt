@@ -82,7 +82,6 @@ class FirebasePush: FirebaseMessagingService(), OnSuccessListener {
         preference.saveStringByKey(SharedPrefConstants.TOKEN, token)
     }
 
-    @SuppressLint("LogNotTimber")
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         "Re: ${remoteMessage.notification?.body}".printMeD()
@@ -120,7 +119,7 @@ class FirebasePush: FirebaseMessagingService(), OnSuccessListener {
 
             TYPE_NEW_GROUP_MESSAGE -> { handleGroupMsg() }
 
-            else -> {}
+            else -> { /*Any*/ }
         }
     }
 
@@ -284,7 +283,8 @@ class FirebasePush: FirebaseMessagingService(), OnSuccessListener {
             messageCount = 0
             personCount = 0
             val notifications = ArrayList<Notification>()
-            val myUserId = SharedPreferencesManager(context).retrieveStringByKey(SharedPrefConstants.UID).toString()
+            val myUserId =
+                SharedPreferencesManager(context).retrieveStringByKey(SharedPrefConstants.UID).toString()
             val manager: NotificationManagerCompat = Utils.returnNManager(context)
 
             for (user in chatUserWithMessages) {
@@ -315,15 +315,15 @@ class FirebasePush: FirebaseMessagingService(), OnSuccessListener {
 
             val summaryNotification = NotificationUtils.getSummaryNotification(context, manager)
             for ((index, notification) in notifications.withIndex()) {
-                val notIdString = chatUserWithMessages[index].user.user.createdAt.toString()
-                val notId = notIdString.substring(notIdString.length - 4).toInt() // last 4 digits as notificationId
-                manager.notify(notId, notification)
+                val notiIdString = chatUserWithMessages[index].user.user.createdAt.toString()
+                // last 4 digits as notificationId
+                val notiId = notiIdString.substring(notiIdString.length - 4).toInt()
+                manager.notify(notiId, notification)
             }
 
             if (notifications.size > 1)
                 manager.notify(SUMMARY_ID, summaryNotification)
         }
-
     }
 
     override fun onResult(

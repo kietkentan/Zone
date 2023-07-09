@@ -31,7 +31,7 @@
     <string name="logged_in_another_device">Số điện thoại này được đăng nhập vào một thiết bị khác!</string>
     <string name="login_again">Vui lòng đăng nhập lại để xác minh số của bạn</string>
     <string name="logout">Đăng xuất</string>
-    <string name="create_by">Được tạo lúc</string>
+    <string name="create_by">Được tạo bởi</string>
     <string name="txt_resend">Gửi lại</string>
     <string name="txt_in">trong</string>
     <string name="otp_sent_succesfully">Mã xác nhận đã được gửi thành công.</string>

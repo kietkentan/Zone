@@ -126,13 +126,12 @@ class MainActivity: BaseActivity() {
                 if (isNewMessage && navController.isValidDestination(R.id.singleChatHomeFragment)) {
                     preference.setCurrentUser(userData!!.id)
                     val action =
-                        SingleChatHomeFragmentDirections.actionSingleChatHomeFragmentToSingleChatFragment(
-                            userData
-                        )
+                        SingleChatHomeFragmentDirections.actionSingleChatHomeFragmentToSingleChatFragment(userData)
                     navController.navigate(action)
                 } else if (isNewGroupMessage && navController.isValidDestination(R.id.singleChatHomeFragment)) {
                     preference.setCurrentGroup(groupData!!.id)
-                    val action = SingleChatHomeFragmentDirections.actionSingleChatHomeFragmentToGroupChatFragment(groupData)
+                    val action =
+                        SingleChatHomeFragmentDirections.actionSingleChatHomeFragmentToGroupChatFragment(groupData)
                     navController.navigate(action)
                 }
 
@@ -188,7 +187,11 @@ class MainActivity: BaseActivity() {
 
     @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
         super.onActivityResult(requestCode, resultCode, data)
         supportFragmentManager.fragments.first() as? NavHostFragment
         if (navHostFragment != null) {
@@ -222,7 +225,7 @@ class MainActivity: BaseActivity() {
             Uri.parse("package:$packageName")
         )
         myAppSettings.addCategory(Intent.CATEGORY_DEFAULT)
-        //myAppSettings.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        // myAppSettings.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivityForResult(myAppSettings, Utils.REQUEST_APP_SETTINGS)
     }
 

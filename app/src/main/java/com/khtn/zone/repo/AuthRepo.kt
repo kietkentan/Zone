@@ -71,7 +71,10 @@ class AuthRepo @Inject constructor(
         }
     }
 
-    override fun onCodeSent(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
+    override fun onCodeSent(
+        verificationId: String,
+        token: PhoneAuthProvider.ForceResendingToken
+    ) {
         Timber.v("onCodeSent:$verificationId")
         this.verificationId.value = verificationId
         context.toast(context.getString(R.string.otp_sent_succesfully))

@@ -40,6 +40,7 @@
                         android:id="@+id/image_profile"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/ic_other_user"
                         app:imageUrl="@{groupChat.group.image}" />
                 </androidx.cardview.widget.CardView>

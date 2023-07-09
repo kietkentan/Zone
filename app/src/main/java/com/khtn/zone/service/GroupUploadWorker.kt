@@ -47,7 +47,7 @@ class GroupUploadWorker @AssistedInject constructor(
             "group/${message.to}/$sourceName"
         )
         val task = if (url.contains(".mp3")) {
-            val stream = FileInputStream(url)  //audio message
+            val stream = FileInputStream(url)  // audio message
             child.putStream(stream)
         } else
             child.putFile(Uri.parse(message.imageMessage?.uri))

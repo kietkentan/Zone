@@ -674,7 +674,6 @@ class SingleChatFragment : Fragment(), ItemClickListener, StickerListener, Custo
         }
 
         viewModel.allSticker.observe(viewLifecycleOwner) {
-            "ListS: $it".printMeD()
             if (it.isNotEmpty()) {
                 binding.viewSticker.updateListItem(it)
             }
