@@ -1,7 +1,7 @@
 # Zone
 
 ## Tổng quan
-- ![Video Demo](https://drive.google.com/file/d/1933y7bEqD57EMoIB35ACtGYppc691y37/view)
+- [Video Demo](https://drive.google.com/file/d/1933y7bEqD57EMoIB35ACtGYppc691y37/view)
 - Test: 0352335288 - OTP: 123456
 - Thành viên: 1
 - Mô hình MVVM dùng Kotlin, Firebase (Auth, Storage, Realtime, FireStore), Dagger-Hilt, Navigation, LiveData
